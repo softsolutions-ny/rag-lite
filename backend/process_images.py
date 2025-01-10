@@ -67,6 +67,9 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
         with open(image_path, "rb") as image_file:
             base64_image = base64.b64encode(image_file.read()).decode('utf-8')
         
+        # Start timing API call
+        stats.start_api_call(job_id)
+        
         # Call OpenAI Vision API - gpt-4o-mini IS THE SUPPORTED MODEL. DO NOT CHANGE 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -87,6 +90,9 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
             max_tokens=500
         )
         
+        # End timing API call
+        stats.end_api_call(job_id)
+        
         # Clean up
         http_client.close()
         
@@ -106,7 +112,7 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
             "filename": filename,
             "result": response.choices[0].message.content,
             "error": None,
-            "processing_time": processing_stats.get("duration_seconds")
+            "processing_time": processing_stats.get("api_duration_seconds")  # Use API duration
         }
         print(f"[Process] Returning result with processing time: {result['processing_time']}")
         
