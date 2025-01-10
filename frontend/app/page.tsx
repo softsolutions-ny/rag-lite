@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+
 import { Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -20,6 +20,7 @@ interface ImageResult {
   result?: string;
   error?: string;
   imageUrl?: string;
+  processing_time?: number;
 }
 
 interface APIJob {
@@ -41,6 +42,7 @@ export default function Home() {
       "image/*": [".png", ".jpg", ".jpeg", ".gif"],
     },
     onDrop: async (acceptedFiles) => {
+      console.log(`[Upload] Starting upload for ${acceptedFiles.length} files`);
       setIsUploading(true);
       const formData = new FormData();
 
@@ -49,66 +51,100 @@ export default function Home() {
         file,
         url: URL.createObjectURL(file),
       }));
+      console.log(`[Upload] Created URLs for files:`, filesWithUrls);
 
       filesWithUrls.forEach(({ file }) => {
         formData.append("files", file);
       });
 
       try {
-        const response = await fetch(
-          "http://localhost:8000/api/process-images",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        console.log(`[Upload] Sending files to backend...`);
+        const response = await fetch("/api/process-images", {
+          method: "POST",
+          body: formData,
+        });
 
         const data: APIResponse = await response.json();
+        console.log(`[Upload] Received response from backend:`, data);
+
         const newResults = data.jobs.map((job, index) => ({
           jobId: job.job_id,
           filename: job.filename,
           status: "processing" as const,
           imageUrl: filesWithUrls[index].url,
         }));
+        console.log(`[Upload] Created new results:`, newResults);
 
-        setResults((prev) => [...prev, ...newResults]);
-        newResults.forEach((result) => pollForResult(result.jobId));
+        setResults((prev) => {
+          const updated = [...prev, ...newResults];
+          console.log(`[State] Updated results after upload:`, updated);
+          return updated;
+        });
+
+        console.log(`[Upload] Starting polling for new jobs...`);
+        newResults.forEach((result) => pollJobStatus(result.jobId));
       } catch (error) {
-        console.error("Upload failed:", error);
+        console.error("[Upload] Upload failed:", error);
       } finally {
         setIsUploading(false);
+        console.log(`[Upload] Upload process completed`);
       }
     },
   });
 
-  const pollForResult = async (jobId: string) => {
-    const pollInterval = setInterval(async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/job-status/${jobId}`
-        );
-        const data = await response.json();
+  const pollJobStatus = async (jobId: string) => {
+    const POLL_INTERVAL = 1000;
+    const MAX_ATTEMPTS = 60;
+    let attempts = 0;
 
-        if (data.status === "completed" || data.status === "error") {
-          setResults((prev) =>
-            prev.map((r) =>
-              r.jobId === jobId
-                ? {
-                    ...r,
-                    status: data.status,
-                    result: data.result,
-                    error: data.error,
-                  }
-                : r
-            )
+    const poll = async () => {
+      attempts++;
+
+      try {
+        console.log(`[Poll] Polling status for job ${jobId}`);
+        const response = await fetch(`/api/job-status/${jobId}`);
+        const data = await response.json();
+        console.log(`[Poll] Received status for job ${jobId}:`, data);
+
+        setResults((prev) => {
+          return prev.map((result) => {
+            if (result.jobId === jobId) {
+              return {
+                ...result,
+                status: data.status,
+                result: data.result || result.result,
+                error: data.error || result.error,
+                processing_time: data.processing_time,
+              };
+            }
+            return result;
+          });
+        });
+
+        // Stop polling if we have a final state or max attempts reached
+        if (
+          data.status === "completed" ||
+          data.status === "error" ||
+          data.error ||
+          attempts >= MAX_ATTEMPTS
+        ) {
+          console.log(
+            `[Poll] Stopping poll for job ${jobId}. Final state:`,
+            data
           );
-          clearInterval(pollInterval);
+          return;
         }
+
+        // Continue polling
+        setTimeout(poll, POLL_INTERVAL);
       } catch (error) {
-        console.error("Polling failed:", error);
-        clearInterval(pollInterval);
+        console.error(`[Poll] Error polling job ${jobId}:`, error);
+        // Stop polling on error
+        return;
       }
-    }, 1000);
+    };
+
+    poll();
   };
 
   return (
@@ -152,17 +188,17 @@ export default function Home() {
           )}
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {results.map((result) => (
             <Card
               key={result.jobId}
-              className="relative overflow-hidden cursor-pointer group"
+              className="overflow-hidden cursor-pointer flex flex-col shadow-none border-none bg-transparent"
               onClick={() =>
                 result.status === "completed" && setSelectedImage(result)
               }
             >
               {result.imageUrl && (
-                <div className="aspect-square relative">
+                <div className="aspect-square relative border border-black/[0.08] rounded-lg">
                   <Image
                     src={result.imageUrl}
                     alt={result.filename}
@@ -170,40 +206,38 @@ export default function Home() {
                     className="object-cover"
                     unoptimized // Since we're using object URLs
                   />
-                  <div
+                </div>
+              )}
+              <div className="pt-2 space-y-1.5">
+                <p className="text-xs text-muted-foreground truncate">
+                  {result.filename}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span
                     className={`
-                    absolute inset-0 bg-gradient-to-t from-black/60 to-transparent
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                    flex flex-col justify-end p-3
+                    px-1.5 py-0.5 text-[10px] rounded-md flex items-center gap-1
+                    ${
+                      result.status === "completed"
+                        ? "bg-green-100 text-green-800"
+                        : result.status === "error"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }
                   `}
                   >
-                    <p className="text-xs text-white truncate">
-                      {result.filename}
-                    </p>
-                  </div>
+                    {result.status === "processing" && (
+                      <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                    )}
+                    {result.status}
+                  </span>
+                  {result.status === "completed" && (
+                    <span className="text-[10px] text-muted-foreground/50 tabular-nums flex items-center gap-1">
+                      <span>Described:</span>
+                      <span>{result.processing_time?.toFixed(1)}s</span>
+                    </span>
+                  )}
                 </div>
-              )}
-              <div className="absolute top-2 right-2">
-                <span
-                  className={`
-                  px-2 py-1 text-xs rounded-full
-                  ${
-                    result.status === "completed"
-                      ? "bg-green-100 text-green-800"
-                      : result.status === "error"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }
-                `}
-                >
-                  {result.status}
-                </span>
               </div>
-              {result.status === "processing" && (
-                <div className="absolute bottom-0 left-0 right-0">
-                  <Progress value={33} className="h-1" />
-                </div>
-              )}
             </Card>
           ))}
         </div>
@@ -213,24 +247,32 @@ export default function Home() {
         open={!!selectedImage}
         onOpenChange={() => setSelectedImage(null)}
       >
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle>{selectedImage?.filename}</DialogTitle>
           </DialogHeader>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4 min-h-0 flex-1 overflow-hidden">
             {selectedImage?.imageUrl && (
-              <div className="relative aspect-square">
+              <div className="relative aspect-square border border-black/[0.08] rounded-lg">
                 <Image
                   src={selectedImage.imageUrl}
                   alt={selectedImage.filename}
                   fill
-                  className="object-contain rounded-lg"
-                  unoptimized // Since we're using object URLs
+                  className="object-contain"
+                  unoptimized
                 />
               </div>
             )}
-            <div className="space-y-4">
-              <h3 className="font-medium">Analysis</h3>
+            <div className="space-y-4 overflow-y-auto pr-2">
+              <div className="flex justify-between items-center">
+                <h3 className="font-medium">Analysis</h3>
+                {selectedImage?.processing_time && (
+                  <span className="text-[10px] text-muted-foreground/50 tabular-nums flex items-center gap-1">
+                    <span>Described:</span>
+                    <span>{selectedImage.processing_time.toFixed(1)}s</span>
+                  </span>
+                )}
+              </div>
               <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                 {selectedImage?.result}
               </p>

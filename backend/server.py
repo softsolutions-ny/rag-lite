@@ -45,10 +45,10 @@ async def upload_images(files: List[UploadFile] = File(...)):
             content = await file.read()
             await out_file.write(content)
         
-        # Create job ID and submit to queue
-        job_id = str(uuid.uuid4())
-        process_image.delay(file_path, job_id)
-        job_ids.append({"job_id": job_id, "filename": file.filename})
+        # Submit to queue using task ID as job ID
+        task = process_image.delay(file_path, file.filename)
+        print(f"[Server] Created task with ID: {task.id}")
+        job_ids.append({"job_id": task.id, "filename": file.filename})
     
     return JSONResponse(content={"jobs": job_ids})
 
@@ -56,15 +56,31 @@ async def upload_images(files: List[UploadFile] = File(...)):
 async def get_job_status(job_id: str):
     result = AsyncResult(job_id)
     
-    if result.ready():
-        return result.get()
+    if result.state == 'SUCCESS':
+        # Return the actual result for completed tasks
+        response = result.get()
+        print(f"[Server] Returning SUCCESS response for job {job_id}: {response}")
+    elif result.state == 'FAILURE':
+        response = {
+            "status": "error",
+            "job_id": job_id,
+            "filename": result.info.get('filename') if result.info else None,
+            "result": None,
+            "error": str(result.info) if result.info else "Task failed"
+        }
+        print(f"[Server] Returning FAILURE response for job {job_id}: {response}")
+    else:
+        # For PROGRESS or PENDING state
+        response = result.info if result.info else {
+            "status": "processing",
+            "job_id": job_id,
+            "filename": None,
+            "result": None,
+            "error": None
+        }
+        print(f"[Server] Returning {result.state} response for job {job_id}: {response}")
     
-    return {
-        "status": "processing",
-        "job_id": job_id,
-        "result": None,
-        "error": None
-    }
+    return response
 
 @app.on_event("startup")
 async def startup_event():
