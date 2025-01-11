@@ -9,6 +9,9 @@ from stats import stats  # Import the stats module
 from PIL import Image
 import io
 import sys
+from db.storage import StorageManager
+from sqlalchemy.orm import Session
+from db.config import SessionLocal
 
 # Load environment variables
 load_dotenv()
@@ -42,6 +45,10 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
         'filename': filename
     })
     
+    # Initialize database session
+    db = SessionLocal()
+    storage = StorageManager(db)
+    
     try:
         # Initialize OpenAI client inside the task
         api_key = os.getenv("OPENAI_API_KEY")
@@ -55,7 +62,7 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
         # Validate image
         if not validate_image(image_path):
             raise ValueError(f"Invalid or corrupted image file: {filename}")
-        
+            
         # Create a basic HTTP client without proxies
         http_client = httpx.Client()
         client = OpenAI(
@@ -96,30 +103,42 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
         # Clean up
         http_client.close()
         
-        # Clean up the image file after successful processing
+        # Get processing stats
+        processing_stats = stats.end_processing(job_id)
+        print(f"[Process] Got processing stats for job {job_id}: {processing_stats}")
+        
+        # Store image and analysis after successful OpenAI processing
+        stored_image = storage.store_image(image_path, filename)
+        print(f"[Process] Stored image with ID: {stored_image.id}")
+        
+        # Store analysis
+        analysis = storage.store_analysis(
+            image_id=stored_image.id,
+            description=response.choices[0].message.content,
+            processing_time=processing_stats.get("api_duration_seconds", 0.0)
+        )
+        print(f"[Process] Stored analysis for image {stored_image.id}")
+        
+        # Get complete image data with analysis
+        result = storage.get_image_with_analysis(stored_image.id)
+        result.update({
+            "status": "completed",
+            "job_id": job_id,
+            "error": None
+        })
+        
+        # Clean up the image file after successful storage
         try:
             os.remove(image_path)
         except Exception as e:
             print(f"Warning: Could not remove image file {image_path}: {e}")
         
-        # Get processing stats
-        processing_stats = stats.end_processing(job_id)
-        print(f"[Process] Got processing stats for job {job_id}: {processing_stats}")
-            
-        result = {
-            "status": "completed",
-            "job_id": job_id,
-            "filename": filename,
-            "result": response.choices[0].message.content,
-            "error": None,
-            "processing_time": processing_stats.get("api_duration_seconds")  # Use API duration
-        }
-        print(f"[Process] Returning result with processing time: {result['processing_time']}")
+        print(f"[Process] Returning result with processing time: {result['analysis']['processing_time']}")
         
         # Update final state
         self.update_state(state='SUCCESS', meta=result)
         return result
-        
+            
     except Exception as e:
         error_msg = f"Error processing image: {str(e)}"
         print(f"[Process] Error in job {job_id}: {error_msg}")
@@ -147,3 +166,6 @@ def process_image(self, image_path: str, filename: str) -> Dict[str, Any]:
         # Update error state with proper exception info
         self.update_state(state='FAILURE', meta=error_result)
         return error_result
+    finally:
+        # Always close the database session
+        db.close()

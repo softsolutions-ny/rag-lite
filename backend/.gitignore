@@ -1,9 +1,15 @@
-# Environments
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
 .env
-.venv
-.DS_Store
-.vscode
 
-# Local storage
+# Virtual Environment
+.venv/
+venv/
+
+# Project specific
 uploads/
 stats/
+credentials/
+*.json

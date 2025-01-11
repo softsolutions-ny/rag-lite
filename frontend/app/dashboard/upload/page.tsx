@@ -216,9 +216,6 @@ export default function UploadPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold">Upload Images</h1>
-          <p className="text-sm text-muted-foreground">
-            Drop images, folders, or ZIP files for processing
-          </p>
         </div>
 
         <div
@@ -297,7 +294,7 @@ export default function UploadPage() {
                         {result.processing_time && (
                           <ProcessingTime time={result.processing_time} />
                         )}
-                        <span className="text-[10px] text-primary hover:text-primary/80 cursor-pointer transition-colors">
+                        <span className="text-[10px] text-primary hover:text-primary/80 cursor-pointer transition-colors ml-auto">
                           View description →
                         </span>
                       </>
