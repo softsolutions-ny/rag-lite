@@ -70,12 +70,17 @@ async def upload_images(files: List[UploadFile] = File(...)):
     
     for file in files:
         try:
+            # Skip files without filename
+            if not file.filename:
+                print("[Server] Skipping file with no filename")
+                continue
+
             # Skip invalid files
             if not is_valid_file(file.filename):
                 continue
                 
             # Generate unique filename
-            file_extension = os.path.splitext(file.filename)[1].lower()
+            file_extension = os.path.splitext(str(file.filename))[1].lower()
             unique_filename = f"{uuid.uuid4()}{file_extension}"
             file_path = os.path.join(UPLOAD_DIR, unique_filename)
             
@@ -93,7 +98,7 @@ async def upload_images(files: List[UploadFile] = File(...)):
                 continue
             
             # Mark file as processed
-            processed_files.add(file.filename)
+            processed_files.add(str(file.filename))
             
             # Start processing task
             task = process_image.delay(file_path, file.filename)
