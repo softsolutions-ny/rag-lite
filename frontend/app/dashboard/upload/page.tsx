@@ -1,18 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, Loader2, Folder } from "lucide-react";
 import JSZip from "jszip";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { uploadImages, pollJobStatus } from "@/lib/api";
-import {
-  ImageResult,
-  FileWithUrl,
-  APIResponse,
-  JobStatusResponse,
-} from "@/lib/types";
+import { useAPI } from "@/lib/api";
+import { ImageResult, FileWithUrl, JobStatusResponse } from "@/lib/types";
 import {
   Dialog,
   DialogContent,
@@ -89,118 +84,103 @@ const ProcessingTime = ({ time }: { time: number }) => (
   </span>
 );
 
+// Add this component above the main UploadPage component
+const JobStatusMonitor = ({
+  jobId,
+  onStatusUpdate,
+}: {
+  jobId: string;
+  onStatusUpdate: (jobId: string, status: JobStatusResponse) => void;
+}) => {
+  const api = useAPI();
+  const { data: statusData } = api.useJobStatus(jobId);
+
+  useEffect(() => {
+    if (statusData) {
+      onStatusUpdate(jobId, statusData);
+    }
+  }, [statusData, jobId, onStatusUpdate]);
+
+  return null;
+};
+
 export default function UploadPage() {
-  const [uploading, setUploading] = useState(false);
   const [results, setResults] = useState<ImageResult[]>([]);
   const [selectedImage, setSelectedImage] = useState<ImageResult | null>(null);
   const [showThankYou, setShowThankYou] = useState(false);
   const [processingMessage, setProcessingMessage] = useState<string>("");
+  const api = useAPI();
 
-  const handleUploadSuccess = (
-    apiResponse: APIResponse,
-    filesWithUrls: FileWithUrl[]
-  ) => {
-    // Create a map of filenames to their URLs
-    const fileUrlMap = new Map(filesWithUrls.map((f) => [f.file.name, f.url]));
+  // Update handleStatusUpdate to use React Query data
+  const handleStatusUpdate = useCallback(
+    (jobId: string, status: JobStatusResponse) => {
+      setResults((prev) =>
+        prev.map((s) => {
+          if (s.jobId === jobId) {
+            const analysis = status.analysis || status.image?.analysis;
+            const result = analysis
+              ? {
+                  text: analysis.description,
+                  analysis: analysis,
+                }
+              : undefined;
 
-    const newResults = apiResponse.jobs
-      .map((job) => {
-        const imageUrl = fileUrlMap.get(job.filename);
-        if (!imageUrl) {
-          console.log(`[Upload] No URL found for file: ${job.filename}`);
-        }
-        return {
-          jobId: job.job_id,
-          filename: job.filename,
-          status: "pending" as const,
-          imageUrl: imageUrl, // Will be undefined if not found
-        };
-      })
-      .filter((result) => result.imageUrl !== undefined);
-
-    console.log(
-      `[Upload] Created ${newResults.length} results from ${apiResponse.jobs.length} jobs`
-    );
-    setResults((prev) => [...prev, ...newResults]);
-    return newResults;
-  };
-
-  const handleStatusUpdate = (jobId: string, status: JobStatusResponse) => {
-    setResults((prev) =>
-      prev.map((s) => {
-        if (s.jobId === jobId) {
-          const result =
-            typeof status.result === "string"
-              ? { text: status.result }
-              : status.result;
-
-          return {
-            ...s,
-            status: status.status,
-            result,
-            processing_time: status.processing_time,
-          };
-        }
-        return s;
-      })
-    );
-  };
-
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    console.log(
-      `[Upload] Starting upload for ${acceptedFiles.length} files/folders`
-    );
-    setUploading(true);
-    setProcessingMessage("Processing dropped items...");
-
-    try {
-      const processedFiles = await processDroppedItems(acceptedFiles);
-      console.log(`[Upload] Extracted ${processedFiles.length} images`);
-
-      if (processedFiles.length === 0) {
-        throw new Error("No valid images found in the dropped items");
-      }
-
-      setProcessingMessage(`Uploading ${processedFiles.length} images...`);
-      const filesWithUrls = processedFiles.map(createFileWithUrl);
-
-      const response = await uploadImages(processedFiles);
-      console.log(`[Upload] Received response from backend:`, response);
-
-      handleUploadSuccess(response, filesWithUrls);
-
-      // Start polling for status
-      response.jobs.forEach((job) => {
-        pollJobStatus(
-          job.job_id,
-          (status) => {
-            handleStatusUpdate(job.job_id, status);
-          },
-          (error) => {
-            console.error("Polling error:", error);
-            handleStatusUpdate(job.job_id, {
-              status: "error",
-              result: { error: error.message },
-            });
+            return {
+              ...s,
+              status: status.status,
+              result,
+              processing_time:
+                status.stats?.duration_seconds || status.processing_time,
+              error: status.error,
+            };
           }
-        );
-      });
-
-      setShowThankYou(true);
-      setTimeout(() => {
-        setShowThankYou(false);
-      }, 1500);
-    } catch (error) {
-      console.error("[Upload] Upload failed:", error);
-      setProcessingMessage(
-        error instanceof Error ? error.message : "Upload failed"
+          return s;
+        })
       );
-    } finally {
-      setUploading(false);
-      setTimeout(() => setProcessingMessage(""), 3000);
-      console.log(`[Upload] Upload process completed`);
-    }
-  }, []);
+    },
+    []
+  );
+
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      setProcessingMessage("Processing dropped items...");
+
+      try {
+        const processedFiles = await processDroppedItems(acceptedFiles);
+
+        if (processedFiles.length === 0) {
+          throw new Error("No valid images found in the dropped items");
+        }
+
+        setProcessingMessage(`Uploading ${processedFiles.length} images...`);
+        const filesWithUrls = processedFiles.map(createFileWithUrl);
+
+        const response = await api.uploadImages(processedFiles);
+
+        const newResults = response.jobs
+          .map((job) => ({
+            jobId: job.job_id,
+            filename: job.filename,
+            status: "pending" as const,
+            imageUrl: filesWithUrls.find((f) => f.file.name === job.filename)
+              ?.url,
+          }))
+          .filter((result) => result.imageUrl !== undefined);
+
+        setResults((prev) => [...prev, ...newResults]);
+        setShowThankYou(true);
+        setTimeout(() => setShowThankYou(false), 1500);
+      } catch (error) {
+        console.error("[Upload] Upload failed:", error);
+        setProcessingMessage(
+          error instanceof Error ? error.message : "Upload failed"
+        );
+      } finally {
+        setTimeout(() => setProcessingMessage(""), 3000);
+      }
+    },
+    [api]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -208,11 +188,20 @@ export default function UploadPage() {
       "image/*": [".png", ".jpg", ".jpeg", ".gif"],
       "application/zip": [".zip"],
     },
-    noClick: uploading,
+    noClick: api.isUploading,
   });
 
   return (
     <div className="min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      {/* Add this before the main content */}
+      {results.map((result) => (
+        <JobStatusMonitor
+          key={result.jobId}
+          jobId={result.jobId}
+          onStatusUpdate={handleStatusUpdate}
+        />
+      ))}
+
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold">Upload Images</h1>
@@ -228,7 +217,7 @@ export default function UploadPage() {
           <input {...getInputProps()} />
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
             <div className="flex items-center gap-3">
-              {uploading ? (
+              {api.isUploading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <div className="flex gap-2">
@@ -237,14 +226,14 @@ export default function UploadPage() {
                 </div>
               )}
               <p className="text-sm">
-                {uploading
+                {api.isUploading
                   ? processingMessage || "Uploading..."
                   : showThankYou
                   ? "Thank you"
                   : "Drop images, folders, or ZIP files"}
               </p>
             </div>
-            {!uploading && !showThankYou && (
+            {!api.isUploading && !showThankYou && (
               <p className="text-xs text-muted-foreground/60">
                 Supports PNG, JPG, JPEG, GIF
               </p>
@@ -329,7 +318,7 @@ export default function UploadPage() {
             )}
             <div className="space-y-4 overflow-y-auto pr-2">
               <div className="flex justify-between items-center">
-                <h3 className="font-medium">Analysis</h3>
+                <h3 className="font-medium">Description</h3>
                 {selectedImage?.status === "completed" &&
                   selectedImage?.processing_time && (
                     <div className="flex items-center gap-1">
@@ -341,7 +330,11 @@ export default function UploadPage() {
                   )}
               </div>
               <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {selectedImage?.result?.text || selectedImage?.result?.result}
+                {selectedImage?.status === "completed"
+                  ? selectedImage?.result?.text
+                  : selectedImage?.status === "error"
+                  ? selectedImage.error
+                  : "Processing..."}
               </p>
             </div>
           </div>

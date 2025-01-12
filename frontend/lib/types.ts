@@ -2,13 +2,38 @@
 export type JobStatus = "pending" | "processing" | "completed" | "error";
 
 // API Response types
-export interface ProcessedResult {
-  text?: string;
-  analysis?: {
-    [key: string]: string | number | boolean;
-  };
-  error?: string;
-  result?: string;
+export interface ImageAnalysis {
+  id: string;
+  description: string;
+  processing_time: number;
+  created_at: string;
+  model_version?: string;
+}
+
+export interface Image {
+  id: string;
+  filename: string;
+  gcs_key: string;
+  gcs_bucket: string;
+  gcs_url: string;
+  mime_type?: string;
+  file_size?: number;
+  uploaded_at: string;
+  user_id?: string;
+  analysis?: ImageAnalysis;
+}
+
+export interface JobStats {
+  job_id: string;
+  status: JobStatus;
+  user_id?: string;
+  start_time: string;
+  end_time?: string;
+  duration_seconds?: number;
+  api_start_time?: string;
+  api_end_time?: string;
+  api_duration_seconds?: number;
+  image_id?: string;
 }
 
 export interface APIJob {
@@ -17,29 +42,37 @@ export interface APIJob {
 }
 
 export interface APIResponse {
-  jobs: APIJob[];
+  jobs: Array<{
+    job_id: string;
+    filename: string;
+  }>;
 }
 
 export interface JobStatusResponse {
   status: JobStatus;
-  result?: ProcessedResult | string;
-  processing_time?: number;
+  job_id: string;
   error?: string;
-  job_id?: string;
+  image?: Image;
+  stats?: JobStats;
+  analysis?: ImageAnalysis;
+  processing_time?: number;
   filename?: string;
+  gcs_url?: string;
+  uploaded_at?: string;
 }
 
 // UI State types
-export interface UploadStatus {
+export interface ImageResult {
   jobId: string;
-  status: JobStatus;
-  result?: ProcessedResult;
-  processing_time?: number;
-}
-
-export interface ImageResult extends UploadStatus {
   filename: string;
+  status: JobStatus;
   imageUrl?: string;
+  result?: {
+    text: string;
+    analysis?: ImageAnalysis;
+  };
+  processing_time?: number;
+  error?: string;
 }
 
 // File processing types

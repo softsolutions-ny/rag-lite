@@ -1,0 +1,125 @@
+[2025-01-11 20:25:37] INFO [server] [server.py:37] Received 1 files
+[2025-01-11 20:25:37] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-11 20:25:37] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 8f8626db-1a16-4307-84e1-95b989b90363.png
+[2025-01-11 20:25:37] INFO [server] [server.py:70] Created job 937715a1-f9ae-4de3-a685-b9d226a218cc for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-11 20:25:37] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-11 21:40:20] INFO [server] [server.py:37] Received 1 files
+[2025-01-11 21:40:20] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-11 21:40:20] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 552abb8b-16de-4ba0-99f5-87613351dce3.png
+[2025-01-11 21:40:20] INFO [server] [server.py:70] Created job 6914dbb5-0e5e-4f40-be42-0bf17f5fdde1 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-11 21:40:20] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-11 21:40:33] INFO [server] [server.py:37] Received 1 files
+[2025-01-11 21:40:33] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-11 21:40:33] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> c1902c40-4869-4d98-988f-81c3947bf63b.png
+[2025-01-11 21:40:33] INFO [server] [server.py:70] Created job 157e4c6d-8194-40ea-802b-7d2242b2c493 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-11 21:40:33] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-11 21:40:49] INFO [server] [server.py:37] Received 1 files
+[2025-01-11 21:40:49] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-11 21:40:49] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 20515de2-1eb7-49f5-b2b6-a2abfbc02156.png
+[2025-01-11 21:40:49] INFO [server] [server.py:70] Created job 745ed033-dff6-4bde-b336-f73d70f95935 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-11 21:40:49] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-11 21:41:37] INFO [server] [server.py:37] Received 1 files
+[2025-01-11 21:41:37] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-11 21:41:37] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> cb500d5a-4311-4288-89f9-2922ab1982bb.png
+[2025-01-11 21:41:37] INFO [server] [server.py:70] Created job d939e1de-70cf-4798-93b7-dc995c803374 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-11 21:41:37] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-11 21:41:47] INFO [server] [server.py:37] Received 1 files
+[2025-01-11 21:41:47] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-11 21:41:47] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 26b11a48-4e94-4902-add7-d305d5f82146.png
+[2025-01-11 21:41:47] INFO [server] [server.py:70] Created job 22ff193a-6b8d-4662-be63-a4c3847609d6 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-11 21:41:47] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-11 21:42:01] INFO [server] [server.py:37] Received 13 files
+[2025-01-11 21:42:01] INFO [server] [server.py:38] File names: ['Gg-4FAOWQAAAR9N.jpg', '7c088c767861c114a9c719948e1f7127.jpg', 'd482f08d99dd330a5834125b2b7e7511.jpg', 'f9998efe411152578fb8db52e19f28e4.jpg', 'GgtXVYjWQAIzupv.jpg', 'Normal-Distribution-meme-meme-56amfo.jpg', '788331f19d450984a65652bfc855f3f9.jpg', 'e8cdfd3ea51e43468018749f9a094517.jpg', '84e3b74819392eda227e486db0085ffe.jpg', 'ca262768a8a551ae3da8cc3a48525499.jpg', 'cdbdd441ca335f8afc97f47e677f0d71.jpg', 'be43f76d69ec299d7970dd07ae8bc2ed.jpg', '8ef1a72d608376d681f4e0ebd4b43f45.jpg']
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: Gg-4FAOWQAAAR9N.jpg -> e4abba48-1a7a-4d65-988a-e5621962f4b3.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job c21ab69c-3067-49f5-b269-640ce865f5db for file Gg-4FAOWQAAAR9N.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: 7c088c767861c114a9c719948e1f7127.jpg -> bc2c423b-d213-447a-989f-69f5f4f7dbae.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 080c8056-ee32-44f0-9f32-98a84c16742d for file 7c088c767861c114a9c719948e1f7127.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: d482f08d99dd330a5834125b2b7e7511.jpg -> 672c638f-e98d-426d-a525-d86fede50945.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job ae56765c-2fc5-44da-8c24-50b325c938e3 for file d482f08d99dd330a5834125b2b7e7511.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: f9998efe411152578fb8db52e19f28e4.jpg -> f02e0003-f817-4f26-bf9a-c15eefcf9c5a.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 4b9b5e4d-313f-4519-a453-b7575d984d06 for file f9998efe411152578fb8db52e19f28e4.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: GgtXVYjWQAIzupv.jpg -> 0f7d83fb-8a0f-475d-b3fb-865d3d213473.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 62332fc4-e028-482e-9b73-efb01fcee309 for file GgtXVYjWQAIzupv.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: Normal-Distribution-meme-meme-56amfo.jpg -> 7dd88ed6-7c38-4519-ae29-d09d0018ab59.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job e66bd743-6326-4719-ba0e-7239d85f0b86 for file Normal-Distribution-meme-meme-56amfo.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: 788331f19d450984a65652bfc855f3f9.jpg -> 4649b546-b676-4f89-9984-8e536fad634d.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 20304e58-6f0f-4c42-bd21-431388d86e3f for file 788331f19d450984a65652bfc855f3f9.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: e8cdfd3ea51e43468018749f9a094517.jpg -> ed14f037-077b-44c8-9054-b3cf9fd64165.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 190e4dcc-d669-45ad-b10e-0fd1c5b8e5a0 for file e8cdfd3ea51e43468018749f9a094517.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: 84e3b74819392eda227e486db0085ffe.jpg -> c697b4c0-3fee-4925-bad8-aada52835c63.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 5c1405a9-1b63-48a3-acb3-06b602c74e26 for file 84e3b74819392eda227e486db0085ffe.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: ca262768a8a551ae3da8cc3a48525499.jpg -> 1ead04be-18d0-424b-a5f8-e7904c341bcb.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job cd16ab8d-b789-45a4-a664-b89385f58fcb for file ca262768a8a551ae3da8cc3a48525499.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: cdbdd441ca335f8afc97f47e677f0d71.jpg -> a894d814-4502-4847-b7c4-c4110401151e.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job 605ab10b-4df2-44d8-8eec-e1a0f2a3c800 for file cdbdd441ca335f8afc97f47e677f0d71.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: be43f76d69ec299d7970dd07ae8bc2ed.jpg -> e22f25e4-604e-45df-87e8-00b474a207b3.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job ff013681-346e-4196-94f7-bc1705ecb360 for file be43f76d69ec299d7970dd07ae8bc2ed.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:56] Processing file: 8ef1a72d608376d681f4e0ebd4b43f45.jpg -> f2751dca-8a8b-49cb-8dd0-281f9b07793c.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:70] Created job af8c8f1a-c7fc-453d-ad9e-06a17308eaf5 for file 8ef1a72d608376d681f4e0ebd4b43f45.jpg
+[2025-01-11 21:42:01] INFO [server] [server.py:82] Successfully created 13 jobs
+[2025-01-12 00:17:24] INFO [server] [server.py:37] Received 1 files
+[2025-01-12 00:17:24] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-12 00:17:25] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> f2111078-c84b-42cc-8eb2-5a9aaa3d9eee.png
+[2025-01-12 00:17:25] ERROR [server] [server.py:77] Error processing file Screenshot 2025-01-10 at 11.37.08 PM.png: [Errno 2] No such file or directory: '/Users/arekhalpern/Code/soloprojects/2025/rag-lite/backend/uploads/f2111078-c84b-42cc-8eb2-5a9aaa3d9eee.png'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/rag-lite/backend/server.py", line 59, in upload_images
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/arekhalpern/Code/soloprojects/2025/rag-lite/backend/uploads/f2111078-c84b-42cc-8eb2-5a9aaa3d9eee.png'
+[2025-01-12 00:19:27] INFO [server] [server.py:37] Received 1 files
+[2025-01-12 00:19:27] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-12 00:19:27] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 64df3c76-13a5-40a0-8a8d-b4840967c54e.png
+[2025-01-12 00:19:27] INFO [server] [server.py:70] Created job 0526b3de-54cd-4126-bf8d-d2c3c5d57d81 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-12 00:19:27] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-12 00:25:43] INFO [server] [server.py:37] Received 1 files
+[2025-01-12 00:25:43] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-12 00:25:43] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> cdb8573a-e29e-45ec-8b3b-6290749fd39d.png
+[2025-01-12 00:25:43] INFO [server] [server.py:70] Created job 39522fab-9e27-4ffe-ae82-4edcf1f91ce6 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-12 00:25:43] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-12 00:30:16] ERROR [server] [server.py:112] Error fetching images: 'AsyncSession' object has no attribute 'query'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 106, in get_user_images
+    images = storage.get_user_images(current_user["user_id"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 122, in get_user_images
+    raise e
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 87, in get_user_images
+    self.db.query(Image, ImageAnalysis)
+    ^^^^^^^^^^^^^
+AttributeError: 'AsyncSession' object has no attribute 'query'
+[2025-01-12 00:30:17] ERROR [server] [server.py:112] Error fetching images: 'AsyncSession' object has no attribute 'query'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 106, in get_user_images
+    images = storage.get_user_images(current_user["user_id"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 122, in get_user_images
+    raise e
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 87, in get_user_images
+    self.db.query(Image, ImageAnalysis)
+    ^^^^^^^^^^^^^
+AttributeError: 'AsyncSession' object has no attribute 'query'
+[2025-01-12 00:30:18] ERROR [server] [server.py:112] Error fetching images: 'AsyncSession' object has no attribute 'query'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 106, in get_user_images
+    images = storage.get_user_images(current_user["user_id"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 122, in get_user_images
+    raise e
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 87, in get_user_images
+    self.db.query(Image, ImageAnalysis)
+    ^^^^^^^^^^^^^
+AttributeError: 'AsyncSession' object has no attribute 'query'
+[2025-01-12 00:30:19] ERROR [server] [server.py:112] Error fetching images: 'AsyncSession' object has no attribute 'query'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 106, in get_user_images
+    images = storage.get_user_images(current_user["user_id"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 122, in get_user_images
+    raise e
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/db/storage.py", line 87, in get_user_images
+    self.db.query(Image, ImageAnalysis)
+    ^^^^^^^^^^^^^
+AttributeError: 'AsyncSession' object has no attribute 'query'
+[2025-01-12 00:47:12] INFO [server] [server.py:37] Received 1 files
+[2025-01-12 00:47:12] INFO [server] [server.py:38] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-12 00:47:12] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> b66925a1-56e8-4252-8474-5fe9d1644916.png
+[2025-01-12 00:47:12] INFO [server] [server.py:70] Created job ebbe0207-78b9-4344-a766-b0660790c0dc for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-12 00:47:12] INFO [server] [server.py:82] Successfully created 1 jobs
