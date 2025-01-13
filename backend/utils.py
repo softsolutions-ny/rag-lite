@@ -41,16 +41,49 @@ def parse_celery_result(job_id: str, result: AsyncResult) -> Dict[str, Any]:
     """
     Parse a Celery AsyncResult into a standardized response format.
     """
-    if result.state == "SUCCESS":
-        return result.result  # Our tasks already return properly formatted results
-    elif result.state == "FAILURE":
+    try:
+        # Check if task exists
+        if not result:
+            return {
+                "status": "error",
+                "job_id": job_id,
+                "error": "Task not found"
+            }
+            
+        # Get task state
+        state = result.state
+        
+        if state == "SUCCESS":
+            return result.get()  # Our tasks already return properly formatted results
+        elif state == "FAILURE":
+            return {
+                "status": "error",
+                "job_id": job_id,
+                "error": str(result.result) if result.result else "Task failed"
+            }
+        elif state == "STARTED":
+            return {
+                "status": "processing",
+                "job_id": job_id,
+                "state": "started"
+            }
+        elif state == "PENDING":
+            return {
+                "status": "pending",
+                "job_id": job_id
+            }
+        else:  # PROGRESS or other states
+            info = result.info
+            if isinstance(info, dict):
+                return info
+            return {
+                "status": "processing",
+                "job_id": job_id,
+                "state": state.lower()
+            }
+    except Exception as e:
         return {
             "status": "error",
             "job_id": job_id,
-            "error": str(result.result) if result.result else "Task failed"
-        }
-    else:
-        return result.info or {
-            "status": "processing",
-            "job_id": job_id
+            "error": f"Error getting task status: {str(e)}"
         }

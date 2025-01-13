@@ -27,15 +27,23 @@ register('custom_json', custom_dumps, custom_loads,
          content_encoding='utf-8')
 
 # Initialize Celery with Redis backend
-celery_app = Celery('tasks')
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+celery_app = Celery(
+    'tasks',
+    broker=redis_url,
+    backend='redis'  # Just specify the backend type
+)
 
 # Configure Celery
 celery_app.conf.update(
-    broker_url=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
-    result_backend=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+    broker_url=redis_url,
+    result_backend=redis_url,
     task_serializer='custom_json',
-    accept_content=['custom_json'],
+    accept_content=['custom_json', 'application/json', 'json'],  # Accept more content types
     result_serializer='custom_json',
+    result_expires=None,  # Results don't expire
+    task_track_started=True,  # Track when tasks are started
+    task_ignore_result=False,  # Don't ignore results
     timezone='UTC',
     enable_utc=True,
     imports=['process_images']

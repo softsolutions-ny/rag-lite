@@ -123,3 +123,202 @@ AttributeError: 'AsyncSession' object has no attribute 'query'
 [2025-01-12 00:47:12] INFO [server] [server.py:56] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> b66925a1-56e8-4252-8474-5fe9d1644916.png
 [2025-01-12 00:47:12] INFO [server] [server.py:70] Created job ebbe0207-78b9-4344-a766-b0660790c0dc for file Screenshot 2025-01-10 at 11.37.08 PM.png
 [2025-01-12 00:47:12] INFO [server] [server.py:82] Successfully created 1 jobs
+[2025-01-13 09:31:02] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:31:02] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:31:02] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> b8133cc2-a920-4df9-90ca-2ad185f09239.png
+[2025-01-13 09:31:02] INFO [server] [server.py:71] Created job ddb868cb-8140-462b-84f6-7172891b24fb for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:31:02] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:31:02] ERROR [server] [server.py:132] Error getting status for job ddb868cb-8140-462b-84f6-7172891b24fb: 'AsyncSession' object has no attribute 'query'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 126, in get_job_status
+    processing_stats = stats.get_stats(db, job_id)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/stats.py", line 81, in get_stats
+    processing = db.query(ImageProcessing).filter_by(job_id=job_id).first()
+                 ^^^^^^^^
+AttributeError: 'AsyncSession' object has no attribute 'query'
+[2025-01-13 09:34:01] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:34:01] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:34:01] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 09cd80a9-f36a-4db8-8cff-14114fecbd20.png
+[2025-01-13 09:34:01] INFO [server] [server.py:71] Created job 65cd0160-60c9-4dd8-8ec9-2ad502c6a638 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:34:01] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:34:01] ERROR [server] [server.py:132] Error getting status for job 65cd0160-60c9-4dd8-8ec9-2ad502c6a638: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:34:53] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:34:53] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:34:53] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> f577258e-5b78-44cc-b8f5-0623c977e9e2.png
+[2025-01-13 09:34:53] INFO [server] [server.py:71] Created job 65cc19f4-3cbf-455f-a788-2b07a73a3548 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:34:53] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:34:53] ERROR [server] [server.py:132] Error getting status for job 65cc19f4-3cbf-455f-a788-2b07a73a3548: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:37:02] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:37:02] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:37:02] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> e9f277db-79fd-40e8-946b-7d82a667b709.png
+[2025-01-13 09:37:03] INFO [server] [server.py:71] Created job 34524520-9262-4477-bc3b-7799ebd8f22c for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:37:03] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:37:03] ERROR [server] [server.py:132] Error getting status for job 34524520-9262-4477-bc3b-7799ebd8f22c: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:37:29] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:37:29] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:37:29] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 36a0bf5a-8623-4d61-a7c5-26806bd624ce.png
+[2025-01-13 09:37:29] INFO [server] [server.py:71] Created job 82e8a2a8-e201-4dae-8af6-8a7db3875aeb for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:37:29] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:37:29] ERROR [server] [server.py:132] Error getting status for job 82e8a2a8-e201-4dae-8af6-8a7db3875aeb: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:38:45] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:38:45] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:38:45] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> bfd09596-21cd-4c08-ad63-5a4222e8dc7d.png
+[2025-01-13 09:38:45] INFO [server] [server.py:71] Created job 3a510196-023c-4a36-8b6a-a3ef2170bf79 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:38:45] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:38:45] ERROR [server] [server.py:132] Error getting status for job 3a510196-023c-4a36-8b6a-a3ef2170bf79: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:39:36] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:39:36] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:39:36] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> fa476fba-ec46-41a0-b382-1ef32960b68a.png
+[2025-01-13 09:39:36] INFO [server] [server.py:71] Created job fb4831b4-cec1-4ce7-a3fe-cb1a8f199234 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:39:36] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:39:36] ERROR [server] [server.py:132] Error getting status for job fb4831b4-cec1-4ce7-a3fe-cb1a8f199234: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:40:00] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:40:00] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:40:00] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> d5c2835a-2b2f-4539-8a53-bcb6945b1013.png
+[2025-01-13 09:40:00] INFO [server] [server.py:71] Created job 6b3a2850-a7fd-47ff-b2d0-a56ae5561ebd for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:40:00] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:40:00] ERROR [server] [server.py:132] Error getting status for job 6b3a2850-a7fd-47ff-b2d0-a56ae5561ebd: 'DisabledBackend' object has no attribute '_get_task_meta_for'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 123, in get_job_status
+    celery_result = parse_celery_result(job_id, result)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/utils.py", line 44, in parse_celery_result
+    if result.state == "SUCCESS":
+       ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 503, in state
+    return self._get_task_meta()['status']
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/result.py", line 442, in _get_task_meta
+    return self._maybe_set_cache(self.backend.get_task_meta(self.id))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/celery/backends/base.py", line 608, in get_task_meta
+    meta = self._get_task_meta_for(task_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DisabledBackend' object has no attribute '_get_task_meta_for'. Did you mean: 'get_task_meta_for'?
+[2025-01-13 09:42:32] INFO [server] [server.py:38] Received 1 files
+[2025-01-13 09:42:32] INFO [server] [server.py:39] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:42:32] INFO [server] [server.py:57] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> 0a672759-6661-4aa0-9324-9f6a78364c4a.png
+[2025-01-13 09:42:33] INFO [server] [server.py:71] Created job 9167062f-c68a-4b15-94d4-677b268a8f28 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:42:33] INFO [server] [server.py:83] Successfully created 1 jobs
+[2025-01-13 09:42:33] ERROR [server] [server.py:132] Error getting status for job 9167062f-c68a-4b15-94d4-677b268a8f28: 'AsyncSession' object has no attribute 'query'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/server.py", line 126, in get_job_status
+    processing_stats = stats.get_stats(db, job_id)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/stats.py", line 81, in get_stats
+    processing = db.query(ImageProcessing).filter_by(job_id=job_id).first()
+                 ^^^^^^^^
+AttributeError: 'AsyncSession' object has no attribute 'query'
+[2025-01-13 09:50:51] INFO [server] [server.py:39] Received 1 files
+[2025-01-13 09:50:51] INFO [server] [server.py:40] File names: ['Screenshot 2025-01-10 at 11.37.08\u202fPM.png']
+[2025-01-13 09:50:51] INFO [server] [server.py:58] Processing file: Screenshot 2025-01-10 at 11.37.08 PM.png -> a6c63762-a6d8-4f37-ab6e-e44a9a644893.png
+[2025-01-13 09:50:51] INFO [server] [server.py:72] Created job 9827cf3e-f837-45d1-8df6-ec1b5082b194 for file Screenshot 2025-01-10 at 11.37.08 PM.png
+[2025-01-13 09:50:51] INFO [server] [server.py:84] Successfully created 1 jobs
+[2025-01-13 09:52:17] INFO [server] [server.py:39] Received 1 files
+[2025-01-13 09:52:17] INFO [server] [server.py:40] File names: ['Screenshot 2025-01-12 at 1.03.39\u202fAM.png']
+[2025-01-13 09:52:17] INFO [server] [server.py:58] Processing file: Screenshot 2025-01-12 at 1.03.39 AM.png -> fc25475d-4d6c-4e3c-8118-b613145d6e8b.png
+[2025-01-13 09:52:17] INFO [server] [server.py:72] Created job e1ab787c-b887-4c61-bc23-2174b15c999a for file Screenshot 2025-01-12 at 1.03.39 AM.png
+[2025-01-13 09:52:17] INFO [server] [server.py:84] Successfully created 1 jobs

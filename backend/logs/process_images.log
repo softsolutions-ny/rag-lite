@@ -86,3 +86,112 @@
 [2025-01-12 00:47:18] INFO [process_images] [process_images.py:91] Stored image with ID: 44a42c18-c530-41ae-8ca1-739966131d0b
 [2025-01-12 00:47:18] INFO [process_images] [process_images.py:102] Got processing stats for job ebbe0207-78b9-4344-a766-b0660790c0dc: {'job_id': 'ebbe0207-78b9-4344-a766-b0660790c0dc', 'status': 'completed', 'start_time': '2025-01-12T00:47:12.576222-05:00', 'end_time': '2025-01-12T05:47:18.559718+00:00', 'duration_seconds': 5.98, 'api_start_time': '2025-01-12T00:47:12.687806-05:00', 'api_end_time': '2025-01-12T00:47:18.141537-05:00', 'api_duration_seconds': 5.45, 'image_id': '44a42c18-c530-41ae-8ca1-739966131d0b', 'user_id': 'user_2rUfnyh68uZAwot0qzRLALTdVOc'}
 [2025-01-12 00:47:18] INFO [process_images] [process_images.py:124] Returning result with processing time: 5.45
+[2025-01-13 09:31:02] ERROR [process_images] [process_images.py:127] Error in job ddb868cb-8140-462b-84f6-7172891b24fb: Error processing image: (psycopg2.errors.NotNullViolation) null value in column "image_id" of relation "image_processings" violates not-null constraint
+DETAIL:  Failing row contains (4eb932c8-f0ae-4693-a710-2c4f75c1ffbf, ddb868cb-8140-462b-84f6-7172891b24fb, null, user_2rUfnyh68uZAwot0qzRLALTdVOc, processing, 2025-01-13 09:31:02.807379-05, null, null, null, null, null, null, null, 2025-01-13 09:31:02.857975-05).
+
+[SQL: INSERT INTO image_processings (id, job_id, image_id, user_id, status, start_time, end_time, duration_seconds, api_start_time, api_end_time, api_duration_seconds, description, model_version, created_at) VALUES (%(id)s::UUID, %(job_id)s, %(image_id)s::UUID, %(user_id)s, %(status)s, %(start_time)s, %(end_time)s, %(duration_seconds)s, %(api_start_time)s, %(api_end_time)s, %(api_duration_seconds)s, %(description)s, %(model_version)s, %(created_at)s)]
+[parameters: {'id': UUID('4eb932c8-f0ae-4693-a710-2c4f75c1ffbf'), 'job_id': 'ddb868cb-8140-462b-84f6-7172891b24fb', 'image_id': None, 'user_id': 'user_2rUfnyh68uZAwot0qzRLALTdVOc', 'status': 'processing', 'start_time': datetime.datetime(2025, 1, 13, 14, 31, 2, 807379, tzinfo=datetime.timezone.utc), 'end_time': None, 'duration_seconds': None, 'api_start_time': None, 'api_end_time': None, 'api_duration_seconds': None, 'description': None, 'model_version': None, 'created_at': datetime.datetime(2025, 1, 13, 9, 31, 2, 857975)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.NotNullViolation: null value in column "image_id" of relation "image_processings" violates not-null constraint
+DETAIL:  Failing row contains (4eb932c8-f0ae-4693-a710-2c4f75c1ffbf, ddb868cb-8140-462b-84f6-7172891b24fb, null, user_2rUfnyh68uZAwot0qzRLALTdVOc, processing, 2025-01-13 09:31:02.807379-05, null, null, null, null, null, null, null, 2025-01-13 09:31:02.857975-05).
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/process_images.py", line 28, in process_image
+    stats.start_processing(db, job_id, user_id)
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/stats.py", line 28, in start_processing
+    db.commit()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1969, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1256, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1231, in _prepare_impl
+    self.session.flush()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4312, in flush
+    self._flush(objects)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4447, in _flush
+    with util.safe_reraise():
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4408, in _flush
+    flush_context.execute()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 1227, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 517, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2344, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.NotNullViolation) null value in column "image_id" of relation "image_processings" violates not-null constraint
+DETAIL:  Failing row contains (4eb932c8-f0ae-4693-a710-2c4f75c1ffbf, ddb868cb-8140-462b-84f6-7172891b24fb, null, user_2rUfnyh68uZAwot0qzRLALTdVOc, processing, 2025-01-13 09:31:02.807379-05, null, null, null, null, null, null, null, 2025-01-13 09:31:02.857975-05).
+
+[SQL: INSERT INTO image_processings (id, job_id, image_id, user_id, status, start_time, end_time, duration_seconds, api_start_time, api_end_time, api_duration_seconds, description, model_version, created_at) VALUES (%(id)s::UUID, %(job_id)s, %(image_id)s::UUID, %(user_id)s, %(status)s, %(start_time)s, %(end_time)s, %(duration_seconds)s, %(api_start_time)s, %(api_end_time)s, %(api_duration_seconds)s, %(description)s, %(model_version)s, %(created_at)s)]
+[parameters: {'id': UUID('4eb932c8-f0ae-4693-a710-2c4f75c1ffbf'), 'job_id': 'ddb868cb-8140-462b-84f6-7172891b24fb', 'image_id': None, 'user_id': 'user_2rUfnyh68uZAwot0qzRLALTdVOc', 'status': 'processing', 'start_time': datetime.datetime(2025, 1, 13, 14, 31, 2, 807379, tzinfo=datetime.timezone.utc), 'end_time': None, 'duration_seconds': None, 'api_start_time': None, 'api_end_time': None, 'api_duration_seconds': None, 'description': None, 'model_version': None, 'created_at': datetime.datetime(2025, 1, 13, 9, 31, 2, 857975)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+[2025-01-13 09:34:01] INFO [process_images] [process_images.py:29] Starting image processing for job 65cd0160-60c9-4dd8-8ec9-2ad502c6a638
+[2025-01-13 09:34:07] INFO [process_images] [process_images.py:92] Stored image with ID: b78898a9-0b47-4dc0-892a-a86dba764159
+[2025-01-13 09:34:07] INFO [process_images] [process_images.py:119] Returning result with processing time: 5.6
+[2025-01-13 09:34:53] INFO [process_images] [process_images.py:29] Starting image processing for job 65cc19f4-3cbf-455f-a788-2b07a73a3548
+[2025-01-13 09:34:59] INFO [process_images] [process_images.py:92] Stored image with ID: 3c8f59d1-c8b9-4014-823d-baf0ad5fc581
+[2025-01-13 09:34:59] INFO [process_images] [process_images.py:119] Returning result with processing time: 5.63
+[2025-01-13 09:37:13] INFO [process_images] [process_images.py:29] Starting image processing for job 34524520-9262-4477-bc3b-7799ebd8f22c
+[2025-01-13 09:37:19] INFO [process_images] [process_images.py:92] Stored image with ID: 4fb18b6d-4614-4a07-a031-59e1ffc51f58
+[2025-01-13 09:37:19] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.11
+[2025-01-13 09:37:29] INFO [process_images] [process_images.py:29] Starting image processing for job 82e8a2a8-e201-4dae-8af6-8a7db3875aeb
+[2025-01-13 09:37:35] INFO [process_images] [process_images.py:92] Stored image with ID: 8ecfd68e-0b24-4951-b107-51bc5ba68123
+[2025-01-13 09:37:35] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.18
+[2025-01-13 09:38:45] INFO [process_images] [process_images.py:29] Starting image processing for job 3a510196-023c-4a36-8b6a-a3ef2170bf79
+[2025-01-13 09:38:52] INFO [process_images] [process_images.py:92] Stored image with ID: 777975c7-aef9-463c-9678-30a33ff1dcff
+[2025-01-13 09:38:52] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.39
+[2025-01-13 09:39:44] INFO [process_images] [process_images.py:29] Starting image processing for job fb4831b4-cec1-4ce7-a3fe-cb1a8f199234
+[2025-01-13 09:39:51] INFO [process_images] [process_images.py:92] Stored image with ID: 3428a7bb-f5c4-43b4-8fc0-06b254db5675
+[2025-01-13 09:39:51] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.26
+[2025-01-13 09:40:00] INFO [process_images] [process_images.py:29] Starting image processing for job 6b3a2850-a7fd-47ff-b2d0-a56ae5561ebd
+[2025-01-13 09:40:07] INFO [process_images] [process_images.py:92] Stored image with ID: 38ebcc0d-3ff1-4685-beeb-98244fdd8dda
+[2025-01-13 09:40:07] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.03
+[2025-01-13 09:42:33] INFO [process_images] [process_images.py:29] Starting image processing for job 9167062f-c68a-4b15-94d4-677b268a8f28
+[2025-01-13 09:42:40] INFO [process_images] [process_images.py:92] Stored image with ID: 9a13cb6e-576c-4372-831e-6006543ca007
+[2025-01-13 09:42:40] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.31
+[2025-01-13 09:50:51] INFO [process_images] [process_images.py:29] Starting image processing for job 9827cf3e-f837-45d1-8df6-ec1b5082b194
+[2025-01-13 09:50:57] INFO [process_images] [process_images.py:92] Stored image with ID: 617f5d32-0cec-4615-999c-263753e172e5
+[2025-01-13 09:50:57] INFO [process_images] [process_images.py:119] Returning result with processing time: 5.37
+[2025-01-13 09:52:17] INFO [process_images] [process_images.py:29] Starting image processing for job e1ab787c-b887-4c61-bc23-2174b15c999a
+[2025-01-13 09:52:23] INFO [process_images] [process_images.py:92] Stored image with ID: 27ef9c63-cf97-4d2a-a8f1-9faa425b2958
+[2025-01-13 09:52:23] INFO [process_images] [process_images.py:119] Returning result with processing time: 6.14

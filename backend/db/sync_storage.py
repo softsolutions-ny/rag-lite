@@ -1,6 +1,4 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import UUID
 from typing import Optional, Dict, Any, List
 import uuid
@@ -8,14 +6,14 @@ import os
 from google.cloud import storage
 from .models import Image, ImageProcessing
 
-class StorageManager:
-    def __init__(self, db_session: AsyncSession):
+class SyncStorageManager:
+    def __init__(self, db_session: Session):
         self.db = db_session
         self.gcs_client = storage.Client()
         self.bucket_name = os.getenv("GCS_BUCKET_NAME")
         self.bucket = self.gcs_client.bucket(self.bucket_name)
 
-    async def store_image(self, file_path: str, filename: str, user_id: Optional[str] = None) -> Image:
+    def store_image(self, file_path: str, filename: str, user_id: Optional[str] = None) -> Image:
         """Store image in GCS and create database record"""
         # Generate unique GCS key
         gcs_key = f"users/{user_id if user_id else 'anonymous'}/images/{uuid.uuid4()}/{filename}"
@@ -41,31 +39,28 @@ class StorageManager:
         
         try:
             self.db.add(image)
-            await self.db.commit()
+            self.db.commit()
             return image
         except Exception as e:
-            await self.db.rollback()
+            self.db.rollback()
             raise e
 
-    async def get_latest_processing(self, image_id: UUID) -> Optional[ImageProcessing]:
+    def get_latest_processing(self, image_id: UUID) -> Optional[ImageProcessing]:
         """Get the latest processing record for an image"""
-        stmt = (
-            select(ImageProcessing)
+        return (
+            self.db.query(ImageProcessing)
             .filter(ImageProcessing.image_id == image_id)
             .order_by(ImageProcessing.created_at.desc())
+            .first()
         )
-        result = await self.db.execute(stmt)
-        return result.scalar_one_or_none()
 
-    async def get_image_with_analysis(self, image_id: UUID) -> Dict[str, Any]:
+    def get_image_with_analysis(self, image_id: UUID) -> Dict[str, Any]:
         """Get image and its latest analysis"""
-        stmt = select(Image).filter(Image.id == image_id)
-        result = await self.db.execute(stmt)
-        image = result.scalar_one_or_none()
+        image = self.db.query(Image).filter(Image.id == image_id).first()
         if not image:
             return None
             
-        processing = await self.get_latest_processing(image_id)
+        processing = self.get_latest_processing(image_id)
         
         return {
             "id": str(image.id),
@@ -81,15 +76,13 @@ class StorageManager:
             } if processing and processing.status == "completed" else None
         }
 
-    async def get_user_images(self, user_id: str) -> List[Dict[str, Any]]:
+    def get_user_images(self, user_id: str) -> List[Dict[str, Any]]:
         """Get all images and their analyses for a user"""
-        stmt = select(Image).filter(Image.user_id == user_id)
-        result = await self.db.execute(stmt)
-        images = result.scalars().all()
+        images = self.db.query(Image).filter(Image.user_id == user_id).all()
         
         results = []
         for image in images:
-            processing = await self.get_latest_processing(image.id)
+            processing = self.get_latest_processing(image.id)
             results.append({
                 "id": str(image.id),
                 "filename": image.filename,
@@ -106,11 +99,9 @@ class StorageManager:
             
         return results
 
-    async def delete_image(self, image_id: UUID) -> bool:
+    def delete_image(self, image_id: UUID) -> bool:
         """Delete image and its processing records"""
-        stmt = select(Image).filter(Image.id == image_id)
-        result = await self.db.execute(stmt)
-        image = result.scalar_one_or_none()
+        image = self.db.query(Image).filter(Image.id == image_id).first()
         if not image:
             return False
             
@@ -120,6 +111,6 @@ class StorageManager:
             blob.delete()
             
         # Database cascade will handle processing records deletion
-        await self.db.delete(image)
-        await self.db.commit()
-        return True
+        self.db.delete(image)
+        self.db.commit()
+        return True 

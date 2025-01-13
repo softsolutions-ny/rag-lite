@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, inspect, text
-from .models import Base, Image, ImageAnalysis, JobStats
+from .models import Base, Image, ImageProcessing
 import os
 from dotenv import load_dotenv
 
@@ -12,11 +12,13 @@ def init_db():
     # Create engine with echo to see SQL output
     engine = create_engine(DATABASE_URL, echo=True)
     
-    # Drop old processing_stats table if it exists
+    # Drop old tables if they exist
     with engine.connect() as conn:
         conn.execute(text("DROP TABLE IF EXISTS processing_stats CASCADE"))
+        conn.execute(text("DROP TABLE IF EXISTS job_stats CASCADE"))
+        conn.execute(text("DROP TABLE IF EXISTS image_analyses CASCADE"))
         conn.commit()
-        print("Dropped old processing_stats table.")
+        print("Dropped old tables.")
     
     # Drop all tables
     Base.metadata.drop_all(engine)
@@ -28,7 +30,7 @@ def init_db():
     
     # Verify table structure
     inspector = inspect(engine)
-    for table in ['images', 'image_analyses', 'job_stats']:
+    for table in ['images', 'image_processings']:
         print(f"\nColumns in {table}:")
         columns = inspector.get_columns(table)
         for column in columns:

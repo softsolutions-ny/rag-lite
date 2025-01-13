@@ -12,54 +12,47 @@ class Image(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     filename = Column(String, nullable=False)
-    gcs_key = Column(String, nullable=False)
+    gcs_key = Column(String, nullable=False, index=True)
     gcs_bucket = Column(String, nullable=False)
     mime_type = Column(String)
     file_size = Column(Float)
-    uploaded_at = Column(TIMESTAMP(timezone=True), default=datetime.now)
-    user_id = Column(String(255), nullable=True, server_default=text('NULL'))
+    uploaded_at = Column(TIMESTAMP(timezone=True), default=datetime.now, index=True)
+    user_id = Column(String(255), nullable=True, server_default=text('NULL'), index=True)
 
-    # Relationships
-    analysis = relationship("ImageAnalysis", back_populates="image", uselist=False, cascade="all, delete-orphan")
-    job = relationship("JobStats", back_populates="image", uselist=False)
+    # Single relationship to combined processing table
+    processings = relationship("ImageProcessing", back_populates="image", cascade="all, delete-orphan")
 
-class ImageAnalysis(Base):
-    __tablename__ = "image_analyses"
+class ImageProcessing(Base):
+    __tablename__ = "image_processings"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    image_id = Column(UUID(as_uuid=True), ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
-    description = Column(Text, nullable=False)
-    processing_time = Column(Float)
-    created_at = Column(TIMESTAMP(timezone=True), default=datetime.now)
-    model_version = Column(String)
-
-    # Relationships
-    image = relationship("Image", back_populates="analysis")
-
-class JobStats(Base):
-    __tablename__ = "job_stats"
-
-    job_id = Column(String, primary_key=True)
-    status = Column(String, nullable=False)
-    user_id = Column(String(255), nullable=True)
+    job_id = Column(String, unique=True, nullable=False, index=True)  # Celery task ID
+    image_id = Column(UUID(as_uuid=True), ForeignKey("images.id", ondelete="CASCADE"), nullable=True, index=True)  # Allow null initially
+    user_id = Column(String(255), nullable=True, index=True)
     
-    # Timing fields
-    start_time = Column(TIMESTAMP(timezone=True), nullable=False)
+    # Job status and timing
+    status = Column(String, nullable=False, index=True)
+    start_time = Column(TIMESTAMP(timezone=True), nullable=False, index=True)
     end_time = Column(TIMESTAMP(timezone=True), nullable=True)
     duration_seconds = Column(Float, nullable=True)
     
-    # API timing fields
+    # API timing
     api_start_time = Column(TIMESTAMP(timezone=True), nullable=True)
     api_end_time = Column(TIMESTAMP(timezone=True), nullable=True)
     api_duration_seconds = Column(Float, nullable=True)
     
-    # Relationship to Image
-    image_id = Column(UUID(as_uuid=True), ForeignKey("images.id", ondelete="SET NULL"), nullable=True)
-    image = relationship("Image", back_populates="job")
+    # Analysis results
+    description = Column(Text, nullable=True)  # Nullable because job might fail
+    model_version = Column(String, index=True)
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.now, index=True)
+
+    # Relationship
+    image = relationship("Image", back_populates="processings")
 
     def to_dict(self) -> dict:
-        """Convert job stats to dictionary"""
+        """Convert processing record to dictionary"""
         return {
+            "id": str(self.id),
             "job_id": self.job_id,
             "status": self.status,
             "start_time": self.start_time.isoformat() if self.start_time else None,
@@ -68,6 +61,9 @@ class JobStats(Base):
             "api_start_time": self.api_start_time.isoformat() if self.api_start_time else None,
             "api_end_time": self.api_end_time.isoformat() if self.api_end_time else None,
             "api_duration_seconds": self.api_duration_seconds,
+            "description": self.description,
+            "model_version": self.model_version,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
             "image_id": str(self.image_id) if self.image_id else None,
             "user_id": self.user_id
         }
