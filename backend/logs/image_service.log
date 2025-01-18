@@ -1,0 +1,111 @@
+[2025-01-18 00:22:49] INFO [image_service] [image_service.py:29] Starting image processing for job 0066f272-6334-48f2-bb5c-92527e84e2ea
+[2025-01-18 00:22:58] ERROR [image_service] [image_service.py:127] Error in job 0066f272-6334-48f2-bb5c-92527e84e2ea: Error processing image: (psycopg2.errors.UndefinedColumn) column "storage_path" of relation "images" does not exist
+LINE 1: ... INTO images (id, filename, user_id, uploaded_at, storage_pa...
+                                                             ^
+
+[SQL: INSERT INTO images (id, filename, user_id, uploaded_at, storage_path) VALUES (%(id)s::UUID, %(filename)s, %(user_id)s, %(uploaded_at)s, %(storage_path)s)]
+[parameters: {'id': UUID('1b663fe3-e62a-4397-a180-28984fea0225'), 'filename': 'Screenshot 2025-01-16 at 11.18.19\u202fAM.png', 'user_id': 'user_2rUfnyh68uZAwot0qzRLALTdVOc', 'uploaded_at': datetime.datetime(2025, 1, 18, 5, 22, 58, 45241), 'storage_path': '/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/6b12447c-0c76-4d69-ba09-a57bcde33960.png'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column "storage_path" of relation "images" does not exist
+LINE 1: ... INTO images (id, filename, user_id, uploaded_at, storage_pa...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/image_service.py", line 91, in process_image
+    stored_image = storage.store_image(image_path, filename, user_id)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/db/repositories/storage.py", line 89, in store_image
+    self.db.commit()
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 1969, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 1256, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 1231, in _prepare_impl
+    self.session.flush()
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 4312, in flush
+    self._flush(objects)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 4447, in _flush
+    with util.safe_reraise():
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 4408, in _flush
+    flush_context.execute()
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py", line 1227, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 517, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2344, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column "storage_path" of relation "images" does not exist
+LINE 1: ... INTO images (id, filename, user_id, uploaded_at, storage_pa...
+                                                             ^
+
+[SQL: INSERT INTO images (id, filename, user_id, uploaded_at, storage_path) VALUES (%(id)s::UUID, %(filename)s, %(user_id)s, %(uploaded_at)s, %(storage_path)s)]
+[parameters: {'id': UUID('1b663fe3-e62a-4397-a180-28984fea0225'), 'filename': 'Screenshot 2025-01-16 at 11.18.19\u202fAM.png', 'user_id': 'user_2rUfnyh68uZAwot0qzRLALTdVOc', 'uploaded_at': datetime.datetime(2025, 1, 18, 5, 22, 58, 45241), 'storage_path': '/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/6b12447c-0c76-4d69-ba09-a57bcde33960.png'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-01-18 00:25:49] INFO [image_service] [image_service.py:29] Starting image processing for job dbfff246-1907-4e0f-84f2-ee1f80bf946e
+[2025-01-18 00:25:54] INFO [image_service] [image_service.py:92] Stored image with ID: 442e1292-fde9-4b65-8501-ef9223ff1e1c
+[2025-01-18 00:25:54] INFO [image_service] [image_service.py:119] Returning result with processing time: 18005.27
+[2025-01-18 00:26:29] INFO [image_service] [image_service.py:29] Starting image processing for job e926a1a7-f50f-4168-9633-c67c985a5dd7
+[2025-01-18 00:26:37] INFO [image_service] [image_service.py:92] Stored image with ID: 11d449e4-140a-41a0-9b06-53c2861c0ab6
+[2025-01-18 00:26:37] INFO [image_service] [image_service.py:119] Returning result with processing time: 18008.45
+[2025-01-18 00:31:54] INFO [image_service] [image_service.py:29] Starting image processing for job 77caaf89-53bd-4aab-81f7-f5b6baa91401
+[2025-01-18 00:32:00] INFO [image_service] [image_service.py:92] Stored image with ID: 155eb9e3-d672-43bf-b236-d46fd2253f87
+[2025-01-18 00:32:00] INFO [image_service] [image_service.py:119] Returning result with processing time: 18005.84
+[2025-01-18 00:34:46] INFO [image_service] [image_service.py:29] Starting image processing for job 1e3f2fde-ee64-4993-8764-2f32c75f85e4
+[2025-01-18 00:34:54] INFO [image_service] [image_service.py:92] Stored image with ID: 166383e8-364a-4601-b440-e3b73bce761c
+[2025-01-18 00:34:54] INFO [image_service] [image_service.py:119] Returning result with processing time: 18007.81
+[2025-01-18 00:37:00] INFO [image_service] [image_service.py:29] Starting image processing for job df22602b-4a66-4380-b5b1-718bfcd43204
+[2025-01-18 00:37:04] INFO [image_service] [image_service.py:92] Stored image with ID: 1cbcbd73-d732-4b0f-8911-f7ec8ee03da1
+[2025-01-18 00:37:04] INFO [image_service] [image_service.py:119] Returning result with processing time: 18004.49
+[2025-01-18 00:38:26] INFO [image_service] [image_service.py:29] Starting image processing for job ed743aae-c325-4803-8ed9-37050b26bf98
+[2025-01-18 00:38:31] INFO [image_service] [image_service.py:92] Stored image with ID: 8da71d0c-39e3-47f5-8ff4-5c7c71e8d33f
+[2025-01-18 00:38:31] INFO [image_service] [image_service.py:119] Returning result with processing time: 18005.08
+[2025-01-18 00:43:18] INFO [image_service] [image_service.py:29] Starting image processing for job 0b3a30bc-a789-443b-9b8a-7e281f9666c3
+[2025-01-18 00:43:22] INFO [image_service] [image_service.py:92] Stored image with ID: 433a87f9-7ca4-4316-96e7-3fe305d5f29d
+[2025-01-18 00:43:22] INFO [image_service] [image_service.py:119] Returning result with processing time: 18003.87
+[2025-01-18 00:45:17] INFO [image_service] [image_service.py:29] Starting image processing for job 59000df4-71a2-4e8d-8e03-f84a784da855
+[2025-01-18 00:45:24] INFO [image_service] [image_service.py:92] Stored image with ID: bbb44c66-fb4e-4b37-8860-0e71eb38e982
+[2025-01-18 00:45:24] INFO [image_service] [image_service.py:119] Returning result with processing time: 18006.96
+[2025-01-18 00:47:10] INFO [image_service] [image_service.py:29] Starting image processing for job c9f70e93-73d2-4d69-a4ab-e6178307d11d
+[2025-01-18 00:47:16] INFO [image_service] [image_service.py:92] Stored image with ID: c9b3f289-89ef-4306-9ecf-d695e2d41e23
+[2025-01-18 00:47:16] INFO [image_service] [image_service.py:119] Returning result with processing time: 6.0

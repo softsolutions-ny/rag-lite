@@ -1,0 +1,35 @@
+# Web Framework
+fastapi==0.109.0
+uvicorn==0.25.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.25
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+greenlet==3.0.1
+
+# Task Queue
+celery==5.3.6
+redis==5.0.1
+
+# Image Processing
+Pillow==10.2.0
+
+# OpenAI
+openai==1.6.1
+httpx==0.26.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Google Cloud Storage
+google-cloud-storage==2.13.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+requests==2.31.0
+
+# Additional dependencies
+pydantic==2.5.3
+pydantic-settings==2.1.0 

@@ -42,3 +42,260 @@
 [2025-01-13 09:42:33] INFO [stats] [stats.py:37] Started API call for job 9167062f-c68a-4b15-94d4-677b268a8f28
 [2025-01-13 09:42:39] INFO [stats] [stats.py:53] Ended API call for job 9167062f-c68a-4b15-94d4-677b268a8f28, duration: 6.31s
 [2025-01-13 09:42:40] INFO [stats] [stats.py:74] Completed job 9167062f-c68a-4b15-94d4-677b268a8f28 in 6.81s with status completed
+[2025-01-18 00:22:49] INFO [stats] [stats_service.py:140] Started processing job 0066f272-6334-48f2-bb5c-92527e84e2ea
+[2025-01-18 00:22:49] INFO [stats] [stats_service.py:148] Started API call for job 0066f272-6334-48f2-bb5c-92527e84e2ea
+[2025-01-18 00:22:58] INFO [stats] [stats_service.py:164] Ended API call for job 0066f272-6334-48f2-bb5c-92527e84e2ea, duration: 8.05s
+[2025-01-18 00:25:49] ERROR [stats] [stats.py:34] Error getting status for job dbfff246-1907-4e0f-84f2-ee1f80bf946e: (sqlalchemy.dialects.postgresql.asyncpg.InvalidCachedStatementError) <class 'asyncpg.exceptions.InvalidCachedStatementError'>: cached statement plan is invalid due to a database schema or configuration change (SQLAlchemy asyncpg dialect will now invalidate all prepared caches in response to this exception)
+[SQL: SELECT image_processings.id, image_processings.job_id, image_processings.user_id, image_processings.image_id, image_processings.status, image_processings.model_version, image_processings.description, image_processings.start_time, image_processings.end_time, image_processings.duration_seconds, image_processings.api_start_time, image_processings.api_end_time, image_processings.api_duration_seconds 
+FROM image_processings 
+WHERE image_processings.job_id = $1::VARCHAR]
+[parameters: ('dbfff246-1907-4e0f-84f2-ee1f80bf946e',)]
+(Background on this error at: https://sqlalche.me/e/20/tw8g)
+Traceback (most recent call last):
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._rows = await prepared_stmt.fetch(*parameters)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/asyncpg/prepared_stmt.py", line 241, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/asyncpg/prepared_stmt.py", line 230, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 207, in bind_execute
+asyncpg.exceptions.InvalidCachedStatementError: cached statement plan is invalid due to a database schema or configuration change
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 130, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 195, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 509, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.InvalidCachedStatementError: <class 'asyncpg.exceptions.InvalidCachedStatementError'>: cached statement plan is invalid due to a database schema or configuration change (SQLAlchemy asyncpg dialect will now invalidate all prepared caches in response to this exception)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/api/v1/endpoints/stats.py", line 28, in get_job_status
+    processing_stats = await stats.get_stats(db, job_id)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/stats_service.py", line 90, in get_stats
+    result = await db.execute(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 455, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 200, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 517, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2344, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 130, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 195, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 509, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.NotSupportedError: (sqlalchemy.dialects.postgresql.asyncpg.InvalidCachedStatementError) <class 'asyncpg.exceptions.InvalidCachedStatementError'>: cached statement plan is invalid due to a database schema or configuration change (SQLAlchemy asyncpg dialect will now invalidate all prepared caches in response to this exception)
+[SQL: SELECT image_processings.id, image_processings.job_id, image_processings.user_id, image_processings.image_id, image_processings.status, image_processings.model_version, image_processings.description, image_processings.start_time, image_processings.end_time, image_processings.duration_seconds, image_processings.api_start_time, image_processings.api_end_time, image_processings.api_duration_seconds 
+FROM image_processings 
+WHERE image_processings.job_id = $1::VARCHAR]
+[parameters: ('dbfff246-1907-4e0f-84f2-ee1f80bf946e',)]
+(Background on this error at: https://sqlalche.me/e/20/tw8g)
+[2025-01-18 00:25:49] ERROR [stats] [stats.py:34] Error getting status for job dbfff246-1907-4e0f-84f2-ee1f80bf946e: (sqlalchemy.dialects.postgresql.asyncpg.InvalidCachedStatementError) <class 'asyncpg.exceptions.InvalidCachedStatementError'>: cached statement plan is invalid due to a database schema or configuration change (SQLAlchemy asyncpg dialect will now invalidate all prepared caches in response to this exception)
+[SQL: SELECT image_processings.id, image_processings.job_id, image_processings.user_id, image_processings.image_id, image_processings.status, image_processings.model_version, image_processings.description, image_processings.start_time, image_processings.end_time, image_processings.duration_seconds, image_processings.api_start_time, image_processings.api_end_time, image_processings.api_duration_seconds 
+FROM image_processings 
+WHERE image_processings.job_id = $1::VARCHAR]
+[parameters: ('dbfff246-1907-4e0f-84f2-ee1f80bf946e',)]
+(Background on this error at: https://sqlalche.me/e/20/tw8g)
+Traceback (most recent call last):
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 546, in _prepare_and_execute
+    self._rows = await prepared_stmt.fetch(*parameters)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/asyncpg/prepared_stmt.py", line 241, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/asyncpg/prepared_stmt.py", line 230, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 207, in bind_execute
+asyncpg.exceptions.InvalidCachedStatementError: cached statement plan is invalid due to a database schema or configuration change
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 130, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 195, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 509, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.InvalidCachedStatementError: <class 'asyncpg.exceptions.InvalidCachedStatementError'>: cached statement plan is invalid due to a database schema or configuration change (SQLAlchemy asyncpg dialect will now invalidate all prepared caches in response to this exception)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/api/v1/endpoints/stats.py", line 28, in get_job_status
+    processing_stats = await stats.get_stats(db, job_id)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/stats_service.py", line 90, in get_stats
+    result = await db.execute(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 455, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 200, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 517, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2344, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 130, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 195, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 509, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/arekhalpern/anaconda3/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.NotSupportedError: (sqlalchemy.dialects.postgresql.asyncpg.InvalidCachedStatementError) <class 'asyncpg.exceptions.InvalidCachedStatementError'>: cached statement plan is invalid due to a database schema or configuration change (SQLAlchemy asyncpg dialect will now invalidate all prepared caches in response to this exception)
+[SQL: SELECT image_processings.id, image_processings.job_id, image_processings.user_id, image_processings.image_id, image_processings.status, image_processings.model_version, image_processings.description, image_processings.start_time, image_processings.end_time, image_processings.duration_seconds, image_processings.api_start_time, image_processings.api_end_time, image_processings.api_duration_seconds 
+FROM image_processings 
+WHERE image_processings.job_id = $1::VARCHAR]
+[parameters: ('dbfff246-1907-4e0f-84f2-ee1f80bf946e',)]
+(Background on this error at: https://sqlalche.me/e/20/tw8g)
+[2025-01-18 00:25:49] INFO [stats] [stats_service.py:140] Started processing job dbfff246-1907-4e0f-84f2-ee1f80bf946e
+[2025-01-18 00:25:49] INFO [stats] [stats_service.py:148] Started API call for job dbfff246-1907-4e0f-84f2-ee1f80bf946e
+[2025-01-18 00:25:54] INFO [stats] [stats_service.py:164] Ended API call for job dbfff246-1907-4e0f-84f2-ee1f80bf946e, duration: 18005.16s
+[2025-01-18 00:25:54] INFO [stats] [stats_service.py:185] Completed job dbfff246-1907-4e0f-84f2-ee1f80bf946e in 18005.27s with status completed
+[2025-01-18 00:26:29] INFO [stats] [stats_service.py:140] Started processing job e926a1a7-f50f-4168-9633-c67c985a5dd7
+[2025-01-18 00:26:29] INFO [stats] [stats_service.py:148] Started API call for job e926a1a7-f50f-4168-9633-c67c985a5dd7
+[2025-01-18 00:26:37] INFO [stats] [stats_service.py:164] Ended API call for job e926a1a7-f50f-4168-9633-c67c985a5dd7, duration: 18008.31s
+[2025-01-18 00:26:37] INFO [stats] [stats_service.py:185] Completed job e926a1a7-f50f-4168-9633-c67c985a5dd7 in 18008.45s with status completed
+[2025-01-18 00:31:54] INFO [stats] [stats_service.py:140] Started processing job 77caaf89-53bd-4aab-81f7-f5b6baa91401
+[2025-01-18 00:31:54] INFO [stats] [stats_service.py:148] Started API call for job 77caaf89-53bd-4aab-81f7-f5b6baa91401
+[2025-01-18 00:32:00] INFO [stats] [stats_service.py:164] Ended API call for job 77caaf89-53bd-4aab-81f7-f5b6baa91401, duration: 18005.70s
+[2025-01-18 00:32:00] INFO [stats] [stats_service.py:185] Completed job 77caaf89-53bd-4aab-81f7-f5b6baa91401 in 18005.84s with status completed
+[2025-01-18 00:34:46] INFO [stats] [stats_service.py:140] Started processing job 1e3f2fde-ee64-4993-8764-2f32c75f85e4
+[2025-01-18 00:34:46] INFO [stats] [stats_service.py:148] Started API call for job 1e3f2fde-ee64-4993-8764-2f32c75f85e4
+[2025-01-18 00:34:54] INFO [stats] [stats_service.py:164] Ended API call for job 1e3f2fde-ee64-4993-8764-2f32c75f85e4, duration: 18007.65s
+[2025-01-18 00:34:54] INFO [stats] [stats_service.py:185] Completed job 1e3f2fde-ee64-4993-8764-2f32c75f85e4 in 18007.81s with status completed
+[2025-01-18 00:37:00] INFO [stats] [stats_service.py:140] Started processing job df22602b-4a66-4380-b5b1-718bfcd43204
+[2025-01-18 00:37:00] INFO [stats] [stats_service.py:148] Started API call for job df22602b-4a66-4380-b5b1-718bfcd43204
+[2025-01-18 00:37:04] INFO [stats] [stats_service.py:164] Ended API call for job df22602b-4a66-4380-b5b1-718bfcd43204, duration: 18004.44s
+[2025-01-18 00:37:04] INFO [stats] [stats_service.py:185] Completed job df22602b-4a66-4380-b5b1-718bfcd43204 in 18004.49s with status completed
+[2025-01-18 00:38:26] INFO [stats] [stats_service.py:140] Started processing job ed743aae-c325-4803-8ed9-37050b26bf98
+[2025-01-18 00:38:26] INFO [stats] [stats_service.py:148] Started API call for job ed743aae-c325-4803-8ed9-37050b26bf98
+[2025-01-18 00:38:31] INFO [stats] [stats_service.py:164] Ended API call for job ed743aae-c325-4803-8ed9-37050b26bf98, duration: 18005.04s
+[2025-01-18 00:38:31] INFO [stats] [stats_service.py:185] Completed job ed743aae-c325-4803-8ed9-37050b26bf98 in 18005.08s with status completed
+[2025-01-18 00:43:18] INFO [stats] [stats_service.py:140] Started processing job 0b3a30bc-a789-443b-9b8a-7e281f9666c3
+[2025-01-18 00:43:18] INFO [stats] [stats_service.py:148] Started API call for job 0b3a30bc-a789-443b-9b8a-7e281f9666c3
+[2025-01-18 00:43:22] INFO [stats] [stats_service.py:164] Ended API call for job 0b3a30bc-a789-443b-9b8a-7e281f9666c3, duration: 18003.78s
+[2025-01-18 00:43:22] INFO [stats] [stats_service.py:185] Completed job 0b3a30bc-a789-443b-9b8a-7e281f9666c3 in 18003.87s with status completed
+[2025-01-18 00:45:17] INFO [stats] [stats_service.py:140] Started processing job 59000df4-71a2-4e8d-8e03-f84a784da855
+[2025-01-18 00:45:17] INFO [stats] [stats_service.py:148] Started API call for job 59000df4-71a2-4e8d-8e03-f84a784da855
+[2025-01-18 00:45:24] INFO [stats] [stats_service.py:164] Ended API call for job 59000df4-71a2-4e8d-8e03-f84a784da855, duration: 18006.83s
+[2025-01-18 00:45:24] INFO [stats] [stats_service.py:185] Completed job 59000df4-71a2-4e8d-8e03-f84a784da855 in 18006.96s with status completed
+[2025-01-18 00:47:10] INFO [stats] [stats_service.py:140] Started processing job c9f70e93-73d2-4d69-a4ab-e6178307d11d
+[2025-01-18 00:47:11] INFO [stats] [stats_service.py:148] Started API call for job c9f70e93-73d2-4d69-a4ab-e6178307d11d
+[2025-01-18 00:47:16] INFO [stats] [stats_service.py:164] Ended API call for job c9f70e93-73d2-4d69-a4ab-e6178307d11d, duration: 5.87s
+[2025-01-18 00:47:16] INFO [stats] [stats_service.py:185] Completed job c9f70e93-73d2-4d69-a4ab-e6178307d11d in 6.00s with status completed
