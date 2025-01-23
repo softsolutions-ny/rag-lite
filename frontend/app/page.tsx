@@ -13,7 +13,6 @@ export default function Home() {
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">elucide</h1>
-            <ThemeToggle />
           </div>
           <p className="text-sm text-muted-foreground dark:text-gray-400">
             give your pictures meaning
