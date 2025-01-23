@@ -30,7 +30,7 @@ interface DeepSeekChunk {
   }];
 }
 
-async function getDeepSeekResponse(messages: ChatMessage[]) {
+async function getDeepSeekResponse(messages: ChatMessage[], threadId: string, model: string) {
   const response = await deepseek.chat.completions.create({
     model: "deepseek-reasoner",
     messages,
@@ -45,6 +45,7 @@ async function getDeepSeekResponse(messages: ChatMessage[]) {
       const encoder = new TextEncoder();
       let hasStartedReasoning = false;
       let hasStartedAnswer = false;
+      let fullContent = "";
 
       try {
         for await (const chunk of response) {
@@ -57,16 +58,44 @@ async function getDeepSeekResponse(messages: ChatMessage[]) {
               hasStartedReasoning = true;
             }
             controller.enqueue(encoder.encode(delta.reasoning_content));
+            fullContent += delta.reasoning_content;
           }
           // Handle regular content
           else if (delta.content) {
             if (!hasStartedAnswer && hasStartedReasoning) {
               controller.enqueue(encoder.encode("\n\nAnswer:\n"));
               hasStartedAnswer = true;
+              fullContent += "\n\nAnswer:\n";
             }
             controller.enqueue(encoder.encode(delta.content));
+            fullContent += delta.content;
           }
         }
+
+        // Store the complete response in the database
+        const assistantMessageData = {
+          thread_id: threadId,
+          role: "assistant",
+          content: fullContent,
+          model,
+        };
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(assistantMessageData),
+          });
+
+          if (!response.ok) {
+            console.error("Failed to store DeepSeek assistant message");
+          }
+        } catch (error) {
+          console.error("Error storing DeepSeek assistant message:", error);
+        }
+
         controller.close();
       } catch (error) {
         controller.error(error);
@@ -113,7 +142,7 @@ export async function POST(req: Request) {
     // Get the AI response
     let stream;
     if (model === "deepseek-reasoner") {
-      stream = await getDeepSeekResponse(messages);
+      stream = await getDeepSeekResponse(messages, threadId, model);
     } else {
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",

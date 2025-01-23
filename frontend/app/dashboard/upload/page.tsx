@@ -6,8 +6,9 @@ import { Upload, Loader2, Folder } from "lucide-react";
 import JSZip from "jszip";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { useAPI } from "@/lib/api";
-import { ImageResult, FileWithUrl, JobStatusResponse } from "@/lib/types";
+import { useImageStore } from "@/lib/store/images";
+import { ImageResult, FileWithUrl } from "@/lib/types";
+import { JobStatusResponse } from "@/lib/store/api";
 import {
   Dialog,
   DialogContent,
@@ -92,8 +93,8 @@ const JobStatusMonitor = ({
   jobId: string;
   onStatusUpdate: (jobId: string, status: JobStatusResponse) => void;
 }) => {
-  const api = useAPI();
-  const { data: statusData } = api.useJobStatus(jobId);
+  const imageStore = useImageStore();
+  const { data: statusData } = imageStore.useJobStatus(jobId);
 
   useEffect(() => {
     if (statusData) {
@@ -109,7 +110,7 @@ export default function UploadPage() {
   const [selectedImage, setSelectedImage] = useState<ImageResult | null>(null);
   const [showThankYou, setShowThankYou] = useState(false);
   const [processingMessage, setProcessingMessage] = useState<string>("");
-  const api = useAPI();
+  const imageStore = useImageStore();
 
   // Update handleStatusUpdate to use React Query data
   const handleStatusUpdate = useCallback(
@@ -155,7 +156,7 @@ export default function UploadPage() {
         setProcessingMessage(`Uploading ${processedFiles.length} images...`);
         const filesWithUrls = processedFiles.map(createFileWithUrl);
 
-        const response = await api.uploadImages(processedFiles);
+        const response = await imageStore.uploadImages(processedFiles);
 
         const newResults = response.jobs
           .map((job) => ({
@@ -179,7 +180,7 @@ export default function UploadPage() {
         setTimeout(() => setProcessingMessage(""), 3000);
       }
     },
-    [api]
+    [imageStore]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -188,7 +189,7 @@ export default function UploadPage() {
       "image/*": [".png", ".jpg", ".jpeg", ".gif"],
       "application/zip": [".zip"],
     },
-    noClick: api.isUploading,
+    noClick: imageStore.isUploading,
   });
 
   return (
@@ -217,7 +218,7 @@ export default function UploadPage() {
           <input {...getInputProps()} />
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
             <div className="flex items-center gap-3">
-              {api.isUploading ? (
+              {imageStore.isUploading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <div className="flex gap-2">
@@ -226,14 +227,14 @@ export default function UploadPage() {
                 </div>
               )}
               <p className="text-sm">
-                {api.isUploading
+                {imageStore.isUploading
                   ? processingMessage || "Uploading..."
                   : showThankYou
                   ? "Thank you"
                   : "Drop images, folders, or ZIP files"}
               </p>
             </div>
-            {!api.isUploading && !showThankYou && (
+            {!imageStore.isUploading && !showThankYou && (
               <p className="text-xs text-muted-foreground/60">
                 Supports PNG, JPG, JPEG, GIF
               </p>

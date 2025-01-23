@@ -79,4 +79,40 @@ export interface ImageResult {
 export interface FileWithUrl {
   file: File;
   url: string;
+}
+
+export interface Folder {
+  id: string;
+  user_id: string;
+  name: string;
+  parent_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Thread {
+  id: string;
+  user_id: string;
+  title: string | null;
+  label: string | null;
+  folder_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateFolderData {
+  user_id: string;
+  name: string;
+  parent_id?: string;
+}
+
+export interface UpdateFolderData {
+  name?: string;
+  parent_id?: string;
+}
+
+export interface UpdateThreadData {
+  title?: string;
+  label?: string;
+  folder_id?: string;
 } 

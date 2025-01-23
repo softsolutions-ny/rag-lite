@@ -16,12 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useState, useRef } from "react";
-
-interface Thread {
-  id: string;
-  title: string;
-  updated_at: string;
-}
+import { Thread } from "@/lib/types";
 
 interface ThreadListProps {
   threads: Thread[];
@@ -105,7 +100,7 @@ export function ThreadList({
             {editingThreadId === thread.id ? (
               <div className="flex-1 px-2">
                 <Input
-                  ref={inputRef}
+                  autoFocus
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   onKeyDown={(e) => handleRenameKeyDown(e, thread.id)}
@@ -141,18 +136,7 @@ export function ThreadList({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onSelect={() => {
-                    handleStartRename(thread);
-                    // Focus after dropdown is closed
-                    requestAnimationFrame(() => {
-                      if (inputRef.current) {
-                        inputRef.current.focus();
-                        inputRef.current.select();
-                      }
-                    });
-                  }}
-                >
+                <DropdownMenuItem onSelect={() => handleStartRename(thread)}>
                   <Pencil className="h-4 w-4 mr-2" />
                   Rename
                 </DropdownMenuItem>

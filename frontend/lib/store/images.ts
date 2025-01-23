@@ -1,28 +1,17 @@
-import { useAuth } from "@clerk/nextjs";
-import { JobStatusResponse, APIResponse, Image } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuthFetch } from "./api";
+import { Image } from "../types";
+import { APIResponse, JobStatusResponse } from "./api";
 
-export function useAPI() {
-  const { getToken } = useAuth();
+// API endpoints
+const API_PATHS = {
+  images: "/api/v1/images",
+  jobs: "/api/v1/jobs"
+};
+
+export function useImageStore() {
+  const authFetch = useAuthFetch();
   const queryClient = useQueryClient();
-
-  // Helper for authenticated fetch
-  const authFetch = async (url: string, options: RequestInit = {}) => {
-    const token = await getToken();
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
-    }
-
-    return response;
-  };
 
   // Upload images mutation
   const uploadImagesMutation = useMutation({
@@ -32,7 +21,7 @@ export function useAPI() {
         formData.append("files", file);
       });
 
-      const response = await authFetch("/api/images", {
+      const response = await authFetch(API_PATHS.images, {
         method: "POST",
         body: formData,
       });
@@ -40,7 +29,6 @@ export function useAPI() {
       return response.json();
     },
     onSuccess: () => {
-      // Invalidate user images query after successful upload
       queryClient.invalidateQueries({ queryKey: ["userImages"] });
     },
   });
@@ -50,7 +38,7 @@ export function useAPI() {
     return useQuery({
       queryKey: ["jobStatus", jobId],
       queryFn: async (): Promise<JobStatusResponse> => {
-        const response = await authFetch(`/api/jobs/${jobId}`);
+        const response = await authFetch(`${API_PATHS.jobs}/${jobId}`);
         return response.json();
       },
       refetchInterval: (query) => {
@@ -68,7 +56,7 @@ export function useAPI() {
     return useQuery({
       queryKey: ["userImages"],
       queryFn: async (): Promise<Image[]> => {
-        const response = await authFetch("/api/images");
+        const response = await authFetch(API_PATHS.images);
         return response.json();
       },
     });
@@ -79,7 +67,7 @@ export function useAPI() {
     return useQuery({
       queryKey: ["image", imageId],
       queryFn: async (): Promise<Image> => {
-        const response = await authFetch(`/api/images/${imageId}`);
+        const response = await authFetch(`${API_PATHS.images}/${imageId}`);
         return response.json();
       },
       enabled: !!imageId,
@@ -89,12 +77,11 @@ export function useAPI() {
   // Delete image mutation
   const deleteImageMutation = useMutation({
     mutationFn: async (imageId: string): Promise<void> => {
-      await authFetch(`/api/images/${imageId}`, {
+      await authFetch(`${API_PATHS.images}/${imageId}`, {
         method: "DELETE",
       });
     },
     onSuccess: () => {
-      // Invalidate user images query after successful deletion
       queryClient.invalidateQueries({ queryKey: ["userImages"] });
     },
   });
@@ -105,7 +92,6 @@ export function useAPI() {
     useUserImages,
     useImage,
     deleteImage: deleteImageMutation.mutateAsync,
-    // For upload status
     isUploading: uploadImagesMutation.isPending,
     uploadError: uploadImagesMutation.error,
   };

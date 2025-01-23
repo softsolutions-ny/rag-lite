@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { ModelType } from "./model-selector";
 import { useAuth } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useThreadsStore } from "@/lib/store";
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,14 @@ export function ChatContainer() {
   const threadId = searchParams.get("thread");
   const [initialMessages, setInitialMessages] = useState<any[]>([]);
   const [isLoadingThread, setIsLoadingThread] = useState(false);
+  const { threads, fetchThreads, updateThread } = useThreadsStore();
+
+  // Fetch threads when user ID is available
+  useEffect(() => {
+    if (userId) {
+      fetchThreads(userId);
+    }
+  }, [userId, fetchThreads]);
 
   // Fetch existing messages when thread is selected
   useEffect(() => {
@@ -64,6 +73,15 @@ export function ChatContainer() {
     onFinish: async (message) => {
       // The assistant's message will be stored by the /api/chat route
       console.log("Chat completed:", message);
+
+      // Update thread's updated_at timestamp
+      if (threadId) {
+        try {
+          await updateThread(threadId, {});
+        } catch (error) {
+          console.error("Error updating thread timestamp:", error);
+        }
+      }
     },
   });
 
@@ -138,7 +156,7 @@ export function ChatContainer() {
       </div>
 
       {/* Fixed input at viewport bottom */}
-      <div className="absolute inset-x-0 bottom-0 backdrop-blur-sm pt-4">
+      <div className="absolute inset-x-0 bottom-0  pt-4">
         <div className="mx-auto max-w-4xl p-4">
           <ChatInput
             isLoading={isLoading || isLoadingThread}
