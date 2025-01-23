@@ -16,7 +16,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <h1 className="text-xl font-bold px-2 py-1">Elucide Vision</h1>
+        <h1 className="text-xl font-bold px-2 py-1">elucide</h1>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
