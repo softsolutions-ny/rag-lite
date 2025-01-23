@@ -24,6 +24,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
+                  <a href="/dashboard/chat">Chat</a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
                   <a href="/dashboard/upload">Upload</a>
                 </SidebarMenuButton>
               </SidebarMenuItem>

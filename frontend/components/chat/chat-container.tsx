@@ -64,7 +64,7 @@ export function ChatContainer() {
       </div>
 
       {/* Fixed input at viewport bottom */}
-      <div className="absolute inset-x-0 bottom-0 border-t backdrop-blur-sm">
+      <div className="absolute inset-x-0 bottom-0 backdrop-blur-sm">
         <div className="mx-auto max-w-4xl p-4">
           <ChatInput isLoading={isLoading} onSubmit={handleMessageSubmit} />
         </div>
