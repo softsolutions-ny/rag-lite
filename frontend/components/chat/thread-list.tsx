@@ -4,7 +4,7 @@ import {
   PlusIcon,
   MessageSquare,
   Loader2,
-  MoreVertical,
+  MoreHorizontal,
   Pencil,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -84,45 +84,45 @@ export function ThreadList({
   }
 
   return (
-    <div className="flex flex-col gap-2 p-2">
+    <div className="flex flex-col gap-1.5">
       <Button
         variant="ghost"
-        className="flex items-center gap-2 w-full justify-start hover:bg-muted"
+        className="flex items-center gap-1.5 w-full justify-start hover:bg-muted px-2 h-8"
         onClick={onNewThread}
       >
-        <PlusIcon className="h-4 w-4" />
+        <PlusIcon className="h-3.5 w-3.5" />
         New Chat
       </Button>
 
-      <div className="flex flex-col gap-1 mt-2">
+      <div className="flex flex-col gap-1">
         {threads.map((thread) => (
-          <div key={thread.id} className="flex items-center gap-2">
+          <div key={thread.id} className="flex items-center min-w-0">
             {editingThreadId === thread.id ? (
-              <div className="flex-1 px-2">
+              <div className="flex-1 px-1">
                 <Input
                   autoFocus
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   onKeyDown={(e) => handleRenameKeyDown(e, thread.id)}
                   onBlur={() => handleRenameSubmit(thread.id)}
-                  className="h-8"
+                  className="h-7"
                 />
               </div>
             ) : (
               <Button
                 variant="ghost"
                 className={cn(
-                  "flex items-center gap-2 w-full justify-start text-left",
+                  "flex items-center gap-1.5 flex-1 min-w-0 justify-start text-left px-2 h-8",
                   currentThreadId === thread.id && "bg-muted"
                 )}
                 onClick={() => onSelectThread(thread.id)}
               >
-                <MessageSquare className="h-4 w-4 shrink-0" />
-                <div className="flex flex-col min-w-0">
-                  <span className="truncate text-sm">
+                <MessageSquare className="h-3.5 w-3.5 shrink-0" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="truncate text-sm leading-none">
                     {formatTitle(thread)}
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-[10px] text-muted-foreground leading-none mt-1">
                     {formatDate(thread.updated_at)}
                   </span>
                 </div>
@@ -130,14 +130,17 @@ export function ThreadList({
             )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-muted">
-                  <MoreVertical className="h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  className="h-7 w-7 p-0 hover:bg-muted focus-visible:ring-0 focus-visible:ring-offset-0 shrink-0 ml-1"
+                >
+                  <MoreHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onSelect={() => handleStartRename(thread)}>
-                  <Pencil className="h-4 w-4 mr-2" />
+                  <Pencil className="h-3.5 w-3.5 mr-2" />
                   Rename
                 </DropdownMenuItem>
                 <DropdownMenuItem

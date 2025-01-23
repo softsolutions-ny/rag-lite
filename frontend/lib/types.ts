@@ -115,4 +115,5 @@ export interface UpdateThreadData {
   title?: string;
   label?: string;
   folder_id?: string;
+  updated_at?: string;
 } 

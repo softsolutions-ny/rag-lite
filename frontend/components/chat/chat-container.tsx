@@ -4,7 +4,7 @@ import { useChat } from "ai/react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ScrollArea } from "../ui/scroll-area";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { ModelType } from "./model-selector";
 import { useAuth } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -16,8 +16,9 @@ export function ChatContainer() {
   const router = useRouter();
   const { userId } = useAuth();
   const [model, setModel] = useState<ModelType>("gpt-4o-mini");
-  const [currentThreadId, setCurrentThreadId] = useState<string | null>(
-    searchParams.get("thread")
+  const threadParam = searchParams.get("thread");
+  const [currentThreadId, setCurrentThreadId] = useState<string | undefined>(
+    threadParam as string | undefined
   );
   const [initialMessages, setInitialMessages] = useState<any[]>([]);
   const [isLoadingThread, setIsLoadingThread] = useState(false);
@@ -26,7 +27,8 @@ export function ChatContainer() {
 
   // Update currentThreadId when URL changes
   useEffect(() => {
-    setCurrentThreadId(searchParams.get("thread"));
+    const param = searchParams.get("thread");
+    setCurrentThreadId(param as string | undefined);
   }, [searchParams]);
 
   // Fetch threads when user ID is available
@@ -39,7 +41,10 @@ export function ChatContainer() {
   // Fetch existing messages when thread is selected
   useEffect(() => {
     const fetchMessages = async () => {
-      if (!currentThreadId) return;
+      if (!currentThreadId) {
+        setInitialMessages([]);
+        return;
+      }
 
       setIsLoadingThread(true);
       try {
@@ -66,37 +71,37 @@ export function ChatContainer() {
       }
     };
 
-    setInitialMessages([]); // Reset messages when thread changes
     fetchMessages();
   }, [currentThreadId]);
 
-  const { messages, isLoading, append, setMessages } = useChat({
+  const { messages, isLoading, append } = useChat({
     api: "/api/chat",
     body: {
       model,
       threadId: currentThreadId,
     },
-    id: currentThreadId || "new", // Use threadId as chat identifier
-    initialMessages: initialMessages,
-    onFinish: async (message) => {
-      // The assistant's message will be stored by the /api/chat route
-      console.log("Chat completed:", message);
-
-      // Update thread's updated_at timestamp
-      if (currentThreadId) {
-        try {
-          await updateThread(currentThreadId, {});
-        } catch (error) {
-          console.error("Error updating thread timestamp:", error);
+    id: currentThreadId ?? "new",
+    initialMessages,
+    onFinish: useCallback(
+      async (message: { id: string; content: string; role: string }) => {
+        if (currentThreadId) {
+          try {
+            // Find the current thread to preserve its title
+            const currentThread = threads.find((t) => t.id === currentThreadId);
+            if (currentThread) {
+              await updateThread(currentThreadId, {
+                title: currentThread.title || undefined, // Convert null to undefined
+                updated_at: new Date().toISOString(),
+              });
+            }
+          } catch (error) {
+            console.error("Error updating thread timestamp:", error);
+          }
         }
-      }
-    },
+      },
+      [currentThreadId, updateThread, threads]
+    ),
   });
-
-  // Reset messages when thread changes
-  useEffect(() => {
-    setMessages(initialMessages);
-  }, [initialMessages, setMessages]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -110,18 +115,13 @@ export function ChatContainer() {
     if (!userId) return;
 
     try {
-      // If no thread is selected, create a new one
       if (!currentThreadId) {
         const newThread = await createThread(userId);
-        // Update the current thread ID
         setCurrentThreadId(newThread.id);
-        // Navigate to the new thread
         await router.push(`/dashboard/chat?thread=${newThread.id}`);
-        // Wait a bit for the state to update
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      // Let the Vercel AI SDK handle message storage through /api/chat
       await append({
         content,
         role: "user",
@@ -131,22 +131,27 @@ export function ChatContainer() {
     }
   };
 
+  const memoizedMessages = useMemo(
+    () =>
+      messages.map((message) => (
+        <ChatMessage
+          key={message.id}
+          message={{
+            id: message.id,
+            content: message.content,
+            role: message.role as "user" | "assistant",
+          }}
+        />
+      )),
+    [messages]
+  );
+
   return (
     <>
-      {/* Main scrollable content */}
       <div className="absolute inset-0 bottom-[88px]">
         <ScrollArea className="h-full">
           <div className="flex flex-col gap-4 px-4">
-            {messages.map((message) => (
-              <ChatMessage
-                key={message.id}
-                message={{
-                  id: message.id,
-                  content: message.content,
-                  role: message.role as "user" | "assistant",
-                }}
-              />
-            ))}
+            {memoizedMessages}
             {messages.length === 0 && !isLoadingThread && (
               <div className="flex h-[50vh] items-center justify-center text-center">
                 <div className="max-w-md space-y-4">
@@ -158,16 +163,13 @@ export function ChatContainer() {
                 </div>
               </div>
             )}
-            {/* Add padding at the bottom to ensure last message is visible */}
             <div className="h-16" />
-            {/* Invisible element to scroll to */}
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
       </div>
 
-      {/* Fixed input at viewport bottom */}
-      <div className="absolute inset-x-0 bottom-0  pt-4">
+      <div className="absolute inset-x-0 bottom-0 pt-4">
         <div className="mx-auto max-w-4xl p-4">
           <ChatInput
             isLoading={isLoading || isLoadingThread}
