@@ -115,11 +115,6 @@ class ChatRepository:
             )
             self.db.add(message)
             
-            # Update thread's updated_at timestamp
-            thread = await self.get_thread(thread_id)
-            if thread:
-                thread.updated_at = now
-            
             if self.is_async:
                 await self.db.commit()
                 await self.db.refresh(message)

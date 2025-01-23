@@ -172,12 +172,24 @@ async def create_chat_message(
         thread = await chat_repo.get_thread(UUID(message.thread_id))
         if not thread:
             raise HTTPException(status_code=404, detail="Thread not found")
+        
+        # Store the message
         db_message = await chat_repo.add_message(
             thread_id=UUID(message.thread_id),
             role=message.role,
             content=message.content,
             model=message.model
         )
+        
+        # Update thread's timestamp while preserving all other fields
+        await chat_repo.update_thread(
+            UUID(message.thread_id),
+            {
+                "title": thread.title,  # Explicitly preserve the title
+                "updated_at": datetime.utcnow()
+            }
+        )
+        
         return ChatMessage.from_orm(db_message)
     except Exception as e:
         logger.error(f"Error creating message: {e}")
