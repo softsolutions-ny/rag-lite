@@ -16,10 +16,18 @@ export function ChatContainer() {
   const router = useRouter();
   const { userId } = useAuth();
   const [model, setModel] = useState<ModelType>("gpt-4o-mini");
-  const threadId = searchParams.get("thread");
+  const [currentThreadId, setCurrentThreadId] = useState<string | null>(
+    searchParams.get("thread")
+  );
   const [initialMessages, setInitialMessages] = useState<any[]>([]);
   const [isLoadingThread, setIsLoadingThread] = useState(false);
-  const { threads, fetchThreads, updateThread } = useThreadsStore();
+  const { threads, fetchThreads, updateThread, createThread } =
+    useThreadsStore();
+
+  // Update currentThreadId when URL changes
+  useEffect(() => {
+    setCurrentThreadId(searchParams.get("thread"));
+  }, [searchParams]);
 
   // Fetch threads when user ID is available
   useEffect(() => {
@@ -31,12 +39,12 @@ export function ChatContainer() {
   // Fetch existing messages when thread is selected
   useEffect(() => {
     const fetchMessages = async () => {
-      if (!threadId) return;
+      if (!currentThreadId) return;
 
       setIsLoadingThread(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${threadId}/messages`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${currentThreadId}/messages`
         );
 
         if (response.ok) {
@@ -60,24 +68,24 @@ export function ChatContainer() {
 
     setInitialMessages([]); // Reset messages when thread changes
     fetchMessages();
-  }, [threadId]);
+  }, [currentThreadId]);
 
   const { messages, isLoading, append, setMessages } = useChat({
     api: "/api/chat",
     body: {
       model,
-      threadId,
+      threadId: currentThreadId,
     },
-    id: threadId || "new", // Use threadId as chat identifier
+    id: currentThreadId || "new", // Use threadId as chat identifier
     initialMessages: initialMessages,
     onFinish: async (message) => {
       // The assistant's message will be stored by the /api/chat route
       console.log("Chat completed:", message);
 
       // Update thread's updated_at timestamp
-      if (threadId) {
+      if (currentThreadId) {
         try {
-          await updateThread(threadId, {});
+          await updateThread(currentThreadId, {});
         } catch (error) {
           console.error("Error updating thread timestamp:", error);
         }
@@ -90,13 +98,6 @@ export function ChatContainer() {
     setMessages(initialMessages);
   }, [initialMessages, setMessages]);
 
-  // Redirect to threads list if no thread ID is present
-  useEffect(() => {
-    if (!threadId && userId) {
-      router.push("/dashboard/chat");
-    }
-  }, [threadId, userId, router]);
-
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
@@ -106,12 +107,20 @@ export function ChatContainer() {
   }, [messages, scrollToBottom]);
 
   const handleMessageSubmit = async (content: string) => {
-    if (!threadId) {
-      console.error("Cannot send message: no thread selected");
-      return;
-    }
+    if (!userId) return;
 
     try {
+      // If no thread is selected, create a new one
+      if (!currentThreadId) {
+        const newThread = await createThread(userId);
+        // Update the current thread ID
+        setCurrentThreadId(newThread.id);
+        // Navigate to the new thread
+        await router.push(`/dashboard/chat?thread=${newThread.id}`);
+        // Wait a bit for the state to update
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+
       // Let the Vercel AI SDK handle message storage through /api/chat
       await append({
         content,
@@ -139,12 +148,14 @@ export function ChatContainer() {
               />
             ))}
             {messages.length === 0 && !isLoadingThread && (
-              <div className="flex h-[50vh] items-center justify-center">
-                <p className="text-muted-foreground">
-                  {threadId
-                    ? "Start a conversation by typing a message below."
-                    : "No thread selected."}
-                </p>
+              <div className="flex h-[50vh] items-center justify-center text-center">
+                <div className="max-w-md space-y-4">
+                  <h2 className="text-2xl font-semibold">Welcome to Elucide</h2>
+                  <p className="text-muted-foreground">
+                    Start a new conversation by typing a message below. Your
+                    message will automatically create a new thread.
+                  </p>
+                </div>
               </div>
             )}
             {/* Add padding at the bottom to ensure last message is visible */}

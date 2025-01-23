@@ -50,7 +50,7 @@ export function ThreadList({
   };
 
   const formatTitle = (thread: Thread) => {
-    return thread.title || "New conversation";
+    return thread.title || thread.id;
   };
 
   const handleStartRename = (thread: Thread) => {
