@@ -18,10 +18,14 @@ class SyncProcessingStats:
     
     def start_processing(self, db: Session, job_id: str, user_id: str) -> None:
         """Record the start of processing for a job"""
+        start_time = self._get_utc_now()
+        if start_time.tzinfo is None:
+            start_time = start_time.replace(tzinfo=timezone.utc)
+            
         processing = ImageProcessing(
             job_id=job_id,
             user_id=user_id,
-            start_time=self._get_utc_now(),
+            start_time=start_time,
             status="processing"
         )
         db.add(processing)
@@ -32,7 +36,10 @@ class SyncProcessingStats:
         """Record the start of the API call"""
         processing = db.query(ImageProcessing).filter_by(job_id=job_id).first()
         if processing:
-            processing.api_start_time = self._get_utc_now()
+            api_start_time = self._get_utc_now()
+            if api_start_time.tzinfo is None:
+                api_start_time = api_start_time.replace(tzinfo=timezone.utc)
+            processing.api_start_time = api_start_time
             db.commit()
             logger.info(f"Started API call for job {job_id}")
     
@@ -44,6 +51,8 @@ class SyncProcessingStats:
             # Ensure both timestamps are timezone-aware
             if processing.api_start_time.tzinfo is None:
                 processing.api_start_time = processing.api_start_time.replace(tzinfo=timezone.utc)
+            if api_end_time.tzinfo is None:
+                api_end_time = api_end_time.replace(tzinfo=timezone.utc)
             
             api_duration = (api_end_time - processing.api_start_time).total_seconds()
             
@@ -60,6 +69,8 @@ class SyncProcessingStats:
             # Ensure both timestamps are timezone-aware
             if processing.start_time.tzinfo is None:
                 processing.start_time = processing.start_time.replace(tzinfo=timezone.utc)
+            if end_time.tzinfo is None:
+                end_time = end_time.replace(tzinfo=timezone.utc)
             
             # Calculate total duration from start to end
             duration = (end_time - processing.start_time).total_seconds()

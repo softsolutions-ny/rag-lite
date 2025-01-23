@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     def DATABASE_URL_ASYNC(self) -> str:
         """Async database URL (using asyncpg)"""
         return f"postgresql+asyncpg://{self.DATABASE_URL_BASE}"
-    
+
     @property
     def DATABASE_URL_SYNC(self) -> str:
         """Sync database URL (using psycopg2)"""
@@ -66,8 +66,21 @@ async_engine = create_async_engine(settings.DATABASE_URL_ASYNC, echo=True)
 sync_engine = create_engine(settings.DATABASE_URL_SYNC, echo=True)
 
 # Create session factories
-AsyncSessionLocal = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
-SessionLocal = sessionmaker(sync_engine, class_=Session, expire_on_commit=False)
+AsyncSessionLocal = sessionmaker(
+    async_engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autocommit=False,
+    autoflush=False,
+)
+
+SyncSessionLocal = sessionmaker(
+    sync_engine,
+    class_=Session,
+    expire_on_commit=False,
+    autocommit=False,
+    autoflush=False,
+)
 
 async def get_db():
     """Get async database session"""
@@ -83,7 +96,7 @@ async def get_db():
 
 def get_sync_db():
     """Get synchronous database session"""
-    db = SessionLocal()
+    db = SyncSessionLocal()
     try:
         yield db
         db.commit()

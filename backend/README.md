@@ -44,6 +44,9 @@ backend/
 2. Install dependencies:
 
    ```bash
+   # base
+   pip install -r requirements/base.txt
+
    # For development
    pip install -r requirements/dev.txt
 

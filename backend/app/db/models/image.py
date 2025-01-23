@@ -1,10 +1,13 @@
 from sqlalchemy import Column, String, DateTime, Integer, Float, ForeignKey, Text
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from typing import Dict, Any
 from app.db.base import Base
+
+def utcnow_with_timezone():
+    return datetime.now(timezone.utc)
 
 class Image(Base):
     __tablename__ = "images"
@@ -12,7 +15,7 @@ class Image(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     filename = Column(String, nullable=False)
     user_id = Column(String, nullable=False)
-    uploaded_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow)
+    uploaded_at = Column(DateTime(timezone=True), default=utcnow_with_timezone)
     storage_path = Column(String)
     
     # Relationships
@@ -42,13 +45,13 @@ class ImageProcessing(Base):
     description = Column(Text)  # Generated description
     
     # Timing information
-    start_time = Column(TIMESTAMP(timezone=True))
-    end_time = Column(TIMESTAMP(timezone=True))
+    start_time = Column(DateTime(timezone=True))
+    end_time = Column(DateTime(timezone=True))
     duration_seconds = Column(Float)
     
     # API call timing
-    api_start_time = Column(TIMESTAMP(timezone=True))
-    api_end_time = Column(TIMESTAMP(timezone=True))
+    api_start_time = Column(DateTime(timezone=True))
+    api_end_time = Column(DateTime(timezone=True))
     api_duration_seconds = Column(Float)
     
     # Relationships

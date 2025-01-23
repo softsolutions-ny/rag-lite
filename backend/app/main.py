@@ -10,9 +10,11 @@ logger = setup_logger("main")
 app = FastAPI(title="Elucide API")
 
 # Configure CORS with settings
+origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else ["http://localhost:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.CORS_ORIGINS],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,4 +22,4 @@ app.add_middleware(
 )
 
 # Include API router
-app.include_router(api_router, prefix="/api") 
+app.include_router(api_router, prefix="/api/v1") 
