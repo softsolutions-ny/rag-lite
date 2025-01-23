@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import desc, select
+from sqlalchemy import desc, select, func
 from typing import List, Optional, Dict, Any, Union
 import uuid
 from datetime import datetime
@@ -11,9 +11,41 @@ class ChatRepository:
         self.db = db
         self.is_async = isinstance(db, AsyncSession)
 
+    async def _get_next_thread_number(self, user_id: str) -> int:
+        """Get the next thread number for untitled threads"""
+        if self.is_async:
+            # Query to find the highest number in existing "Untitled X" titles
+            stmt = select(ChatThread).filter(
+                ChatThread.user_id == user_id,
+                ChatThread.title.like("Untitled %")
+            )
+            result = await self.db.execute(stmt)
+            threads = result.scalars().all()
+        else:
+            threads = (self.db.query(ChatThread)
+                      .filter(ChatThread.user_id == user_id,
+                             ChatThread.title.like("Untitled %"))
+                      .all())
+
+        max_num = 0
+        for thread in threads:
+            try:
+                num = int(thread.title.split(" ")[1])
+                max_num = max(max_num, num)
+            except (IndexError, ValueError):
+                continue
+
+        return max_num + 1
+
     async def create_thread(self, user_id: str, title: Optional[str] = None) -> ChatThread:
         """Create a new chat thread"""
         now = datetime.utcnow()
+        
+        # Generate incremental title if none provided
+        if not title:
+            next_num = await self._get_next_thread_number(user_id)
+            title = f"Untitled {next_num}"
+        
         thread = ChatThread(
             user_id=user_id,
             title=title,
