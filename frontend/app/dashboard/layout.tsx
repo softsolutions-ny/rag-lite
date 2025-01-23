@@ -8,13 +8,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen">
+    <div className="fixed inset-0 overflow-hidden">
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="relative z-10 h-full">
-            <AppHeader />
-            <main className="flex-1">{children}</main>
+          <div className="relative flex h-full flex-col">
+            <div className="sticky top-0 z-10">
+              <AppHeader />
+            </div>
+            <div className="absolute inset-x-0 bottom-0 top-16 overflow-auto">
+              {children}
+            </div>
           </div>
         </SidebarInset>
       </SidebarProvider>
