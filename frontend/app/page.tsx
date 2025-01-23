@@ -1,12 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { useSignIn } from "@clerk/nextjs";
 import googleIcon from "@/public/google-icon.svg";
 import appleIcon from "@/public/apple-icon.svg";
 import githubIcon from "@/public/github-icon.svg";
 
 export default function Home() {
+  const { signIn, isLoaded } = useSignIn();
+
+  if (!isLoaded) return null;
+
+  const signInWith = (
+    strategy: "oauth_google" | "oauth_apple" | "oauth_github"
+  ) => {
+    signIn.authenticateWithRedirect({
+      strategy,
+      redirectUrl: "/sso-callback",
+      redirectUrlComplete: "/dashboard",
+    });
+  };
+
   return (
     <div className="min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] dark:text-white">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -19,7 +33,10 @@ export default function Home() {
           </p>
           <div className="h-2"></div>
           <div className="flex gap-2">
-            <button className="p-1.5 border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors">
+            <button
+              onClick={() => signInWith("oauth_google")}
+              className="p-1.5 border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+            >
               <Image
                 src={googleIcon}
                 alt="Google Icon"
@@ -28,7 +45,10 @@ export default function Home() {
                 className="dark:invert"
               />
             </button>
-            <button className="p-1.5 border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors">
+            <button
+              onClick={() => signInWith("oauth_apple")}
+              className="p-1.5 border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+            >
               <Image
                 src={appleIcon}
                 alt="Apple Icon"
@@ -37,7 +57,10 @@ export default function Home() {
                 className="dark:invert"
               />
             </button>
-            <button className="p-1.5 border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors">
+            <button
+              onClick={() => signInWith("oauth_github")}
+              className="p-1.5 border rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+            >
               <Image
                 src={githubIcon}
                 alt="GitHub Icon"
