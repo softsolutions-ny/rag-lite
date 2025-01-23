@@ -83,11 +83,37 @@ export async function POST(req: Request) {
       throw new Error("API keys not configured");
     }
 
-    const { messages, model } = await req.json();
+    const { messages, model, threadId } = await req.json();
 
+    // Store the user's message in the database
+    const lastMessage = messages[messages.length - 1];
+    const messageData = {
+      thread_id: threadId,
+      role: lastMessage.role,
+      content: lastMessage.content,
+      model,
+    };
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(messageData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("Failed to store message. Status:", response.status);
+      console.error("Error details:", error);
+      console.error("Request data:", messageData);
+      throw new Error(`Failed to store message: ${JSON.stringify(error)}`);
+    }
+
+    // Get the AI response
+    let stream;
     if (model === "deepseek-reasoner") {
-      const stream = await getDeepSeekResponse(messages);
-      return new StreamingTextResponse(stream);
+      stream = await getDeepSeekResponse(messages);
     } else {
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -99,10 +125,36 @@ export async function POST(req: Request) {
         temperature: 0.7,
         max_tokens: 500,
       });
+      stream = OpenAIStream(response, {
+        onCompletion: async (completion: string) => {
+          // Store the assistant's message
+          const assistantMessageData = {
+            thread_id: threadId,
+            role: "assistant",
+            content: completion,
+            model,
+          };
 
-      const stream = OpenAIStream(response);
-      return new StreamingTextResponse(stream);
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(assistantMessageData),
+            });
+
+            if (!response.ok) {
+              console.error("Failed to store assistant message");
+            }
+          } catch (error) {
+            console.error("Error storing assistant message:", error);
+          }
+        },
+      });
     }
+
+    return new StreamingTextResponse(stream);
   } catch (error) {
     console.error("Chat API error:", error);
     return new Response(
