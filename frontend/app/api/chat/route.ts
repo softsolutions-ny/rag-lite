@@ -145,14 +145,14 @@ export async function POST(req: Request) {
       stream = await getDeepSeekResponse(messages, threadId, model);
     } else {
       const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: model === "gpt-4o" ? "gpt-4" : "gpt-4o-mini",
         stream: true,
         messages: messages.map((message: ChatMessage) => ({
           content: message.content,
           role: message.role,
         })),
         temperature: 0.7,
-        max_tokens: 500,
+        max_tokens: model === "gpt-4o" ? 1000 : 500,
       });
       stream = OpenAIStream(response, {
         onCompletion: async (completion: string) => {

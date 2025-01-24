@@ -17,17 +17,8 @@ interface ChatMessageProps {
 export function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.role === "user";
 
-  console.log("ChatMessage received:", {
-    id: message.id,
-    role: message.role,
-    content: message.content,
-    model: message.model,
-  });
-
   // Split content into sections if it contains "Reasoning:" and "Answer:"
   const sections = message.content.split(/(?=Reasoning:|Answer:)/);
-
-  console.log("Parsed sections:", sections);
 
   return (
     <div className="mx-auto max-w-4xl w-full px-4">
@@ -44,7 +35,6 @@ export function ChatMessage({ message }: ChatMessageProps) {
             <p className="whitespace-pre-wrap">{message.content}</p>
           ) : (
             sections.map((section, index) => {
-              console.log(`Processing section ${index}:`, section);
               const isReasoning = section.startsWith("Reasoning:");
               const isAnswer = section.startsWith("Answer:");
               const content = section

@@ -73,10 +73,25 @@ export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
       );
       if (!response.ok) throw new Error('Failed to update thread');
       const updatedThread = await response.json();
-      set((state: ThreadsState) => ({
-        threads: state.threads.map((t: Thread) => (t.id === threadId ? updatedThread : t)),
-        isLoading: false,
-      }));
+
+      // Update the thread in state, ensuring folder_id is properly updated
+      set((state: ThreadsState) => {
+        const updatedThreads = state.threads.map((t: Thread) =>
+          t.id === threadId
+            ? {
+                ...t,
+                ...updatedThread,
+                folder_id: data.folder_id !== undefined ? data.folder_id : t.folder_id,
+                title: data.title !== undefined ? data.title : t.title,
+              }
+            : t
+        );
+        return {
+          threads: updatedThreads,
+          isLoading: false,
+        };
+      });
+
       return updatedThread;
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to update thread', isLoading: false });
@@ -103,6 +118,22 @@ export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
   },
 
   moveThreadToFolder: async (threadId: string, folderId: string | undefined): Promise<Thread> => {
-    return await useThreadsStore.getState().updateThread(threadId, { folder_id: folderId });
+    try {
+      // Get the current thread to preserve its title
+      const currentThread = useThreadsStore.getState().threads.find(t => t.id === threadId);
+      if (!currentThread) throw new Error('Thread not found');
+
+      // Use the existing updateThread function to handle both API call and state update
+      const updatedThread = await useThreadsStore.getState().updateThread(threadId, {
+        folder_id: folderId,
+        title: currentThread.title || undefined,
+        updated_at: new Date().toISOString(),
+      });
+
+      return updatedThread;
+    } catch (error) {
+      console.error('Error moving thread to folder:', error);
+      throw error;
+    }
   },
 })); 

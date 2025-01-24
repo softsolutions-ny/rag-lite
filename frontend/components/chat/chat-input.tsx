@@ -75,10 +75,13 @@ export function ChatInput({
         </div>
         <div className="absolute left-2 top-[calc(100%-22px)]">
           <Select value={model} onValueChange={onModelChange}>
-            <SelectTrigger className="h-5 w-[120px] border-none bg-transparent pl-0 text-[10px] text-muted-foreground hover:bg-accent hover:text-accent-foreground">
+            <SelectTrigger className="h-5 w-[120px] border-none bg-transparent pl-0 text-[10px] text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-0">
               <SelectValue placeholder="Select model" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="gpt-4o" className="text-xs">
+                gpt-4o
+              </SelectItem>
               <SelectItem value="gpt-4o-mini" className="text-xs">
                 gpt-4o-mini
               </SelectItem>
