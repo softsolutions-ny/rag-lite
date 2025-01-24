@@ -32,4 +32,5 @@ requests==2.31.0
 
 # Additional dependencies
 pydantic==2.5.3
-pydantic-settings==2.1.0 
+pydantic-settings==2.1.0
+firecrawl==0.1.0 

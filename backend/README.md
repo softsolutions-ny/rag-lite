@@ -63,6 +63,8 @@ backend/
    POSTGRES_HOST=localhost
    POSTGRES_PORT=5432
 
+
+
    REDIS_URL=redis://localhost:6379/0
 
    OPENAI_API_KEY=your_openai_key
