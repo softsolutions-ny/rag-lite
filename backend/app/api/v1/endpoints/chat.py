@@ -44,6 +44,7 @@ class ThreadResponse(BaseModel):
     user_id: str
     title: Optional[str]
     label: Optional[str]
+    folder_id: Optional[UUID]
     created_at: datetime
     updated_at: datetime
 
