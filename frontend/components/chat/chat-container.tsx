@@ -74,7 +74,7 @@ export function ChatContainer() {
     fetchMessages();
   }, [currentThreadId]);
 
-  const { messages, isLoading, append } = useChat({
+  const { messages, isLoading, append, stop } = useChat({
     api: "/api/chat",
     body: {
       model,
@@ -131,6 +131,10 @@ export function ChatContainer() {
     }
   };
 
+  const handleStop = useCallback(() => {
+    stop();
+  }, [stop]);
+
   const memoizedMessages = useMemo(
     () =>
       messages.map((message) => (
@@ -174,6 +178,7 @@ export function ChatContainer() {
           <ChatInput
             isLoading={isLoading || isLoadingThread}
             onSubmit={handleMessageSubmit}
+            onStop={handleStop}
             model={model}
             onModelChange={setModel}
           />

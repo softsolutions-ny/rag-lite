@@ -1,6 +1,6 @@
 "use client";
 
-import { CornerDownLeft } from "lucide-react";
+import { CornerDownLeft, StopCircle } from "lucide-react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "../ui/button";
 import { useState, useRef, useEffect } from "react";
@@ -16,6 +16,7 @@ import { ModelType } from "./model-selector";
 interface ChatInputProps {
   isLoading: boolean;
   onSubmit: (message: string) => void;
+  onStop?: () => void;
   model: ModelType;
   onModelChange: (model: ModelType) => void;
 }
@@ -23,6 +24,7 @@ interface ChatInputProps {
 export function ChatInput({
   isLoading,
   onSubmit,
+  onStop,
   model,
   onModelChange,
 }: ChatInputProps) {
@@ -38,7 +40,11 @@ export function ChatInput({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit();
+      if (isLoading && onStop) {
+        onStop();
+      } else {
+        handleSubmit();
+      }
     }
   };
 
@@ -66,11 +72,17 @@ export function ChatInput({
           <Button
             size="icon"
             variant="ghost"
-            disabled={isLoading || !input.trim()}
-            onClick={handleSubmit}
-            className="text-muted-foreground hover:text-foreground"
+            onClick={isLoading ? onStop : handleSubmit}
+            disabled={isLoading ? false : !input.trim()}
+            className={`text-muted-foreground transition-all duration-200 ${
+              isLoading ? "hover:text-destructive" : "hover:text-foreground"
+            }`}
           >
-            <CornerDownLeft className="h-4 w-4" />
+            {isLoading ? (
+              <StopCircle className="h-4 w-4" />
+            ) : (
+              <CornerDownLeft className="h-4 w-4" />
+            )}
           </Button>
         </div>
         <div className="absolute left-2 top-[calc(100%-22px)]">

@@ -1,13 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn, useAuth } from "@clerk/nextjs";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import googleIcon from "@/public/google-icon.svg";
 import appleIcon from "@/public/apple-icon.svg";
 import githubIcon from "@/public/github-icon.svg";
 
 export default function Home() {
   const { signIn, isLoaded } = useSignIn();
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push("/dashboard");
+    }
+  }, [isSignedIn, router]);
 
   if (!isLoaded) return null;
 
@@ -29,7 +39,7 @@ export default function Home() {
             <h1 className="text-2xl font-bold">elucide</h1>
           </div>
           <p className="text-sm text-muted-foreground dark:text-gray-400">
-            give your pictures meaning
+            graphics user interface for robot intelligence
           </p>
           <div className="h-2"></div>
           <div className="flex gap-2">

@@ -30,14 +30,14 @@ interface DeepSeekChunk {
   }];
 }
 
-async function getDeepSeekResponse(messages: ChatMessage[], threadId: string, model: string) {
+async function getDeepSeekResponse(messages: ChatMessage[], threadId: string, model: string, signal?: AbortSignal) {
   const response = await deepseek.chat.completions.create({
     model: "deepseek-reasoner",
     messages,
     temperature: 0.7,
     max_tokens: 1000,
     stream: true,
-  }) as AsyncIterable<DeepSeekChunk>;
+  }, { signal }) as AsyncIterable<DeepSeekChunk>;
 
   // Create a readable stream from the response
   const stream = new ReadableStream({
@@ -49,6 +49,12 @@ async function getDeepSeekResponse(messages: ChatMessage[], threadId: string, mo
 
       try {
         for await (const chunk of response) {
+          // Check if the stream has been aborted
+          if (signal?.aborted) {
+            controller.error(new Error('Stream aborted by user'));
+            return;
+          }
+
           const delta = chunk.choices[0].delta;
 
           // Handle reasoning content
@@ -98,7 +104,11 @@ async function getDeepSeekResponse(messages: ChatMessage[], threadId: string, mo
 
         controller.close();
       } catch (error) {
-        controller.error(error);
+        if (error instanceof Error && error.name === 'AbortError') {
+          controller.error(new Error('Stream aborted by user'));
+        } else {
+          controller.error(error);
+        }
       }
     },
   });
@@ -142,7 +152,7 @@ export async function POST(req: Request) {
     // Get the AI response
     let stream;
     if (model === "deepseek-reasoner") {
-      stream = await getDeepSeekResponse(messages, threadId, model);
+      stream = await getDeepSeekResponse(messages, threadId, model, req.signal);
     } else {
       const response = await openai.chat.completions.create({
         model: model === "gpt-4o" ? "gpt-4" : "gpt-4o-mini",
@@ -153,7 +163,8 @@ export async function POST(req: Request) {
         })),
         temperature: 0.7,
         max_tokens: model === "gpt-4o" ? 1000 : 500,
-      });
+      }, { signal: req.signal });
+      
       stream = OpenAIStream(response, {
         onCompletion: async (completion: string) => {
           // Store the assistant's message
@@ -186,6 +197,9 @@ export async function POST(req: Request) {
     return new StreamingTextResponse(stream);
   } catch (error) {
     console.error("Chat API error:", error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      return new Response('Request aborted by user', { status: 499 });
+    }
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "An unexpected error occurred",
