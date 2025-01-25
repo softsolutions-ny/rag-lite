@@ -205,3 +205,9 @@ LINE 1: ... INTO images (id, filename, user_id, uploaded_at, storage_pa...
 [2025-01-25 02:48:30] INFO [image_service] [image_service.py:29] Starting image processing for job a17f8043-a7e8-4d51-83e2-537a10f3acfb
 [2025-01-25 02:48:36] INFO [image_service] [image_service.py:92] Stored image with ID: 1db29359-a8a8-4591-a512-fc71e3abdef5
 [2025-01-25 02:48:36] INFO [image_service] [image_service.py:119] Returning result with processing time: 6.22
+[2025-01-25 11:16:57] INFO [image_service] [image_service.py:29] Starting image processing for job 2bea90a5-e653-40e1-bfc6-a027eea6ec6a
+[2025-01-25 11:17:06] INFO [image_service] [image_service.py:92] Stored image with ID: 7ada20a5-c9dc-4810-b849-06b487584650
+[2025-01-25 11:17:06] INFO [image_service] [image_service.py:119] Returning result with processing time: 8.77
+[2025-01-25 11:17:36] INFO [image_service] [image_service.py:29] Starting image processing for job f14a1e1d-adaa-4a9e-91ab-387b6ada98de
+[2025-01-25 11:17:41] INFO [image_service] [image_service.py:92] Stored image with ID: 0efedf72-fd22-4039-919b-9750a601b898
+[2025-01-25 11:17:41] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.77

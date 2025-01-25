@@ -1,48 +1,39 @@
 import { NextResponse } from 'next/server';
-import { openai } from '@ai-sdk/openai';
 import { generateObject } from 'ai';
-import { z } from "zod";
+import { modelConfigs, AgentAction, agentActionSchema, ChatMessage } from '@/lib/ai-config';
 import { useExtractionStore } from '@/lib/store/extraction';
+import { AGENT_ACTION_PROMPT } from '@/lib/prompts';
 
-const model = openai('gpt-4o');
+export async function determineAction(message: string): Promise<AgentAction> {
+  const modelType = 'agent-1';
+  const config = modelConfigs[modelType];
 
-type AgentAction = {
-  type: "EXTRACT" | "CHAT" | "SEARCH";
-  instruction: string;
-  reasoning: string;
-};
+  const messages = [
+    {
+      role: 'system' as const,
+      content: config.systemPrompt
+    },
+    {
+      role: "user" as const,
+      content: [{
+        type: "text" as const,
+        text: `${AGENT_ACTION_PROMPT}\n\nUser message: "${message}"`
+      }]
+    }
+  ];
 
-async function determineAction(message: string): Promise<AgentAction> {
-  const messages = [{
-    role: "user" as const,
-    content: [{
-      type: "text" as const,
-      text: `Given the user message: "${message}", determine the most appropriate action to take.
-Choose from:
-1. EXTRACT - If the user wants to extract data from URLs
-2. CHAT - If this is a regular chat message
-3. SEARCH - If we need to search for information
-
-Return the appropriate action type and reasoning.`
-    }]
-  }];
-
-  const {result} = await generateObject({
-    model,
-    schema: z.object({
-      type: z.enum(["EXTRACT", "CHAT", "SEARCH"]),
-      instruction: z.string(),
-      reasoning: z.string()
-    }),
+  const { object } = await generateObject({
+    model: config.model,
+    schema: agentActionSchema,
     messages
   });
 
-  return result.object;
+  return object;
 }
 
 export async function POST(request: Request) {
   try {
-    const { messages, model } = await request.json();
+    const { messages } = await request.json();
     
     if (!messages || messages.length === 0) {
       return NextResponse.json(
@@ -104,22 +95,9 @@ export async function POST(request: Request) {
         });
       }
 
-      case 'CHAT': {
-        // Forward to regular chat endpoint
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ messages, model: 'gpt-4o' }),
-        });
-
-        return response;
-      }
-
+      case 'CHAT':
       case 'SEARCH': {
-        // Implement search functionality
-        // For now, just respond with chat
+        // Forward to regular chat endpoint with GPT-4
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
           method: 'POST',
           headers: {

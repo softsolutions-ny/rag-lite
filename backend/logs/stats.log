@@ -427,3 +427,11 @@ WHERE image_processings.job_id = $1::VARCHAR]
 [2025-01-25 02:48:30] INFO [stats] [stats_service.py:148] Started API call for job a17f8043-a7e8-4d51-83e2-537a10f3acfb
 [2025-01-25 02:48:36] INFO [stats] [stats_service.py:164] Ended API call for job a17f8043-a7e8-4d51-83e2-537a10f3acfb, duration: 6.20s
 [2025-01-25 02:48:36] INFO [stats] [stats_service.py:185] Completed job a17f8043-a7e8-4d51-83e2-537a10f3acfb in 6.22s with status completed
+[2025-01-25 11:16:57] INFO [stats] [stats_service.py:140] Started processing job 2bea90a5-e653-40e1-bfc6-a027eea6ec6a
+[2025-01-25 11:16:58] INFO [stats] [stats_service.py:148] Started API call for job 2bea90a5-e653-40e1-bfc6-a027eea6ec6a
+[2025-01-25 11:17:06] INFO [stats] [stats_service.py:164] Ended API call for job 2bea90a5-e653-40e1-bfc6-a027eea6ec6a, duration: 8.61s
+[2025-01-25 11:17:06] INFO [stats] [stats_service.py:185] Completed job 2bea90a5-e653-40e1-bfc6-a027eea6ec6a in 8.77s with status completed
+[2025-01-25 11:17:36] INFO [stats] [stats_service.py:140] Started processing job f14a1e1d-adaa-4a9e-91ab-387b6ada98de
+[2025-01-25 11:17:37] INFO [stats] [stats_service.py:148] Started API call for job f14a1e1d-adaa-4a9e-91ab-387b6ada98de
+[2025-01-25 11:17:41] INFO [stats] [stats_service.py:164] Ended API call for job f14a1e1d-adaa-4a9e-91ab-387b6ada98de, duration: 4.73s
+[2025-01-25 11:17:41] INFO [stats] [stats_service.py:185] Completed job f14a1e1d-adaa-4a9e-91ab-387b6ada98de in 4.77s with status completed

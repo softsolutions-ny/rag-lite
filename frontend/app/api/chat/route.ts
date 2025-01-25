@@ -1,24 +1,17 @@
 import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { modelConfigs, ChatMessage, storeMessage, validateApiKey, ModelType } from '@/lib/ai-config';
+import { IMAGE_ANALYSIS_PROMPT } from '@/lib/prompts';
 
 // Set the runtime to edge
 export const runtime = "edge";
 
-interface ChatMessage {
-  content: string;
-  role: "user" | "assistant" | "system";
-}
-
 export async function POST(req: Request) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error("OpenAI API key not configured");
-    }
-
     const { messages, model, threadId } = await req.json();
+    const modelType = model as ModelType;
 
     // Route agent requests to agent endpoint
-    if (model === "agent-gpt4o") {
+    if (modelType === "agent-1") {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/agent`, {
         method: "POST",
         headers: {
@@ -29,87 +22,56 @@ export async function POST(req: Request) {
       return response;
     }
 
-    // Add system prompt for image analysis messages
-    const processedMessages = messages.map((message: ChatMessage) => {
+    const config = modelConfigs[modelType];
+    validateApiKey(config.provider);
+
+    // Add system prompt if not present
+    const hasSystemPrompt = messages.some((msg: ChatMessage) => msg.role === 'system');
+    const processedMessages = hasSystemPrompt ? messages : [
+      { role: 'system', content: config.systemPrompt },
+      ...messages
+    ];
+
+    // Process image analysis messages
+    const finalMessages = processedMessages.map((message: ChatMessage) => {
       if (message.role === "system" && message.content.includes("The image depicts")) {
+        const imageDescription = message.content.split("The image depicts ")[1];
         return {
           role: "system",
-          content: `${message.content}\n\nAssistant: What else would you like to know about this image?`,
+          content: IMAGE_ANALYSIS_PROMPT(imageDescription),
         };
       }
       return message;
     });
 
-    // Store the user's message in the database
+    // Store the user's message
     const lastMessage = messages[messages.length - 1];
-    const messageData = {
+    await storeMessage({
       thread_id: threadId,
       role: lastMessage.role,
       content: lastMessage.content,
-      model,
-    };
-
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(messageData),
+      model: modelType,
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed to store message. Status:", response.status);
-      console.error("Error details:", error);
-      console.error("Request data:", messageData);
-      throw new Error(`Failed to store message: ${JSON.stringify(error)}`);
-    }
-
     const result = await streamText({
-      model: openai((() => {
-        switch (model) {
-          case "gpt-4o":
-            return "gpt-4o";
-          case "gpt-4o-mini":
-            return "gpt-4o-mini";
-          default:
-            return "gpt-4o-mini";
-        }
-      })()),
-      messages: processedMessages.map((message: ChatMessage) => ({
+      model: config.model,
+      messages: finalMessages.map((message: ChatMessage) => ({
         content: message.content,
         role: message.role,
       })),
-      temperature: 0.7,
-      maxTokens: model === "gpt-4o" ? 1000 : 500,
+      temperature: config.temperature,
+      maxTokens: config.maxTokens,
       onFinish: async ({ text }) => {
-        // Store the complete response in the database
-        const assistantMessageData = {
+        // Store the assistant's response
+        await storeMessage({
           thread_id: threadId,
           role: "assistant",
           content: text,
-          model,
-        };
-
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(assistantMessageData),
-          });
-
-          if (!response.ok) {
-            console.error("Failed to store assistant message");
-          }
-        } catch (error) {
-          console.error("Error storing assistant message:", error);
-        }
+          model: modelType,
+        });
       },
     });
 
-    // Convert the stream to a format compatible with useChat
     return result.toDataStreamResponse();
   } catch (error) {
     console.error("Chat API error:", error);
@@ -120,12 +82,7 @@ export async function POST(req: Request) {
       JSON.stringify({
         error: error instanceof Error ? error.message : "An unexpected error occurred",
       }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 } 
