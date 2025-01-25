@@ -97,3 +97,78 @@
 [2025-01-23 15:23:31] INFO [images] [images.py:46] Processing file: Screenshot 2025-01-21 at 5.36.14 PM.png -> 8adab715-21c0-40b0-ba08-19c1226e4819.png
 [2025-01-23 15:23:32] INFO [images] [images.py:60] Created job 65bcb9f4-19a3-4b80-81ac-bc5179527bb9 for file Screenshot 2025-01-21 at 5.36.14 PM.png
 [2025-01-23 15:23:32] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:15:28] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:15:28] INFO [images] [images.py:28] File names: ['softsolutions-script-logo-1.png']
+[2025-01-25 02:15:28] INFO [images] [images.py:46] Processing file: softsolutions-script-logo-1.png -> 65cb9ac0-e738-4cf5-bfb0-1dc13cca7ce6.png
+[2025-01-25 02:15:29] INFO [images] [images.py:60] Created job 300de6b4-dbc2-4466-935c-3c1b29492c9c for file softsolutions-script-logo-1.png
+[2025-01-25 02:15:29] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:17:24] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:17:24] INFO [images] [images.py:28] File names: ['softsolutions-script-logo-1.png']
+[2025-01-25 02:17:24] INFO [images] [images.py:46] Processing file: softsolutions-script-logo-1.png -> 8bcbb150-d45c-465f-8443-61f57465cae1.png
+[2025-01-25 02:17:24] INFO [images] [images.py:60] Created job 6dec93d4-f061-4732-acc0-2626f4aacd43 for file softsolutions-script-logo-1.png
+[2025-01-25 02:17:24] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:19:58] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:19:58] INFO [images] [images.py:28] File names: ['github-icon.jpeg']
+[2025-01-25 02:19:58] INFO [images] [images.py:46] Processing file: github-icon.jpeg -> 48a54e7f-f428-46b2-a792-9a93486fc422.jpeg
+[2025-01-25 02:19:58] INFO [images] [images.py:60] Created job aaee49fe-f2e5-4a1f-b307-27c47a7b5b7f for file github-icon.jpeg
+[2025-01-25 02:19:58] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:24:57] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:24:57] INFO [images] [images.py:28] File names: ['github-icon.jpeg']
+[2025-01-25 02:24:57] INFO [images] [images.py:46] Processing file: github-icon.jpeg -> f054c4d6-3e9e-42cf-9947-3601d98dc953.jpeg
+[2025-01-25 02:24:57] INFO [images] [images.py:60] Created job f9e52dc5-007a-4050-81b8-ac98fe819712 for file github-icon.jpeg
+[2025-01-25 02:24:57] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:26:55] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:26:55] INFO [images] [images.py:28] File names: ['arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg']
+[2025-01-25 02:26:55] INFO [images] [images.py:46] Processing file: arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg -> 8d6a7e4a-542a-497a-a312-b44f9f1cc9e8.jpg
+[2025-01-25 02:26:55] INFO [images] [images.py:60] Created job 4de2cfb2-df55-4cd1-af3a-89b2de603767 for file arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg
+[2025-01-25 02:26:55] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:28:56] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:28:56] INFO [images] [images.py:28] File names: ['arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg']
+[2025-01-25 02:28:56] INFO [images] [images.py:46] Processing file: arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg -> 9258e15c-d021-4f8e-9571-e73d41d21af2.jpg
+[2025-01-25 02:28:56] INFO [images] [images.py:60] Created job 81269052-c239-43a7-ba38-b818098971dd for file arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg
+[2025-01-25 02:28:56] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:30:57] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:30:57] INFO [images] [images.py:28] File names: ['arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg']
+[2025-01-25 02:30:57] INFO [images] [images.py:46] Processing file: arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg -> d9c5383a-f465-42af-8633-9557015dc5a5.jpg
+[2025-01-25 02:30:57] INFO [images] [images.py:60] Created job 71513646-ad89-4af4-9fe6-914791a6c110 for file arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg
+[2025-01-25 02:30:57] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:31:32] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:31:32] INFO [images] [images.py:28] File names: ['japan-vintage-4.jpg']
+[2025-01-25 02:31:32] INFO [images] [images.py:46] Processing file: japan-vintage-4.jpg -> 18132d93-677f-4a3e-a33d-4cbc5f6a9c74.jpg
+[2025-01-25 02:31:32] INFO [images] [images.py:60] Created job fd9c3fd3-d50a-42f6-97ed-da2d2b8ac329 for file japan-vintage-4.jpg
+[2025-01-25 02:31:32] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:33:18] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:33:18] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-25 02:33:18] INFO [images] [images.py:46] Processing file: japan-vintage-6.jpg -> e64cd740-2e45-48dd-be32-5b320414a36a.jpg
+[2025-01-25 02:33:18] INFO [images] [images.py:60] Created job 1009e725-84d5-40c1-a233-8be162e5012a for file japan-vintage-6.jpg
+[2025-01-25 02:33:18] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:36:40] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:36:40] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-25 02:36:40] INFO [images] [images.py:46] Processing file: japan-vintage-11.jpg -> 44a9db6e-6cdb-4b10-a345-0bf57839e1cd.jpg
+[2025-01-25 02:36:40] INFO [images] [images.py:60] Created job 696341b8-9896-4561-a18c-4bf4a1731e9d for file japan-vintage-11.jpg
+[2025-01-25 02:36:40] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:37:16] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:37:16] INFO [images] [images.py:28] File names: ['japan-vintage-12.jpg']
+[2025-01-25 02:37:16] INFO [images] [images.py:46] Processing file: japan-vintage-12.jpg -> 40181c6e-87e4-45ad-a0c7-6465b01744bb.jpg
+[2025-01-25 02:37:16] INFO [images] [images.py:60] Created job a3d2b10b-f4d4-4c0c-a780-feb81e6cce0d for file japan-vintage-12.jpg
+[2025-01-25 02:37:16] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:38:47] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:38:47] INFO [images] [images.py:28] File names: ['japan-vintage-13.jpg']
+[2025-01-25 02:38:47] INFO [images] [images.py:46] Processing file: japan-vintage-13.jpg -> e4dd24d0-7b60-4779-a874-e433ead3aae5.jpg
+[2025-01-25 02:38:47] INFO [images] [images.py:60] Created job 2110f1bb-10a8-462d-8ae2-e783102bd3ed for file japan-vintage-13.jpg
+[2025-01-25 02:38:47] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:44:35] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:44:35] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-25 02:44:35] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> 40012aaf-7189-429c-a802-cbebcadce0a1.jpg
+[2025-01-25 02:44:35] INFO [images] [images.py:60] Created job 5cf525ae-94f2-41a9-87ce-6844e458b4a5 for file japan-vintage-9.jpg
+[2025-01-25 02:44:35] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:46:39] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:46:39] INFO [images] [images.py:28] File names: ['arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg']
+[2025-01-25 02:46:39] INFO [images] [images.py:46] Processing file: arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg -> 3b858302-28e8-4a58-b771-ea35b099242f.jpg
+[2025-01-25 02:46:39] INFO [images] [images.py:60] Created job 0f8281da-77cd-48ff-b2d4-1cc116d5571d for file arek7338_painting_of_cherry_blossoms_old_japanese_artwork_--s_cf23b756-4cea-4ccd-90ad-3ed455bdd59d_3.jpg
+[2025-01-25 02:46:39] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-25 02:48:30] INFO [images] [images.py:27] Received 1 files
+[2025-01-25 02:48:30] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-25 02:48:30] INFO [images] [images.py:46] Processing file: japan-vintage-6.jpg -> 5496ff70-7d5f-4385-96cc-867e601e0ef5.jpg
+[2025-01-25 02:48:30] INFO [images] [images.py:60] Created job a17f8043-a7e8-4d51-83e2-537a10f3acfb for file japan-vintage-6.jpg
+[2025-01-25 02:48:30] INFO [images] [images.py:72] Successfully created 1 jobs

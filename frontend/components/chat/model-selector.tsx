@@ -11,26 +11,37 @@ import {
 
 export type ModelType =
   | "gpt-4o-mini"
-  | "deepseek-reasoner"
   | "gpt-4o"
+  | "deepseek-reasoner"
   | "agent-gpt4o";
 
 interface ModelSelectorProps {
   model: ModelType;
-  onModelChange: (model: ModelType) => void;
+  onChange: (model: ModelType) => void;
+  disabled?: boolean;
 }
 
-export function ModelSelector({ model, onModelChange }: ModelSelectorProps) {
+export function ModelSelector({
+  model,
+  onChange,
+  disabled = false,
+}: ModelSelectorProps) {
   return (
-    <Select value={model} onValueChange={onModelChange}>
-      <SelectTrigger className="w-[200px]">
-        <SelectValue placeholder="Select a model" />
+    <Select value={model} onValueChange={onChange} disabled={disabled}>
+      <SelectTrigger
+        className={`h-5 w-[120px] border-none bg-transparent pl-0 text-[10px] text-muted-foreground focus:ring-0 ${
+          disabled
+            ? "cursor-default hover:bg-transparent [&>svg]:hidden"
+            : "hover:bg-accent hover:text-accent-foreground"
+        }`}
+      >
+        <SelectValue placeholder="Select model" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
-        <SelectItem value="deepseek-reasoner">DeepSeek V1</SelectItem>
-        <SelectItem value="gpt-4o">GPT-4o</SelectItem>
-        <SelectItem value="agent-gpt4o">Agent GPT-4o</SelectItem>
+        <SelectItem value="gpt-4o">gpt-4o</SelectItem>
+        <SelectItem value="gpt-4o-mini">gpt-4o-mini</SelectItem>
+        <SelectItem value="deepseek-reasoner">deepseek-reasoner</SelectItem>
+        <SelectItem value="agent-gpt4o">Agent</SelectItem>
       </SelectContent>
     </Select>
   );

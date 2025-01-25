@@ -17,6 +17,29 @@ export async function POST(req: Request) {
 
     const { messages, model, threadId } = await req.json();
 
+    // Route agent requests to agent endpoint
+    if (model === "agent-gpt4o") {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/agent`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages, model }),
+      });
+      return response;
+    }
+
+    // Add system prompt for image analysis messages
+    const processedMessages = messages.map((message: ChatMessage) => {
+      if (message.role === "system" && message.content.includes("The image depicts")) {
+        return {
+          role: "system",
+          content: `${message.content}\n\nAssistant: What else would you like to know about this image?`,
+        };
+      }
+      return message;
+    });
+
     // Store the user's message in the database
     const lastMessage = messages[messages.length - 1];
     const messageData = {
@@ -43,8 +66,17 @@ export async function POST(req: Request) {
     }
 
     const result = await streamText({
-      model: openai(model === "gpt-4o" ? "gpt-4" : "gpt-4-turbo"),
-      messages: messages.map((message: ChatMessage) => ({
+      model: openai((() => {
+        switch (model) {
+          case "gpt-4o":
+            return "gpt-4o";
+          case "gpt-4o-mini":
+            return "gpt-4o-mini";
+          default:
+            return "gpt-4o-mini";
+        }
+      })()),
+      messages: processedMessages.map((message: ChatMessage) => ({
         content: message.content,
         role: message.role,
       })),

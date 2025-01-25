@@ -160,3 +160,48 @@ LINE 1: ... INTO images (id, filename, user_id, uploaded_at, storage_pa...
 [2025-01-23 15:23:32] INFO [image_service] [image_service.py:29] Starting image processing for job 65bcb9f4-19a3-4b80-81ac-bc5179527bb9
 [2025-01-23 15:23:40] INFO [image_service] [image_service.py:92] Stored image with ID: eb7cc1b7-6281-48a3-b8e8-76fcf78e1944
 [2025-01-23 15:23:40] INFO [image_service] [image_service.py:119] Returning result with processing time: 8.76
+[2025-01-25 02:15:29] INFO [image_service] [image_service.py:29] Starting image processing for job 300de6b4-dbc2-4466-935c-3c1b29492c9c
+[2025-01-25 02:15:32] INFO [image_service] [image_service.py:92] Stored image with ID: 7950abed-091d-48f1-995c-d0c27a9641d3
+[2025-01-25 02:15:32] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.13
+[2025-01-25 02:17:24] INFO [image_service] [image_service.py:29] Starting image processing for job 6dec93d4-f061-4732-acc0-2626f4aacd43
+[2025-01-25 02:17:27] INFO [image_service] [image_service.py:92] Stored image with ID: bebe3a2c-9c52-4574-9a14-85ff03053438
+[2025-01-25 02:17:27] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.06
+[2025-01-25 02:19:58] INFO [image_service] [image_service.py:29] Starting image processing for job aaee49fe-f2e5-4a1f-b307-27c47a7b5b7f
+[2025-01-25 02:20:01] INFO [image_service] [image_service.py:92] Stored image with ID: 22ae8875-3b9b-4526-9be3-ea8093f0d11e
+[2025-01-25 02:20:01] INFO [image_service] [image_service.py:119] Returning result with processing time: 2.94
+[2025-01-25 02:24:57] INFO [image_service] [image_service.py:29] Starting image processing for job f9e52dc5-007a-4050-81b8-ac98fe819712
+[2025-01-25 02:25:01] INFO [image_service] [image_service.py:92] Stored image with ID: ba7fcd84-d990-4178-b430-40b5ca2b2d6f
+[2025-01-25 02:25:01] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.61
+[2025-01-25 02:26:55] INFO [image_service] [image_service.py:29] Starting image processing for job 4de2cfb2-df55-4cd1-af3a-89b2de603767
+[2025-01-25 02:27:02] INFO [image_service] [image_service.py:92] Stored image with ID: 5e9215a4-841c-413c-9d0a-abb9f22fed88
+[2025-01-25 02:27:02] INFO [image_service] [image_service.py:119] Returning result with processing time: 7.55
+[2025-01-25 02:28:56] INFO [image_service] [image_service.py:29] Starting image processing for job 81269052-c239-43a7-ba38-b818098971dd
+[2025-01-25 02:29:01] INFO [image_service] [image_service.py:92] Stored image with ID: 71d439db-abeb-4860-b10c-e638539830ad
+[2025-01-25 02:29:01] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.72
+[2025-01-25 02:30:57] INFO [image_service] [image_service.py:29] Starting image processing for job 71513646-ad89-4af4-9fe6-914791a6c110
+[2025-01-25 02:31:01] INFO [image_service] [image_service.py:92] Stored image with ID: bb95171e-3245-4132-8011-6243b58f1973
+[2025-01-25 02:31:01] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.03
+[2025-01-25 02:31:32] INFO [image_service] [image_service.py:29] Starting image processing for job fd9c3fd3-d50a-42f6-97ed-da2d2b8ac329
+[2025-01-25 02:31:37] INFO [image_service] [image_service.py:92] Stored image with ID: 8b427b90-9df8-4afc-8248-0b942435a1b8
+[2025-01-25 02:31:37] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.37
+[2025-01-25 02:33:18] INFO [image_service] [image_service.py:29] Starting image processing for job 1009e725-84d5-40c1-a233-8be162e5012a
+[2025-01-25 02:33:27] INFO [image_service] [image_service.py:92] Stored image with ID: a4bf7b01-df78-4126-9ae3-ed8e2e29ded8
+[2025-01-25 02:33:27] INFO [image_service] [image_service.py:119] Returning result with processing time: 8.98
+[2025-01-25 02:36:40] INFO [image_service] [image_service.py:29] Starting image processing for job 696341b8-9896-4561-a18c-4bf4a1731e9d
+[2025-01-25 02:36:44] INFO [image_service] [image_service.py:92] Stored image with ID: 942ce5e7-27f7-424e-b365-9df12bdca800
+[2025-01-25 02:36:44] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.94
+[2025-01-25 02:37:16] INFO [image_service] [image_service.py:29] Starting image processing for job a3d2b10b-f4d4-4c0c-a780-feb81e6cce0d
+[2025-01-25 02:37:21] INFO [image_service] [image_service.py:92] Stored image with ID: d6855c6a-74a3-4f8c-ae82-261243eddd7d
+[2025-01-25 02:37:21] INFO [image_service] [image_service.py:119] Returning result with processing time: 5.21
+[2025-01-25 02:38:47] INFO [image_service] [image_service.py:29] Starting image processing for job 2110f1bb-10a8-462d-8ae2-e783102bd3ed
+[2025-01-25 02:38:51] INFO [image_service] [image_service.py:92] Stored image with ID: a7e4aea5-16fe-47d5-a54b-7676b0569168
+[2025-01-25 02:38:51] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.59
+[2025-01-25 02:44:35] INFO [image_service] [image_service.py:29] Starting image processing for job 5cf525ae-94f2-41a9-87ce-6844e458b4a5
+[2025-01-25 02:44:39] INFO [image_service] [image_service.py:92] Stored image with ID: 94258aa3-ef6e-4778-af67-ef30caa3da26
+[2025-01-25 02:44:39] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.0
+[2025-01-25 02:46:39] INFO [image_service] [image_service.py:29] Starting image processing for job 0f8281da-77cd-48ff-b2d4-1cc116d5571d
+[2025-01-25 02:46:43] INFO [image_service] [image_service.py:92] Stored image with ID: 7452f716-4055-4a1a-a40d-024bed1e6fa6
+[2025-01-25 02:46:43] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.95
+[2025-01-25 02:48:30] INFO [image_service] [image_service.py:29] Starting image processing for job a17f8043-a7e8-4d51-83e2-537a10f3acfb
+[2025-01-25 02:48:36] INFO [image_service] [image_service.py:92] Stored image with ID: 1db29359-a8a8-4591-a512-fc71e3abdef5
+[2025-01-25 02:48:36] INFO [image_service] [image_service.py:119] Returning result with processing time: 6.22

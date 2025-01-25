@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
@@ -55,7 +55,6 @@ DialogTriggerButton.displayName = "DialogTriggerButton";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { userId } = useAuth();
   const {
@@ -170,24 +169,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <div className="flex items-center justify-between px-2 py-1">
+        <div className="flex items-center justify-between px-.5 py-1">
           <h1 className="text-xl font-bold">elucide</h1>
           <div className="flex items-center gap-1">
             <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <NewChatButton
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={handleNewThread}
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                  </NewChatButton>
-                </TooltipTrigger>
-                <TooltipContent>New chat</TooltipContent>
-              </Tooltip>
-
               <Dialog
                 open={isNewFolderDialogOpen}
                 onOpenChange={setIsNewFolderDialogOpen}
@@ -227,6 +212,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </div>
                 </DialogContent>
               </Dialog>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <NewChatButton
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={handleNewThread}
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                  </NewChatButton>
+                </TooltipTrigger>
+                <TooltipContent>New chat</TooltipContent>
+              </Tooltip>
             </TooltipProvider>
           </div>
         </div>

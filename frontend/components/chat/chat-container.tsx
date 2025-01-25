@@ -1,6 +1,10 @@
 "use client";
 
-import { useChat } from "ai/react";
+import {
+  useChat,
+  Message as AIMessage,
+  CreateMessage as AICreateMessage,
+} from "ai/react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ScrollArea } from "../ui/scroll-area";
@@ -10,10 +14,14 @@ import { useAuth } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useThreadsStore } from "@/lib/store";
 
-interface Message {
-  id: string;
-  content: string;
-  role: "user" | "assistant";
+// Extend the Message and CreateMessage types from ai package
+interface Message extends AIMessage {
+  imageUrl?: string;
+  model?: string;
+}
+
+interface CreateMessage extends AICreateMessage {
+  imageUrl?: string;
 }
 
 export function ChatContainer() {
@@ -65,8 +73,14 @@ export function ChatContainer() {
               id: msg.id,
               content: msg.content,
               role: msg.role,
+              model: msg.model,
+              imageUrl: msg.imageUrl,
             }))
           );
+          // Set model from first message if it exists
+          if (messages.length > 0 && messages[0].model) {
+            setModel(messages[0].model as ModelType);
+          }
         } else {
           console.error("Failed to fetch messages");
         }
@@ -128,7 +142,11 @@ export function ChatContainer() {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  const handleMessageSubmit = async (content: string) => {
+  const handleMessageSubmit = async (
+    content: string,
+    imageUrl?: string,
+    imageAnalysis?: string
+  ) => {
     if (!userId) return;
 
     try {
@@ -141,10 +159,23 @@ export function ChatContainer() {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      await append({
-        content,
-        role: "user",
-      });
+      // If we have both image and analysis, send them together
+      if (imageUrl && imageAnalysis) {
+        await append({
+          content: imageAnalysis,
+          role: "system",
+          imageUrl,
+        } as CreateMessage);
+      }
+
+      // Only send user message if there's content
+      if (content.trim()) {
+        await append({
+          content,
+          role: "user",
+        } as CreateMessage);
+      }
+
       console.log("[ChatContainer] Message appended successfully");
     } catch (error) {
       console.error("[ChatContainer] Error submitting message:", error);
@@ -157,16 +188,11 @@ export function ChatContainer() {
 
   const memoizedMessages = useMemo(
     () =>
-      messages.map((message) => (
-        <ChatMessage
-          key={message.id}
-          message={{
-            id: message.id,
-            content: message.content,
-            role: message.role as "user" | "assistant",
-          }}
-        />
-      )),
+      messages
+        .filter((message) => message.role !== "data")
+        .map((message) => (
+          <ChatMessage key={message.id} message={message as Message} />
+        )),
     [messages]
   );
 
@@ -194,13 +220,14 @@ export function ChatContainer() {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 pt-4">
-        <div className="mx-auto max-w-4xl p-4">
+        <div className="mx-auto max-w-3xl p-4">
           <ChatInput
             isLoading={isLoading || isLoadingThread}
             onSubmit={handleMessageSubmit}
             onStop={handleStop}
             model={model}
             onModelChange={setModel}
+            disableModelChange={messages.length > 0}
           />
         </div>
       </div>
