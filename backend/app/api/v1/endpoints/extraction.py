@@ -15,7 +15,7 @@ class ExtractionRequest(BaseModel):
     """Model for extraction request"""
     urls: List[str]
     prompt: Optional[str] = None
-    schema: Optional[Dict[str, Any]] = None
+    extraction_schema: Optional[Dict[str, Any]] = None
     enable_web_search: bool = False
 
 class ExtractionResponse(BaseModel):
@@ -41,9 +41,9 @@ async def create_extraction(
         task = extract_data.delay(
             urls=request.urls,
             prompt=request.prompt,
-            schema=request.schema,
+            schema=request.extraction_schema,
             enable_web_search=request.enable_web_search,
-            user_id=current_user["id"]
+            user_id=current_user["user_id"]
         )
         
         return ExtractionResponse(
@@ -54,6 +54,8 @@ async def create_extraction(
         
     except Exception as e:
         logger.error(f"Error creating extraction job: {str(e)}")
+        logger.error(f"Request data: {request.dict()}")
+        logger.error(f"Current user data: {current_user}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/extract/{job_id}", response_model=Dict[str, Any])

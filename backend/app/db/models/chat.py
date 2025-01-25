@@ -70,7 +70,7 @@ class ChatMessage(Base):
     role = Column(String, nullable=False)  # user, assistant, system
     content = Column(Text, nullable=False)
     model = Column(String)  # gpt-4o-mini, deepseek-reasoner
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     
     # Relationships
     thread = relationship("ChatThread", back_populates="messages")
