@@ -9,7 +9,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export type ModelType = "gpt-4o-mini" | "deepseek-reasoner" | "gpt-4o";
+export type ModelType =
+  | "gpt-4o-mini"
+  | "deepseek-reasoner"
+  | "gpt-4o"
+  | "agent-gpt4o";
 
 interface ModelSelectorProps {
   model: ModelType;
@@ -26,6 +30,7 @@ export function ModelSelector({ model, onModelChange }: ModelSelectorProps) {
         <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
         <SelectItem value="deepseek-reasoner">DeepSeek V1</SelectItem>
         <SelectItem value="gpt-4o">GPT-4o</SelectItem>
+        <SelectItem value="agent-gpt4o">Agent GPT-4o</SelectItem>
       </SelectContent>
     </Select>
   );

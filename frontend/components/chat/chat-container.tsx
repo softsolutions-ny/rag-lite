@@ -10,6 +10,12 @@ import { useAuth } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useThreadsStore } from "@/lib/store";
 
+interface Message {
+  id: string;
+  content: string;
+  role: "user" | "assistant";
+}
+
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
@@ -20,7 +26,7 @@ export function ChatContainer() {
   const [currentThreadId, setCurrentThreadId] = useState<string | undefined>(
     threadParam as string | undefined
   );
-  const [initialMessages, setInitialMessages] = useState<any[]>([]);
+  const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [isLoadingThread, setIsLoadingThread] = useState(false);
   const { threads, fetchThreads, updateThread, createThread } =
     useThreadsStore();
@@ -55,7 +61,7 @@ export function ChatContainer() {
         if (response.ok) {
           const messages = await response.json();
           setInitialMessages(
-            messages.map((msg: any) => ({
+            messages.map((msg: Message) => ({
               id: msg.id,
               content: msg.content,
               role: msg.role,
@@ -75,32 +81,42 @@ export function ChatContainer() {
   }, [currentThreadId]);
 
   const { messages, isLoading, append, stop } = useChat({
-    api: "/api/chat",
+    api:
+      model === "agent-gpt4o"
+        ? "/api/agent"
+        : model === "deepseek-reasoner"
+        ? "/api/deepseek"
+        : "/api/chat",
     body: {
       model,
       threadId: currentThreadId,
     },
     id: currentThreadId ?? "new",
     initialMessages,
-    onFinish: useCallback(
-      async (message: { id: string; content: string; role: string }) => {
-        if (currentThreadId) {
-          try {
-            // Find the current thread to preserve its title
-            const currentThread = threads.find((t) => t.id === currentThreadId);
-            if (currentThread) {
-              await updateThread(currentThreadId, {
-                title: currentThread.title || undefined, // Convert null to undefined
-                updated_at: new Date().toISOString(),
-              });
-            }
-          } catch (error) {
-            console.error("Error updating thread timestamp:", error);
+    onFinish: useCallback(async () => {
+      console.log("[ChatContainer] Message stream finished");
+      if (currentThreadId) {
+        try {
+          // Find the current thread to preserve its title
+          const currentThread = threads.find((t) => t.id === currentThreadId);
+          if (currentThread) {
+            await updateThread(currentThreadId, {
+              title: currentThread.title || undefined,
+              updated_at: new Date().toISOString(),
+            });
+            console.log("[ChatContainer] Thread updated successfully");
           }
+        } catch (error) {
+          console.error(
+            "[ChatContainer] Error updating thread timestamp:",
+            error
+          );
         }
-      },
-      [currentThreadId, updateThread, threads]
-    ),
+      }
+    }, [currentThreadId, updateThread, threads]),
+    onError: (error) => {
+      console.error("[ChatContainer] Chat error:", error);
+    },
   });
 
   const scrollToBottom = useCallback(() => {
@@ -108,6 +124,7 @@ export function ChatContainer() {
   }, []);
 
   useEffect(() => {
+    console.log("[ChatContainer] Messages updated:", messages);
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
@@ -115,8 +132,10 @@ export function ChatContainer() {
     if (!userId) return;
 
     try {
+      console.log("[ChatContainer] Submitting message:", content);
       if (!currentThreadId) {
         const newThread = await createThread(userId);
+        console.log("[ChatContainer] Created new thread:", newThread.id);
         setCurrentThreadId(newThread.id);
         await router.push(`/dashboard/chat?thread=${newThread.id}`);
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -126,8 +145,9 @@ export function ChatContainer() {
         content,
         role: "user",
       });
+      console.log("[ChatContainer] Message appended successfully");
     } catch (error) {
-      console.error("Error submitting message:", error);
+      console.error("[ChatContainer] Error submitting message:", error);
     }
   };
 

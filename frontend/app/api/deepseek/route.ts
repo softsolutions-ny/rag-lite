@@ -1,5 +1,5 @@
-import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { streamText } from 'ai';
+import { deepseek } from '@ai-sdk/deepseek';
 
 // Set the runtime to edge
 export const runtime = "edge";
@@ -11,11 +11,12 @@ interface ChatMessage {
 
 export async function POST(req: Request) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error("OpenAI API key not configured");
+    if (!process.env.DEEPSEEK_API_KEY) {
+      throw new Error("DeepSeek API key not configured");
     }
 
-    const { messages, model, threadId } = await req.json();
+    const { messages, threadId } = await req.json();
+    console.log("[DeepSeek] Messages:", messages);
 
     // Store the user's message in the database
     const lastMessage = messages[messages.length - 1];
@@ -23,10 +24,10 @@ export async function POST(req: Request) {
       thread_id: threadId,
       role: lastMessage.role,
       content: lastMessage.content,
-      model,
+      model: "deepseek-reasoner",
     };
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+    const storeResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,29 +35,28 @@ export async function POST(req: Request) {
       body: JSON.stringify(messageData),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed to store message. Status:", response.status);
-      console.error("Error details:", error);
-      console.error("Request data:", messageData);
+    if (!storeResponse.ok) {
+      const error = await storeResponse.json();
+      console.error("Failed to store message:", error);
       throw new Error(`Failed to store message: ${JSON.stringify(error)}`);
     }
 
+    // Create stream using AI SDK
     const result = await streamText({
-      model: openai(model === "gpt-4o" ? "gpt-4" : "gpt-4-turbo"),
+      model: deepseek("deepseek-reasoner"),
       messages: messages.map((message: ChatMessage) => ({
         content: message.content,
         role: message.role,
       })),
       temperature: 0.7,
-      maxTokens: model === "gpt-4o" ? 1000 : 500,
+      maxTokens: 1000,
       onFinish: async ({ text }) => {
         // Store the complete response in the database
         const assistantMessageData = {
           thread_id: threadId,
           role: "assistant",
           content: text,
-          model,
+          model: "deepseek-reasoner",
         };
 
         try {
@@ -69,10 +69,10 @@ export async function POST(req: Request) {
           });
 
           if (!response.ok) {
-            console.error("Failed to store assistant message");
+            console.error("Failed to store DeepSeek assistant message");
           }
         } catch (error) {
-          console.error("Error storing assistant message:", error);
+          console.error("Error storing DeepSeek assistant message:", error);
         }
       },
     });
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
     // Convert the stream to a format compatible with useChat
     return result.toDataStreamResponse();
   } catch (error) {
-    console.error("Chat API error:", error);
+    console.error("[DeepSeek] Error:", error);
     if (error instanceof Error && error.name === 'AbortError') {
       return new Response('Request aborted by user', { status: 499 });
     }
@@ -90,9 +90,7 @@ export async function POST(req: Request) {
       }),
       {
         status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }

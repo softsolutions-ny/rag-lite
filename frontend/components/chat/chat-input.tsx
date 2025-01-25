@@ -1,6 +1,6 @@
 "use client";
 
-import { CornerDownLeft, StopCircle } from "lucide-react";
+import { CornerDownLeft, StopCircle, Bot } from "lucide-react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "../ui/button";
 import { useState, useRef, useEffect } from "react";
@@ -65,7 +65,11 @@ export function ChatInput({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
+            placeholder={
+              model === "agent-gpt4o"
+                ? "Chat with Agent GPT-4o..."
+                : "Type a message..."
+            }
             className="flex-1 resize-none bg-transparent px-2 py-1.5 outline-none"
             disabled={isLoading}
           />
@@ -85,7 +89,7 @@ export function ChatInput({
             )}
           </Button>
         </div>
-        <div className="absolute left-2 top-[calc(100%-22px)]">
+        <div className="absolute left-2 top-[calc(100%-22px)] flex items-center gap-2">
           <Select value={model} onValueChange={onModelChange}>
             <SelectTrigger className="h-5 w-[120px] border-none bg-transparent pl-0 text-[10px] text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-0">
               <SelectValue placeholder="Select model" />
@@ -100,8 +104,21 @@ export function ChatInput({
               <SelectItem value="deepseek-reasoner" className="text-xs">
                 deepseek-reasoner
               </SelectItem>
+              <SelectItem
+                value="agent-gpt4o"
+                className="text-xs flex items-center gap-1"
+              >
+                <Bot className="h-3 w-3" />
+                Agent GPT-4o
+              </SelectItem>
             </SelectContent>
           </Select>
+          {model === "agent-gpt4o" && (
+            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+              <Bot className="h-3 w-3" />
+              Agent Mode
+            </span>
+          )}
         </div>
       </div>
     </div>
