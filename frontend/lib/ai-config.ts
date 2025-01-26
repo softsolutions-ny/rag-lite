@@ -3,10 +3,10 @@ import { deepseek } from '@ai-sdk/deepseek';
 import { z } from 'zod';
 import { CHAT_SYSTEM_PROMPT, AGENT_SYSTEM_PROMPT } from './prompts';
 
-export type ModelType = 'gpt-4o' | 'gpt-4o-mini' | 'deepseek-reasoner' | 'agent-gpt4o';
+export type ModelType = 'gpt-4o' | 'gpt-4o-mini' | 'deepseek-reasoner' | 'agent-1' | 'n8n';
 
 export interface ModelConfig {
-  provider: 'openai' | 'deepseek';
+  provider: 'openai' | 'deepseek' | 'n8n';
   model: any; // SDK model instance
   maxTokens: number;
   temperature: number;
@@ -41,6 +41,13 @@ export const modelConfigs: Record<ModelType, ModelConfig> = {
     maxTokens: 1000,
     temperature: 0.7,
     systemPrompt: AGENT_SYSTEM_PROMPT,
+  },
+  'n8n': {
+    provider: 'n8n',
+    model: null,
+    maxTokens: 1000,
+    temperature: 0.7,
+    systemPrompt: '',
   },
 };
 
@@ -80,11 +87,14 @@ export async function storeMessage(messageData: {
   return response;
 }
 
-export function validateApiKey(provider: 'openai' | 'deepseek') {
+export function validateApiKey(provider: 'openai' | 'deepseek' | 'n8n') {
   if (provider === 'openai' && !process.env.OPENAI_API_KEY) {
     throw new Error('OpenAI API key not configured');
   }
   if (provider === 'deepseek' && !process.env.DEEPSEEK_API_KEY) {
     throw new Error('DeepSeek API key not configured');
   }
-} 
+  if (provider === 'n8n' && !process.env.N8N_API_URL) {
+    throw new Error('N8N API URL not configured');
+  }
+}

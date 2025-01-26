@@ -39,7 +39,7 @@ export default function Home() {
             <h1 className="text-2xl font-bold">elucide</h1>
           </div>
           <p className="text-sm text-muted-foreground dark:text-gray-400">
-            graphics user interface for robot intelligence
+            graphical user interface for robot intelligence
           </p>
           <div className="h-2"></div>
           <div className="flex gap-2">

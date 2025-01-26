@@ -182,3 +182,440 @@
 [2025-01-25 11:17:36] INFO [images] [images.py:46] Processing file: japan-vintage-8.jpg -> 73dcdbb5-f26f-4f87-b49d-aa7a13491758.jpg
 [2025-01-25 11:17:36] INFO [images] [images.py:60] Created job f14a1e1d-adaa-4a9e-91ab-387b6ada98de for file japan-vintage-8.jpg
 [2025-01-25 11:17:36] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:02:55] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:02:55] INFO [images] [images.py:28] File names: ['japan-vintage-4.jpg']
+[2025-01-26 11:02:55] INFO [images] [images.py:46] Processing file: japan-vintage-4.jpg -> 8bf93bf5-3b7b-47d3-b4a4-6256b311618a.jpg
+[2025-01-26 11:02:56] INFO [images] [images.py:60] Created job c3318b20-7c6e-4fa4-aa1e-245033530a8f for file japan-vintage-4.jpg
+[2025-01-26 11:02:56] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:04:34] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:04:34] INFO [images] [images.py:28] File names: ['japan-vintage-1.jpg']
+[2025-01-26 11:04:34] INFO [images] [images.py:46] Processing file: japan-vintage-1.jpg -> 971d1ee6-a867-44d2-a49f-332d66528d2b.jpg
+[2025-01-26 11:04:34] INFO [images] [images.py:60] Created job 0bdf8c7d-32a7-4f74-b231-a4b87a23d827 for file japan-vintage-1.jpg
+[2025-01-26 11:04:34] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:08:44] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:08:44] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 11:08:44] INFO [images] [images.py:46] Processing file: japan-vintage-11.jpg -> c91e1999-7a78-41f6-aeed-05fae37925d3.jpg
+[2025-01-26 11:08:44] INFO [images] [images.py:60] Created job 2fb45f3d-fb19-45af-bc0e-ac363548834c for file japan-vintage-11.jpg
+[2025-01-26 11:08:44] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:14:35] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:14:35] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 11:14:35] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> 7d88ad58-2364-4abf-b07a-9b273c68cc1e.jpg
+[2025-01-26 11:14:35] INFO [images] [images.py:60] Created job 8c1daa93-ca8f-4be7-9a80-63d303437760 for file japan-vintage-7.jpg
+[2025-01-26 11:14:35] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:26:16] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:26:16] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 11:26:16] INFO [images] [images.py:46] Processing file: japan-vintage-6.jpg -> 05010f75-496a-4474-a857-affceb1476b6.jpg
+[2025-01-26 11:26:16] INFO [images] [images.py:60] Created job b4f367f3-7863-4558-a5b7-cb06ae78f170 for file japan-vintage-6.jpg
+[2025-01-26 11:26:16] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:26:42] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:26:42] INFO [images] [images.py:28] File names: ['japan-vintage-12.jpg']
+[2025-01-26 11:26:42] INFO [images] [images.py:46] Processing file: japan-vintage-12.jpg -> ddbf7b23-819c-4371-96fe-1d4d7a9cd135.jpg
+[2025-01-26 11:26:42] INFO [images] [images.py:60] Created job 82b4b58b-586b-4576-8683-ad69fde2f8df for file japan-vintage-12.jpg
+[2025-01-26 11:26:42] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:41:22] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:41:22] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 11:41:22] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> bf1f9ff3-918e-4741-8530-c95d2cc214e7.jpg
+[2025-01-26 11:41:22] INFO [images] [images.py:60] Created job 2a1458fd-a533-4a25-aedb-522ecadecfba for file japan-vintage-7.jpg
+[2025-01-26 11:41:22] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:45:46] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:45:46] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 11:45:46] INFO [images] [images.py:46] Processing file: japan-vintage-6.jpg -> 7f2c64d0-b66e-4a5d-aa4f-08f1cf0829f4.jpg
+[2025-01-26 11:45:46] INFO [images] [images.py:60] Created job 6a79efbe-a325-4d00-95a5-f01df815c5c9 for file japan-vintage-6.jpg
+[2025-01-26 11:45:46] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:50:17] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:50:17] INFO [images] [images.py:28] File names: ['japan-vintage-10.jpg']
+[2025-01-26 11:50:17] INFO [images] [images.py:46] Processing file: japan-vintage-10.jpg -> 0611625d-8658-40c3-a279-32f96657b902.jpg
+[2025-01-26 11:50:17] INFO [images] [images.py:60] Created job 639f7167-feae-444e-85b9-a9a1bffb0b97 for file japan-vintage-10.jpg
+[2025-01-26 11:50:17] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:51:35] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:51:35] INFO [images] [images.py:28] File names: ['japan-vintage-8.jpg']
+[2025-01-26 11:51:35] INFO [images] [images.py:46] Processing file: japan-vintage-8.jpg -> 762b7f3c-586c-49e8-a0dd-13393679569a.jpg
+[2025-01-26 11:51:35] INFO [images] [images.py:60] Created job 486d3268-79fa-4a9e-87c7-1b392e2f32ed for file japan-vintage-8.jpg
+[2025-01-26 11:51:35] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 11:56:45] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 11:56:45] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 11:56:45] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> 1f11e931-bca4-4ee8-9709-ec119827f6d6.jpg
+[2025-01-26 11:56:45] INFO [images] [images.py:60] Created job ce66c212-53f2-445a-a51f-8bfd391f54f8 for file japan-vintage-7.jpg
+[2025-01-26 11:56:45] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:01:47] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:01:47] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 12:01:47] INFO [images] [images.py:46] Processing file: japan-vintage-11.jpg -> 36cb413b-3113-4855-8a8c-1fb2f432cdc9.jpg
+[2025-01-26 12:01:47] INFO [images] [images.py:60] Created job 75af43e1-64f1-4c20-ae34-d44c16a2fc84 for file japan-vintage-11.jpg
+[2025-01-26 12:01:47] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:03:58] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:03:58] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 12:03:58] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> a3532d47-20fa-4b2d-a5b2-55eeb3d2f17b.jpg
+[2025-01-26 12:03:58] INFO [images] [images.py:60] Created job 88819580-5806-454d-839a-bdebaf44bfd3 for file japan-vintage-9.jpg
+[2025-01-26 12:03:58] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:07:04] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:07:04] INFO [images] [images.py:28] File names: ['japan-vintage-8.jpg']
+[2025-01-26 12:07:04] INFO [images] [images.py:46] Processing file: japan-vintage-8.jpg -> 762fb640-c003-4e2c-9b10-7dc342a34ef9.jpg
+[2025-01-26 12:07:04] INFO [images] [images.py:60] Created job 57faa5c3-270d-4618-8370-63103b0e294a for file japan-vintage-8.jpg
+[2025-01-26 12:07:04] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:08:52] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:08:52] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 12:08:52] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> 6816c3d1-f631-4935-b698-1ef74f321279.jpg
+[2025-01-26 12:08:52] INFO [images] [images.py:60] Created job 4cb98da5-6121-4e2c-861a-7477712fa76e for file japan-vintage-9.jpg
+[2025-01-26 12:08:52] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:09:21] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:09:21] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 12:09:21] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> 00e265d9-124d-4951-8e92-fa6ef4da2ee0.jpg
+[2025-01-26 12:09:21] INFO [images] [images.py:60] Created job 003952fb-8ea6-4f21-b420-b4652a254cf4 for file japan-vintage-7.jpg
+[2025-01-26 12:09:21] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:19:03] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:19:03] INFO [images] [images.py:28] File names: ['japan-vintage-3.jpg']
+[2025-01-26 12:19:03] INFO [images] [images.py:46] Processing file: japan-vintage-3.jpg -> 98422a46-1644-45e0-984d-94ab72cdc6e1.jpg
+[2025-01-26 12:19:04] INFO [images] [images.py:60] Created job af5b8345-3739-4c32-95e8-ab3c3fadf853 for file japan-vintage-3.jpg
+[2025-01-26 12:19:04] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:21:39] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:21:39] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 12:21:39] INFO [images] [images.py:46] Processing file: japan-vintage-6.jpg -> be9fdfe0-0cd6-41bc-a7fc-0faa20a55a45.jpg
+[2025-01-26 12:21:39] INFO [images] [images.py:60] Created job b54d9f71-2f00-4b0d-a758-5bc04b4691ae for file japan-vintage-6.jpg
+[2025-01-26 12:21:39] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:22:11] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:22:11] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 12:22:11] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> 085afea8-d855-4499-8247-3362a3d76279.jpg
+[2025-01-26 12:22:11] INFO [images] [images.py:60] Created job 2661489d-2969-4bc3-9760-b463c25cfa6b for file japan-vintage-9.jpg
+[2025-01-26 12:22:11] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:24:09] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:24:09] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 12:24:09] INFO [images] [images.py:46] Processing file: japan-vintage-5.jpg -> d722bf9f-d83e-4fc8-8908-916614f8ce67.jpg
+[2025-01-26 12:24:09] INFO [images] [images.py:60] Created job 71d96045-8d92-43e8-a1c8-fccc431025b4 for file japan-vintage-5.jpg
+[2025-01-26 12:24:09] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:25:59] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:25:59] INFO [images] [images.py:28] File names: ['japan-vintage-10.jpg']
+[2025-01-26 12:25:59] INFO [images] [images.py:46] Processing file: japan-vintage-10.jpg -> e4e8f066-992d-4b6d-8a1a-cc04e3fe25d2.jpg
+[2025-01-26 12:25:59] INFO [images] [images.py:60] Created job efa09c01-c105-46ab-ab04-e1f85d18e3db for file japan-vintage-10.jpg
+[2025-01-26 12:25:59] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:26:40] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:26:40] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 12:26:40] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> 8afee253-3e9a-4d87-a43b-648785c40fcc.jpg
+[2025-01-26 12:26:40] INFO [images] [images.py:60] Created job 773206e5-bfa9-4b13-b2cc-d157fd1c3192 for file japan-vintage-9.jpg
+[2025-01-26 12:26:40] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:30:48] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:30:49] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 12:30:49] INFO [images] [images.py:46] Processing file: japan-vintage-5.jpg -> 7a445fdc-cf24-452a-ae99-de828b753c3d.jpg
+[2025-01-26 12:30:49] INFO [images] [images.py:60] Created job 4f317a58-7783-4cab-9b68-7eefb187fb58 for file japan-vintage-5.jpg
+[2025-01-26 12:30:49] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:32:53] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:32:53] INFO [images] [images.py:28] File names: ['japan-vintage-4.jpg']
+[2025-01-26 12:32:53] INFO [images] [images.py:46] Processing file: japan-vintage-4.jpg -> 488bafa7-27a9-41ae-9e30-6fa722b88a8f.jpg
+[2025-01-26 12:32:53] INFO [images] [images.py:60] Created job 325d6c88-171a-4c62-8bda-98d440eb6750 for file japan-vintage-4.jpg
+[2025-01-26 12:32:53] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:35:12] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:35:12] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 12:35:12] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> b601421e-67a5-4cde-bf03-1a4d7788c791.jpg
+[2025-01-26 12:35:12] INFO [images] [images.py:60] Created job 5158f070-9d1e-4cd3-a530-436cb4309202 for file japan-vintage-7.jpg
+[2025-01-26 12:35:12] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:36:57] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:36:57] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 12:36:57] INFO [images] [images.py:46] Processing file: japan-vintage-11.jpg -> 782bb80f-1536-42b7-a613-16cfec901cc7.jpg
+[2025-01-26 12:36:57] INFO [images] [images.py:60] Created job f79e3611-3d66-4e8a-9b3a-650aa0150279 for file japan-vintage-11.jpg
+[2025-01-26 12:36:57] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:39:42] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:39:42] INFO [images] [images.py:28] File names: ['japan-vintage-12.jpg']
+[2025-01-26 12:39:42] INFO [images] [images.py:46] Processing file: japan-vintage-12.jpg -> 73b18b86-459c-4e7a-8586-a85dbdb1ea6e.jpg
+[2025-01-26 12:39:42] INFO [images] [images.py:60] Created job 2f09631a-f9eb-4667-8273-7d3ad86f086f for file japan-vintage-12.jpg
+[2025-01-26 12:39:42] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:40:20] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:40:20] INFO [images] [images.py:28] File names: ['japan-vintage-4.jpg']
+[2025-01-26 12:40:20] INFO [images] [images.py:46] Processing file: japan-vintage-4.jpg -> 73dbfd3b-cb4f-47ed-a56e-bc3549e52543.jpg
+[2025-01-26 12:40:20] INFO [images] [images.py:60] Created job 7df2eefa-7b31-4be4-bab4-4be439e51907 for file japan-vintage-4.jpg
+[2025-01-26 12:40:20] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:44:28] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:44:28] INFO [images] [images.py:28] File names: ['japan-vintage-8.jpg']
+[2025-01-26 12:44:28] INFO [images] [images.py:46] Processing file: japan-vintage-8.jpg -> d085659f-ff2b-40ce-a807-56206d9bb4c2.jpg
+[2025-01-26 12:44:28] INFO [images] [images.py:60] Created job d7856ba4-31e1-4d20-9ae0-b67e8f7e2d95 for file japan-vintage-8.jpg
+[2025-01-26 12:44:28] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:46:44] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:46:44] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 12:46:44] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> 7202c3b7-2688-4bbf-b6b1-79bee3956c03.jpg
+[2025-01-26 12:46:44] INFO [images] [images.py:60] Created job 815357ac-b40c-4980-b3eb-ac09d52906a3 for file japan-vintage-7.jpg
+[2025-01-26 12:46:44] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:48:05] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:48:05] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 12:48:05] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> 7039b39b-302e-45a3-be42-42c50350f85c.jpg
+[2025-01-26 12:48:05] INFO [images] [images.py:60] Created job 31a7007c-0226-4a21-baba-da067b231e01 for file japan-vintage-9.jpg
+[2025-01-26 12:48:05] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:50:30] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:50:30] INFO [images] [images.py:28] File names: ['japan-vintage-10.jpg']
+[2025-01-26 12:50:30] INFO [images] [images.py:46] Processing file: japan-vintage-10.jpg -> 8eb492d7-2978-41ed-ac1a-aa7236ef42ed.jpg
+[2025-01-26 12:50:30] INFO [images] [images.py:60] Created job 47a8a31e-efdf-4a7b-a866-1c2aef58547a for file japan-vintage-10.jpg
+[2025-01-26 12:50:30] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:53:18] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:53:18] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 12:53:18] INFO [images] [images.py:46] Processing file: japan-vintage-9.jpg -> 2cf4621c-64b3-4600-9334-59ed5cf84910.jpg
+[2025-01-26 12:53:18] INFO [images] [images.py:60] Created job 854d7afd-4a86-4798-ab1b-e37ef4e85268 for file japan-vintage-9.jpg
+[2025-01-26 12:53:18] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:53:53] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:53:53] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 12:53:53] INFO [images] [images.py:46] Processing file: japan-vintage-11.jpg -> 0b386cb0-b820-4682-8212-f9fe38b6bb2f.jpg
+[2025-01-26 12:53:53] INFO [images] [images.py:60] Created job 7cb69815-44b7-44a0-879c-fd0691fad5f4 for file japan-vintage-11.jpg
+[2025-01-26 12:53:53] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 12:55:00] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 12:55:00] INFO [images] [images.py:28] File names: ['japan-vintage-4.jpg']
+[2025-01-26 12:55:00] INFO [images] [images.py:46] Processing file: japan-vintage-4.jpg -> dfca3115-cf5c-4f00-87e0-fa761ab811bb.jpg
+[2025-01-26 12:55:00] INFO [images] [images.py:60] Created job ebe6ee82-a1ef-4acb-82a1-87e282b378db for file japan-vintage-4.jpg
+[2025-01-26 12:55:00] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 14:07:39] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:07:39] INFO [images] [images.py:28] File names: ['japan-vintage-8.jpg']
+[2025-01-26 14:07:39] INFO [images] [images.py:46] Processing file: japan-vintage-8.jpg -> e3d85ce3-0639-4723-ae14-56a1a48f5456.jpg
+[2025-01-26 14:07:39] INFO [images] [images.py:60] Created job 013458d0-eee7-478c-bb5f-c19a849f0870 for file japan-vintage-8.jpg
+[2025-01-26 14:07:39] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 14:11:56] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:11:56] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 14:11:56] INFO [images] [images.py:46] Processing file: japan-vintage-5.jpg -> d639822d-f895-4ab8-8409-7a9093963c1c.jpg
+[2025-01-26 14:11:56] INFO [images] [images.py:60] Created job ecd5ceaf-e9b4-494d-bb4e-84c5126ef2d7 for file japan-vintage-5.jpg
+[2025-01-26 14:11:56] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 14:14:16] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:14:16] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 14:14:16] INFO [images] [images.py:46] Processing file: japan-vintage-7.jpg -> 7750bcdf-858c-4204-ae2c-a1dde7790da0.jpg
+[2025-01-26 14:14:16] INFO [images] [images.py:60] Created job cf3ca24d-b83c-4506-90ab-556d5bd5d175 for file japan-vintage-7.jpg
+[2025-01-26 14:14:16] INFO [images] [images.py:72] Successfully created 1 jobs
+[2025-01-26 14:16:04] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:16:04] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 14:19:42] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:19:42] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 14:19:42] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> 48e046cc-a4b2-47d7-8afe-92a40079fa5b.jpg
+[2025-01-26 14:19:42] INFO [images] [images.py:63] Created job e173d24a-6beb-43b6-b9e6-77527799f6a9 for file japan-vintage-6.jpg
+[2025-01-26 14:19:42] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:23:11] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:23:11] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 14:23:11] INFO [images] [images.py:49] Processing file: japan-vintage-11.jpg -> a69d889f-e50d-4a3f-adfb-c79e910f3ed8.jpg
+[2025-01-26 14:23:11] INFO [images] [images.py:63] Created job 99c2d43b-a9ee-4232-8c18-d2f1102a7c0e for file japan-vintage-11.jpg
+[2025-01-26 14:23:11] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:25:11] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:25:11] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 14:25:11] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> f87fbf68-636a-4466-bc55-2bb11d1c5719.jpg
+[2025-01-26 14:25:12] INFO [images] [images.py:63] Created job a40a297c-0851-4497-bf39-e8c3add64f2e for file japan-vintage-6.jpg
+[2025-01-26 14:25:12] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:28:14] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:28:14] INFO [images] [images.py:28] File names: ['japan-vintage-10.jpg']
+[2025-01-26 14:28:14] INFO [images] [images.py:49] Processing file: japan-vintage-10.jpg -> 506c82a8-2811-4f23-8813-45b4918c9c53.jpg
+[2025-01-26 14:28:14] INFO [images] [images.py:63] Created job c5a7957f-26e6-431b-b552-de8eff4ab260 for file japan-vintage-10.jpg
+[2025-01-26 14:28:14] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:30:24] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:30:24] INFO [images] [images.py:28] File names: ['japan-vintage-10.jpg']
+[2025-01-26 14:30:24] INFO [images] [images.py:49] Processing file: japan-vintage-10.jpg -> 5ec7e06e-8160-4b71-867b-073872574a1d.jpg
+[2025-01-26 14:30:24] INFO [images] [images.py:63] Created job eb933f7a-ec3b-4275-94d6-2f23af617b8f for file japan-vintage-10.jpg
+[2025-01-26 14:30:24] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:32:07] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:32:07] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 14:32:07] INFO [images] [images.py:49] Processing file: japan-vintage-11.jpg -> 53b33f89-7dbc-4205-a2ac-08cfb054f2ff.jpg
+[2025-01-26 14:32:07] INFO [images] [images.py:63] Created job 0e77b5cd-9ca4-437a-a10e-32ec47cb5800 for file japan-vintage-11.jpg
+[2025-01-26 14:32:07] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:34:48] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:34:48] INFO [images] [images.py:28] File names: ['japan-vintage-4.jpg']
+[2025-01-26 14:34:48] INFO [images] [images.py:49] Processing file: japan-vintage-4.jpg -> 603b9f81-e169-471c-bd71-9a9057661154.jpg
+[2025-01-26 14:34:48] INFO [images] [images.py:63] Created job 994887da-e059-457d-80aa-c79b8fdcf59c for file japan-vintage-4.jpg
+[2025-01-26 14:34:48] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:36:03] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:36:03] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 14:36:03] INFO [images] [images.py:49] Processing file: japan-vintage-7.jpg -> 0f03da9d-9b13-4c16-a838-8f56952b07e8.jpg
+[2025-01-26 14:36:03] INFO [images] [images.py:63] Created job 216fde55-8763-4bc1-aa67-06f020535e05 for file japan-vintage-7.jpg
+[2025-01-26 14:36:03] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:36:42] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:36:42] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 14:36:43] INFO [images] [images.py:49] Processing file: japan-vintage-9.jpg -> 98a123f6-1729-4d9c-8ab5-a4818afc4723.jpg
+[2025-01-26 14:36:43] INFO [images] [images.py:63] Created job 31c7ad11-369b-4f9b-99aa-437cd7efb94d for file japan-vintage-9.jpg
+[2025-01-26 14:36:43] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:39:45] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:39:45] INFO [images] [images.py:28] File names: ['japan-vintage-11.jpg']
+[2025-01-26 14:39:45] INFO [images] [images.py:49] Processing file: japan-vintage-11.jpg -> a86e8cea-5e81-41a3-844c-52a2ba1fe60d.jpg
+[2025-01-26 14:39:45] INFO [images] [images.py:63] Created job e70b8874-db0a-4576-ba39-66b6bade144a for file japan-vintage-11.jpg
+[2025-01-26 14:39:45] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:42:51] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:42:51] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 14:42:51] INFO [images] [images.py:49] Processing file: japan-vintage-5.jpg -> 19946be6-a8bf-46d3-857f-02ed86c75881.jpg
+[2025-01-26 14:42:51] INFO [images] [images.py:63] Created job 85a071dd-0a7a-495b-9c28-95ea45004b64 for file japan-vintage-5.jpg
+[2025-01-26 14:42:51] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:49:24] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:49:24] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 14:49:24] INFO [images] [images.py:49] Processing file: japan-vintage-7.jpg -> 4fce068e-0edf-406b-9054-ab2baf93a707.jpg
+[2025-01-26 14:49:24] INFO [images] [images.py:63] Created job 7d778c4a-adc0-4367-8e58-56fcc5091e71 for file japan-vintage-7.jpg
+[2025-01-26 14:49:24] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 14:51:24] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 14:51:24] INFO [images] [images.py:28] File names: ['japan-vintage-10.jpg']
+[2025-01-26 14:51:24] INFO [images] [images.py:49] Processing file: japan-vintage-10.jpg -> d9d56b66-3cc8-4b3e-ac8b-91533c1ae48d.jpg
+[2025-01-26 14:51:24] INFO [images] [images.py:63] Created job a64c618d-2dac-4e69-8e43-26640dd5353e for file japan-vintage-10.jpg
+[2025-01-26 14:51:24] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:13:51] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:13:51] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 15:13:51] INFO [images] [images.py:49] Processing file: japan-vintage-9.jpg -> ab27f049-a304-46de-a46c-d5e31d385a19.jpg
+[2025-01-26 15:13:51] INFO [images] [images.py:63] Created job 1c79cf94-af3d-4fa9-b682-e1d75d35ef19 for file japan-vintage-9.jpg
+[2025-01-26 15:13:51] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:16:32] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:16:32] INFO [images] [images.py:28] File names: ['japan-vintage-1.jpg']
+[2025-01-26 15:16:32] INFO [images] [images.py:49] Processing file: japan-vintage-1.jpg -> b56107b9-4629-4719-807a-aafe7dcdbe87.jpg
+[2025-01-26 15:16:32] INFO [images] [images.py:63] Created job 6ed4dd5f-1444-492c-ac66-86d6a3a7d731 for file japan-vintage-1.jpg
+[2025-01-26 15:16:32] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:21:29] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:21:29] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 15:21:29] INFO [images] [images.py:49] Processing file: japan-vintage-9.jpg -> 11bf2805-65d1-492e-9b84-62e494ff2646.jpg
+[2025-01-26 15:21:29] INFO [images] [images.py:63] Created job 7a6a6b83-c5de-4954-99cc-53bf55f42f37 for file japan-vintage-9.jpg
+[2025-01-26 15:21:29] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:24:59] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:24:59] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 15:25:00] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> dc8b8fa8-a0ab-4240-ba69-73a6afb9bde7.jpg
+[2025-01-26 15:25:00] INFO [images] [images.py:63] Created job 2d95d4b5-9f52-4e3b-a4f1-00b06b9b7714 for file japan-vintage-6.jpg
+[2025-01-26 15:25:00] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:26:24] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:26:24] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 15:26:24] INFO [images] [images.py:49] Processing file: japan-vintage-7.jpg -> 921b4974-9f9e-48e4-bb5a-4f8806fab2f0.jpg
+[2025-01-26 15:26:24] INFO [images] [images.py:63] Created job 6138e869-d994-4ce2-96bf-094d786a8c8a for file japan-vintage-7.jpg
+[2025-01-26 15:26:24] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:26:56] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:26:56] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 15:26:56] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> 5adf76be-62a1-472d-af34-78ac83e7fb44.jpg
+[2025-01-26 15:26:56] INFO [images] [images.py:63] Created job 58af810c-fd6f-41d7-8ce4-0461d2c2d52f for file japan-vintage-6.jpg
+[2025-01-26 15:26:56] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:29:37] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:29:37] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 15:29:37] INFO [images] [images.py:49] Processing file: japan-vintage-7.jpg -> 4a66d618-9b7e-49c2-9347-d403f961093e.jpg
+[2025-01-26 15:29:37] INFO [images] [images.py:63] Created job 5add59a4-3db9-4e56-b855-8e3b9ab44b74 for file japan-vintage-7.jpg
+[2025-01-26 15:29:37] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:30:17] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:30:17] INFO [images] [images.py:28] File names: ['japan-vintage-8.jpg']
+[2025-01-26 15:30:18] INFO [images] [images.py:49] Processing file: japan-vintage-8.jpg -> d1441197-0e61-4a0e-99db-ea86932d94f5.jpg
+[2025-01-26 15:30:18] INFO [images] [images.py:63] Created job 74561319-e962-47d7-ac97-f8e51af5439c for file japan-vintage-8.jpg
+[2025-01-26 15:30:18] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:33:12] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:33:12] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 15:33:12] INFO [images] [images.py:49] Processing file: japan-vintage-5.jpg -> 0d38ec07-b016-4f92-894b-ee987a25b7fe.jpg
+[2025-01-26 15:33:12] INFO [images] [images.py:63] Created job dfe74373-97c6-40cd-b18a-c9732c360969 for file japan-vintage-5.jpg
+[2025-01-26 15:33:12] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:37:03] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:37:03] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 15:37:03] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> ec40b3ea-fbd4-4734-9901-1767438ff3d6.jpg
+[2025-01-26 15:37:03] INFO [images] [images.py:63] Created job d24fc831-b0a4-4302-9274-459516bf95ae for file japan-vintage-6.jpg
+[2025-01-26 15:37:03] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:39:37] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:39:37] INFO [images] [images.py:28] File names: ['japan-vintage-3.jpg']
+[2025-01-26 15:39:37] INFO [images] [images.py:49] Processing file: japan-vintage-3.jpg -> af46ec0b-4c35-4dbc-b914-e9108da69db7.jpg
+[2025-01-26 15:39:38] INFO [images] [images.py:63] Created job ea11f42d-9414-4a8f-8a39-89f766e5e935 for file japan-vintage-3.jpg
+[2025-01-26 15:39:38] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:41:48] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:41:48] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 15:41:48] INFO [images] [images.py:49] Processing file: japan-vintage-5.jpg -> a6d8d079-d9d4-45b2-9076-aaa941cbb59a.jpg
+[2025-01-26 15:41:48] INFO [images] [images.py:63] Created job 54eceb06-eab3-4c88-a03f-59540b0bc27c for file japan-vintage-5.jpg
+[2025-01-26 15:41:48] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:53:22] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:53:22] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 15:53:22] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> 2cff65e7-07a6-4f4f-b6e4-840fafe12185.jpg
+[2025-01-26 15:53:22] INFO [images] [images.py:63] Created job 78e29734-ba34-4e6b-927c-4f657aa8e8b7 for file japan-vintage-6.jpg
+[2025-01-26 15:53:22] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 15:56:48] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 15:56:48] INFO [images] [images.py:28] File names: ['japan-vintage-3.jpg']
+[2025-01-26 15:56:48] INFO [images] [images.py:49] Processing file: japan-vintage-3.jpg -> 103d2724-6e6a-48c9-879e-adcfed44a640.jpg
+[2025-01-26 15:56:48] INFO [images] [images.py:63] Created job 7321157e-217a-4580-9c13-6e173c652062 for file japan-vintage-3.jpg
+[2025-01-26 15:56:48] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 16:18:46] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:18:46] INFO [images] [images.py:28] File names: ['japan-vintage-5.jpg']
+[2025-01-26 16:18:46] INFO [images] [images.py:49] Processing file: japan-vintage-5.jpg -> 8a0a37fd-e770-4a3b-bc5e-5a497e303576.jpg
+[2025-01-26 16:18:46] INFO [images] [images.py:63] Created job 3cdabbad-a27b-4031-a5a9-613604420dca for file japan-vintage-5.jpg
+[2025-01-26 16:18:46] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 16:22:28] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:22:28] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 16:22:28] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> 0ef2ba1b-b3ad-4ec7-9307-9ae661c533c5.jpg
+[2025-01-26 16:22:28] INFO [images] [images.py:63] Created job 012692d0-a168-4960-8f86-60d5197227c4 for file japan-vintage-6.jpg
+[2025-01-26 16:22:28] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 16:25:07] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:25:07] INFO [images] [images.py:28] File names: ['japan-vintage-8.jpg']
+[2025-01-26 16:25:07] INFO [images] [images.py:49] Processing file: japan-vintage-8.jpg -> 777ebbb6-c2d8-417b-b0f2-1bf8d7a6dbe2.jpg
+[2025-01-26 16:25:07] INFO [images] [images.py:63] Created job f31e7e5b-51a0-42f2-9d94-fd72b9329f4f for file japan-vintage-8.jpg
+[2025-01-26 16:25:07] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 16:27:26] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:27:26] INFO [images] [images.py:28] File names: ['japan-vintage-6.jpg']
+[2025-01-26 16:27:26] INFO [images] [images.py:49] Processing file: japan-vintage-6.jpg -> 11bef434-134a-4b6d-b6e8-32429f2c8a64.jpg
+[2025-01-26 16:27:26] INFO [images] [images.py:63] Created job 5e5ea0db-3111-4d9f-93ca-f3c7c6b14171 for file japan-vintage-6.jpg
+[2025-01-26 16:27:26] INFO [images] [images.py:75] Successfully created 1 jobs
+[2025-01-26 16:44:43] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:44:43] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 16:44:43] INFO [images] [images.py:49] Processing file: japan-vintage-7.jpg -> 745cb31b-acd8-472b-8c8c-1d3f74db5dee.jpg
+[2025-01-26 16:44:43] INFO [images] [images.py:63] Created upload job 1517460e-144e-4eb1-bfb6-cd5d60c60a50 for file japan-vintage-7.jpg
+[2025-01-26 16:44:43] INFO [images] [images.py:75] Successfully created 1 upload jobs
+[2025-01-26 16:45:07] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:45:07] INFO [images] [images.py:28] File names: ['japan-vintage-9.jpg']
+[2025-01-26 16:45:07] INFO [images] [images.py:49] Processing file: japan-vintage-9.jpg -> 49b19733-21a2-4ab8-ae4c-d68a6e8f8cc5.jpg
+[2025-01-26 16:45:07] INFO [images] [images.py:63] Created upload job e54c05b0-5e09-4533-9e2c-f2167881a5fd for file japan-vintage-9.jpg
+[2025-01-26 16:45:07] INFO [images] [images.py:75] Successfully created 1 upload jobs
+[2025-01-26 16:55:17] INFO [images] [images.py:27] Received 1 files
+[2025-01-26 16:55:17] INFO [images] [images.py:28] File names: ['japan-vintage-7.jpg']
+[2025-01-26 16:55:17] INFO [images] [images.py:49] Processing file: japan-vintage-7.jpg -> d8a3638d-f185-41b4-a2b6-2f660c8ccc99.jpg
+[2025-01-26 16:55:17] INFO [images] [images.py:63] Created upload job 4a797318-0d76-48af-9bb7-55a23e26d26a for file japan-vintage-7.jpg
+[2025-01-26 16:55:17] INFO [images] [images.py:75] Successfully created 1 upload jobs
+[2025-01-26 16:59:50] INFO [images] [images.py:28] Received 1 files
+[2025-01-26 17:02:56] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:03:05] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/0862a9f2-306d-4e1b-b30c-bad1d15853d9/745e03c6-3755-492a-8eab-0af19f05c17f.jpg with prompt: describe image
+[2025-01-26 17:03:05] ERROR [images] [images.py:240] Error analyzing image: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/api/v1/endpoints/images.py", line 229, in analyze_image_direct
+    response.raise_for_status()
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/httpx/_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+[2025-01-26 17:06:35] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:06:39] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/afde5601-7fbf-4dce-9701-d2465d9fb2e9/1799396a-9f73-40ff-af54-d6b7c220a134.jpg with prompt: describ this image
+[2025-01-26 17:06:39] ERROR [images] [images.py:240] Error analyzing image: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/api/v1/endpoints/images.py", line 229, in analyze_image_direct
+    response.raise_for_status()
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/httpx/_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+[2025-01-26 17:06:49] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:06:51] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/1b20e085-0133-4f20-82b9-792552901053/e38b5685-b174-41a0-a19f-00a98d0526e0.jpg with prompt: describe
+[2025-01-26 17:06:52] ERROR [images] [images.py:240] Error analyzing image: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/api/v1/endpoints/images.py", line 229, in analyze_image_direct
+    response.raise_for_status()
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/httpx/_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+[2025-01-26 17:10:31] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:10:33] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/49ef282a-61dc-4bba-aa31-28c13e77cc75/e65d7700-7811-4454-ae3f-f17328dcb5b3.jpg with prompt: describe
+[2025-01-26 17:10:34] ERROR [images] [images.py:241] Error analyzing image: Client error '400 Bad Request' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/api/v1/endpoints/images.py", line 230, in analyze_image_direct
+    response.raise_for_status()
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/httpx/_models.py", line 759, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '400 Bad Request' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+[2025-01-26 17:12:52] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:12:54] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/fa42320b-3682-40a6-86ac-5f3cc1b90fa2/6e399f61-06df-4997-a093-1cee7d468e71.jpg with prompt: describe
+[2025-01-26 17:12:56] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/fa42320b-3682-40a6-86ac-5f3cc1b90fa2/6e399f61-06df-4997-a093-1cee7d468e71.jpg with prompt: describe
+[2025-01-26 17:12:56] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:12:59] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:13:48] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:13:54] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/d1a29fa6-6c41-42aa-83cf-e8a936ad1590/f696f0b5-4592-43a3-a318-f2ea1570e6e3.png with prompt: transcribe this image
+[2025-01-26 17:13:58] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:17:18] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:17:25] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/54c3ad4e-3a38-4217-a29d-198512ea5fd7/a94a1f01-5038-42dd-bb7f-2e7a04ef6515.png with prompt: describe this image
+[2025-01-26 17:17:27] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/54c3ad4e-3a38-4217-a29d-198512ea5fd7/a94a1f01-5038-42dd-bb7f-2e7a04ef6515.png with prompt: describe this image
+[2025-01-26 17:17:29] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:17:30] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:20:30] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:20:41] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/7667dccd-91fe-417d-9224-7c3e4396a624/8bc18e11-34aa-4137-80ea-27ebd3cddd2a.png with prompt: transcribe this image
+[2025-01-26 17:20:42] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:23:18] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:23:26] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/0fc25372-927f-4c5a-866c-4f1f7deb12e9/ef44a958-38de-4695-987e-aaf9b522f50a.png with prompt: whats in this image
+[2025-01-26 17:23:32] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:25:52] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:25:58] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/799f5423-3942-4058-9590-e7c924a79c97/c2fafd00-2033-493c-8ec5-f3fc00d525e8.png with prompt: tell me about this image
+[2025-01-26 17:26:04] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:29:01] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:29:05] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/ccb9a773-4d53-4a7c-8b79-17d55e40fee1/f8255d0a-7900-4cba-a666-d57b4d9702ad.jpg with prompt: describe
+[2025-01-26 17:29:11] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:34:54] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:34:56] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/5a7eb640-1ee3-461d-8e6c-fb6aa6229e4f/9f749be3-06be-4514-9c51-cb80e6ccd91c.jpg with prompt: describe
+[2025-01-26 17:34:59] INFO [images] [images.py:237] Analysis completed successfully
+[2025-01-26 17:36:42] INFO [images] [images.py:29] Received 1 files
+[2025-01-26 17:38:23] INFO [images] [images.py:29] Received 1 files

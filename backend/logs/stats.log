@@ -435,3 +435,283 @@ WHERE image_processings.job_id = $1::VARCHAR]
 [2025-01-25 11:17:37] INFO [stats] [stats_service.py:148] Started API call for job f14a1e1d-adaa-4a9e-91ab-387b6ada98de
 [2025-01-25 11:17:41] INFO [stats] [stats_service.py:164] Ended API call for job f14a1e1d-adaa-4a9e-91ab-387b6ada98de, duration: 4.73s
 [2025-01-25 11:17:41] INFO [stats] [stats_service.py:185] Completed job f14a1e1d-adaa-4a9e-91ab-387b6ada98de in 4.77s with status completed
+[2025-01-26 11:02:56] INFO [stats] [stats_service.py:140] Started processing job c3318b20-7c6e-4fa4-aa1e-245033530a8f
+[2025-01-26 11:02:56] INFO [stats] [stats_service.py:148] Started API call for job c3318b20-7c6e-4fa4-aa1e-245033530a8f
+[2025-01-26 11:03:06] INFO [stats] [stats_service.py:164] Ended API call for job c3318b20-7c6e-4fa4-aa1e-245033530a8f, duration: 10.45s
+[2025-01-26 11:03:06] INFO [stats] [stats_service.py:185] Completed job c3318b20-7c6e-4fa4-aa1e-245033530a8f in 10.54s with status completed
+[2025-01-26 11:04:34] INFO [stats] [stats_service.py:140] Started processing job 0bdf8c7d-32a7-4f74-b231-a4b87a23d827
+[2025-01-26 11:04:34] INFO [stats] [stats_service.py:148] Started API call for job 0bdf8c7d-32a7-4f74-b231-a4b87a23d827
+[2025-01-26 11:04:40] INFO [stats] [stats_service.py:164] Ended API call for job 0bdf8c7d-32a7-4f74-b231-a4b87a23d827, duration: 6.13s
+[2025-01-26 11:04:40] INFO [stats] [stats_service.py:185] Completed job 0bdf8c7d-32a7-4f74-b231-a4b87a23d827 in 6.20s with status completed
+[2025-01-26 11:08:44] INFO [stats] [stats_service.py:140] Started processing job 2fb45f3d-fb19-45af-bc0e-ac363548834c
+[2025-01-26 11:08:45] INFO [stats] [stats_service.py:148] Started API call for job 2fb45f3d-fb19-45af-bc0e-ac363548834c
+[2025-01-26 11:08:49] INFO [stats] [stats_service.py:164] Ended API call for job 2fb45f3d-fb19-45af-bc0e-ac363548834c, duration: 4.66s
+[2025-01-26 11:08:49] INFO [stats] [stats_service.py:185] Completed job 2fb45f3d-fb19-45af-bc0e-ac363548834c in 4.70s with status completed
+[2025-01-26 11:14:35] INFO [stats] [stats_service.py:140] Started processing job 8c1daa93-ca8f-4be7-9a80-63d303437760
+[2025-01-26 11:14:35] INFO [stats] [stats_service.py:148] Started API call for job 8c1daa93-ca8f-4be7-9a80-63d303437760
+[2025-01-26 11:14:39] INFO [stats] [stats_service.py:164] Ended API call for job 8c1daa93-ca8f-4be7-9a80-63d303437760, duration: 4.35s
+[2025-01-26 11:14:39] INFO [stats] [stats_service.py:185] Completed job 8c1daa93-ca8f-4be7-9a80-63d303437760 in 4.38s with status completed
+[2025-01-26 11:26:16] INFO [stats] [stats_service.py:140] Started processing job b4f367f3-7863-4558-a5b7-cb06ae78f170
+[2025-01-26 11:26:16] INFO [stats] [stats_service.py:148] Started API call for job b4f367f3-7863-4558-a5b7-cb06ae78f170
+[2025-01-26 11:26:24] INFO [stats] [stats_service.py:164] Ended API call for job b4f367f3-7863-4558-a5b7-cb06ae78f170, duration: 7.29s
+[2025-01-26 11:26:24] INFO [stats] [stats_service.py:185] Completed job b4f367f3-7863-4558-a5b7-cb06ae78f170 in 7.33s with status completed
+[2025-01-26 11:26:42] INFO [stats] [stats_service.py:140] Started processing job 82b4b58b-586b-4576-8683-ad69fde2f8df
+[2025-01-26 11:26:42] INFO [stats] [stats_service.py:148] Started API call for job 82b4b58b-586b-4576-8683-ad69fde2f8df
+[2025-01-26 11:26:47] INFO [stats] [stats_service.py:164] Ended API call for job 82b4b58b-586b-4576-8683-ad69fde2f8df, duration: 5.14s
+[2025-01-26 11:26:47] INFO [stats] [stats_service.py:185] Completed job 82b4b58b-586b-4576-8683-ad69fde2f8df in 5.16s with status completed
+[2025-01-26 11:41:22] INFO [stats] [stats_service.py:140] Started processing job 2a1458fd-a533-4a25-aedb-522ecadecfba
+[2025-01-26 11:41:22] INFO [stats] [stats_service.py:148] Started API call for job 2a1458fd-a533-4a25-aedb-522ecadecfba
+[2025-01-26 11:41:26] INFO [stats] [stats_service.py:164] Ended API call for job 2a1458fd-a533-4a25-aedb-522ecadecfba, duration: 4.67s
+[2025-01-26 11:41:27] INFO [stats] [stats_service.py:185] Completed job 2a1458fd-a533-4a25-aedb-522ecadecfba in 4.70s with status completed
+[2025-01-26 11:45:46] INFO [stats] [stats_service.py:140] Started processing job 6a79efbe-a325-4d00-95a5-f01df815c5c9
+[2025-01-26 11:45:46] INFO [stats] [stats_service.py:148] Started API call for job 6a79efbe-a325-4d00-95a5-f01df815c5c9
+[2025-01-26 11:45:54] INFO [stats] [stats_service.py:164] Ended API call for job 6a79efbe-a325-4d00-95a5-f01df815c5c9, duration: 7.85s
+[2025-01-26 11:45:54] INFO [stats] [stats_service.py:185] Completed job 6a79efbe-a325-4d00-95a5-f01df815c5c9 in 7.91s with status completed
+[2025-01-26 11:50:17] INFO [stats] [stats_service.py:140] Started processing job 639f7167-feae-444e-85b9-a9a1bffb0b97
+[2025-01-26 11:50:17] INFO [stats] [stats_service.py:148] Started API call for job 639f7167-feae-444e-85b9-a9a1bffb0b97
+[2025-01-26 11:50:22] INFO [stats] [stats_service.py:164] Ended API call for job 639f7167-feae-444e-85b9-a9a1bffb0b97, duration: 4.72s
+[2025-01-26 11:50:22] INFO [stats] [stats_service.py:185] Completed job 639f7167-feae-444e-85b9-a9a1bffb0b97 in 4.76s with status completed
+[2025-01-26 11:51:35] INFO [stats] [stats_service.py:140] Started processing job 486d3268-79fa-4a9e-87c7-1b392e2f32ed
+[2025-01-26 11:51:35] INFO [stats] [stats_service.py:148] Started API call for job 486d3268-79fa-4a9e-87c7-1b392e2f32ed
+[2025-01-26 11:51:42] INFO [stats] [stats_service.py:164] Ended API call for job 486d3268-79fa-4a9e-87c7-1b392e2f32ed, duration: 7.12s
+[2025-01-26 11:51:42] INFO [stats] [stats_service.py:185] Completed job 486d3268-79fa-4a9e-87c7-1b392e2f32ed in 7.15s with status completed
+[2025-01-26 11:56:45] INFO [stats] [stats_service.py:140] Started processing job ce66c212-53f2-445a-a51f-8bfd391f54f8
+[2025-01-26 11:56:45] INFO [stats] [stats_service.py:148] Started API call for job ce66c212-53f2-445a-a51f-8bfd391f54f8
+[2025-01-26 11:56:48] INFO [stats] [stats_service.py:164] Ended API call for job ce66c212-53f2-445a-a51f-8bfd391f54f8, duration: 3.46s
+[2025-01-26 11:56:48] INFO [stats] [stats_service.py:185] Completed job ce66c212-53f2-445a-a51f-8bfd391f54f8 in 3.52s with status completed
+[2025-01-26 12:01:47] INFO [stats] [stats_service.py:140] Started processing job 75af43e1-64f1-4c20-ae34-d44c16a2fc84
+[2025-01-26 12:01:47] INFO [stats] [stats_service.py:148] Started API call for job 75af43e1-64f1-4c20-ae34-d44c16a2fc84
+[2025-01-26 12:01:52] INFO [stats] [stats_service.py:164] Ended API call for job 75af43e1-64f1-4c20-ae34-d44c16a2fc84, duration: 4.76s
+[2025-01-26 12:01:52] INFO [stats] [stats_service.py:185] Completed job 75af43e1-64f1-4c20-ae34-d44c16a2fc84 in 4.80s with status completed
+[2025-01-26 12:03:58] INFO [stats] [stats_service.py:140] Started processing job 88819580-5806-454d-839a-bdebaf44bfd3
+[2025-01-26 12:03:58] INFO [stats] [stats_service.py:148] Started API call for job 88819580-5806-454d-839a-bdebaf44bfd3
+[2025-01-26 12:04:04] INFO [stats] [stats_service.py:164] Ended API call for job 88819580-5806-454d-839a-bdebaf44bfd3, duration: 5.51s
+[2025-01-26 12:04:04] INFO [stats] [stats_service.py:185] Completed job 88819580-5806-454d-839a-bdebaf44bfd3 in 5.55s with status completed
+[2025-01-26 12:07:04] INFO [stats] [stats_service.py:140] Started processing job 57faa5c3-270d-4618-8370-63103b0e294a
+[2025-01-26 12:07:04] INFO [stats] [stats_service.py:148] Started API call for job 57faa5c3-270d-4618-8370-63103b0e294a
+[2025-01-26 12:07:10] INFO [stats] [stats_service.py:164] Ended API call for job 57faa5c3-270d-4618-8370-63103b0e294a, duration: 5.52s
+[2025-01-26 12:07:10] INFO [stats] [stats_service.py:185] Completed job 57faa5c3-270d-4618-8370-63103b0e294a in 5.57s with status completed
+[2025-01-26 12:08:53] INFO [stats] [stats_service.py:140] Started processing job 4cb98da5-6121-4e2c-861a-7477712fa76e
+[2025-01-26 12:08:53] INFO [stats] [stats_service.py:148] Started API call for job 4cb98da5-6121-4e2c-861a-7477712fa76e
+[2025-01-26 12:08:59] INFO [stats] [stats_service.py:164] Ended API call for job 4cb98da5-6121-4e2c-861a-7477712fa76e, duration: 6.09s
+[2025-01-26 12:08:59] INFO [stats] [stats_service.py:185] Completed job 4cb98da5-6121-4e2c-861a-7477712fa76e in 6.13s with status completed
+[2025-01-26 12:09:21] INFO [stats] [stats_service.py:140] Started processing job 003952fb-8ea6-4f21-b420-b4652a254cf4
+[2025-01-26 12:09:21] INFO [stats] [stats_service.py:148] Started API call for job 003952fb-8ea6-4f21-b420-b4652a254cf4
+[2025-01-26 12:09:24] INFO [stats] [stats_service.py:164] Ended API call for job 003952fb-8ea6-4f21-b420-b4652a254cf4, duration: 3.53s
+[2025-01-26 12:09:24] INFO [stats] [stats_service.py:185] Completed job 003952fb-8ea6-4f21-b420-b4652a254cf4 in 3.57s with status completed
+[2025-01-26 12:19:04] INFO [stats] [stats_service.py:140] Started processing job af5b8345-3739-4c32-95e8-ab3c3fadf853
+[2025-01-26 12:19:04] INFO [stats] [stats_service.py:148] Started API call for job af5b8345-3739-4c32-95e8-ab3c3fadf853
+[2025-01-26 12:19:11] INFO [stats] [stats_service.py:164] Ended API call for job af5b8345-3739-4c32-95e8-ab3c3fadf853, duration: 7.28s
+[2025-01-26 12:19:11] INFO [stats] [stats_service.py:185] Completed job af5b8345-3739-4c32-95e8-ab3c3fadf853 in 7.34s with status completed
+[2025-01-26 12:21:39] INFO [stats] [stats_service.py:140] Started processing job b54d9f71-2f00-4b0d-a758-5bc04b4691ae
+[2025-01-26 12:21:39] INFO [stats] [stats_service.py:148] Started API call for job b54d9f71-2f00-4b0d-a758-5bc04b4691ae
+[2025-01-26 12:21:48] INFO [stats] [stats_service.py:164] Ended API call for job b54d9f71-2f00-4b0d-a758-5bc04b4691ae, duration: 8.31s
+[2025-01-26 12:21:48] INFO [stats] [stats_service.py:185] Completed job b54d9f71-2f00-4b0d-a758-5bc04b4691ae in 8.33s with status completed
+[2025-01-26 12:22:11] INFO [stats] [stats_service.py:140] Started processing job 2661489d-2969-4bc3-9760-b463c25cfa6b
+[2025-01-26 12:22:12] INFO [stats] [stats_service.py:148] Started API call for job 2661489d-2969-4bc3-9760-b463c25cfa6b
+[2025-01-26 12:22:21] INFO [stats] [stats_service.py:164] Ended API call for job 2661489d-2969-4bc3-9760-b463c25cfa6b, duration: 9.45s
+[2025-01-26 12:22:21] INFO [stats] [stats_service.py:185] Completed job 2661489d-2969-4bc3-9760-b463c25cfa6b in 9.62s with status error
+[2025-01-26 12:24:09] INFO [stats] [stats_service.py:140] Started processing job 71d96045-8d92-43e8-a1c8-fccc431025b4
+[2025-01-26 12:24:09] INFO [stats] [stats_service.py:148] Started API call for job 71d96045-8d92-43e8-a1c8-fccc431025b4
+[2025-01-26 12:24:18] INFO [stats] [stats_service.py:164] Ended API call for job 71d96045-8d92-43e8-a1c8-fccc431025b4, duration: 9.45s
+[2025-01-26 12:24:18] INFO [stats] [stats_service.py:185] Completed job 71d96045-8d92-43e8-a1c8-fccc431025b4 in 9.49s with status error
+[2025-01-26 12:25:59] INFO [stats] [stats_service.py:140] Started processing job efa09c01-c105-46ab-ab04-e1f85d18e3db
+[2025-01-26 12:25:59] INFO [stats] [stats_service.py:148] Started API call for job efa09c01-c105-46ab-ab04-e1f85d18e3db
+[2025-01-26 12:26:04] INFO [stats] [stats_service.py:164] Ended API call for job efa09c01-c105-46ab-ab04-e1f85d18e3db, duration: 4.51s
+[2025-01-26 12:26:04] INFO [stats] [stats_service.py:185] Completed job efa09c01-c105-46ab-ab04-e1f85d18e3db in 4.54s with status error
+[2025-01-26 12:26:41] INFO [stats] [stats_service.py:140] Started processing job 773206e5-bfa9-4b13-b2cc-d157fd1c3192
+[2025-01-26 12:26:41] INFO [stats] [stats_service.py:148] Started API call for job 773206e5-bfa9-4b13-b2cc-d157fd1c3192
+[2025-01-26 12:26:47] INFO [stats] [stats_service.py:164] Ended API call for job 773206e5-bfa9-4b13-b2cc-d157fd1c3192, duration: 6.27s
+[2025-01-26 12:26:47] INFO [stats] [stats_service.py:185] Completed job 773206e5-bfa9-4b13-b2cc-d157fd1c3192 in 6.78s with status completed
+[2025-01-26 12:30:49] INFO [stats] [stats_service.py:140] Started processing job 4f317a58-7783-4cab-9b68-7eefb187fb58
+[2025-01-26 12:30:49] INFO [stats] [stats_service.py:148] Started API call for job 4f317a58-7783-4cab-9b68-7eefb187fb58
+[2025-01-26 12:30:54] INFO [stats] [stats_service.py:164] Ended API call for job 4f317a58-7783-4cab-9b68-7eefb187fb58, duration: 4.96s
+[2025-01-26 12:30:54] INFO [stats] [stats_service.py:185] Completed job 4f317a58-7783-4cab-9b68-7eefb187fb58 in 5.43s with status completed
+[2025-01-26 12:32:54] INFO [stats] [stats_service.py:140] Started processing job 325d6c88-171a-4c62-8bda-98d440eb6750
+[2025-01-26 12:32:54] INFO [stats] [stats_service.py:148] Started API call for job 325d6c88-171a-4c62-8bda-98d440eb6750
+[2025-01-26 12:33:03] INFO [stats] [stats_service.py:164] Ended API call for job 325d6c88-171a-4c62-8bda-98d440eb6750, duration: 8.99s
+[2025-01-26 12:33:03] INFO [stats] [stats_service.py:185] Completed job 325d6c88-171a-4c62-8bda-98d440eb6750 in 9.41s with status error
+[2025-01-26 12:35:12] INFO [stats] [stats_service.py:140] Started processing job 5158f070-9d1e-4cd3-a530-436cb4309202
+[2025-01-26 12:35:12] INFO [stats] [stats_service.py:148] Started API call for job 5158f070-9d1e-4cd3-a530-436cb4309202
+[2025-01-26 12:35:18] INFO [stats] [stats_service.py:164] Ended API call for job 5158f070-9d1e-4cd3-a530-436cb4309202, duration: 5.80s
+[2025-01-26 12:35:18] INFO [stats] [stats_service.py:185] Completed job 5158f070-9d1e-4cd3-a530-436cb4309202 in 6.32s with status completed
+[2025-01-26 12:36:57] INFO [stats] [stats_service.py:140] Started processing job f79e3611-3d66-4e8a-9b3a-650aa0150279
+[2025-01-26 12:36:57] INFO [stats] [stats_service.py:148] Started API call for job f79e3611-3d66-4e8a-9b3a-650aa0150279
+[2025-01-26 12:37:02] INFO [stats] [stats_service.py:164] Ended API call for job f79e3611-3d66-4e8a-9b3a-650aa0150279, duration: 4.96s
+[2025-01-26 12:37:03] INFO [stats] [stats_service.py:185] Completed job f79e3611-3d66-4e8a-9b3a-650aa0150279 in 5.44s with status completed
+[2025-01-26 12:39:42] INFO [stats] [stats_service.py:140] Started processing job 2f09631a-f9eb-4667-8273-7d3ad86f086f
+[2025-01-26 12:39:42] INFO [stats] [stats_service.py:148] Started API call for job 2f09631a-f9eb-4667-8273-7d3ad86f086f
+[2025-01-26 12:39:54] INFO [stats] [stats_service.py:164] Ended API call for job 2f09631a-f9eb-4667-8273-7d3ad86f086f, duration: 12.09s
+[2025-01-26 12:39:55] INFO [stats] [stats_service.py:185] Completed job 2f09631a-f9eb-4667-8273-7d3ad86f086f in 12.55s with status completed
+[2025-01-26 12:40:20] INFO [stats] [stats_service.py:140] Started processing job 7df2eefa-7b31-4be4-bab4-4be439e51907
+[2025-01-26 12:40:20] INFO [stats] [stats_service.py:148] Started API call for job 7df2eefa-7b31-4be4-bab4-4be439e51907
+[2025-01-26 12:40:28] INFO [stats] [stats_service.py:164] Ended API call for job 7df2eefa-7b31-4be4-bab4-4be439e51907, duration: 7.64s
+[2025-01-26 12:40:28] INFO [stats] [stats_service.py:185] Completed job 7df2eefa-7b31-4be4-bab4-4be439e51907 in 8.13s with status completed
+[2025-01-26 12:44:29] INFO [stats] [stats_service.py:140] Started processing job d7856ba4-31e1-4d20-9ae0-b67e8f7e2d95
+[2025-01-26 12:44:29] INFO [stats] [stats_service.py:148] Started API call for job d7856ba4-31e1-4d20-9ae0-b67e8f7e2d95
+[2025-01-26 12:44:34] INFO [stats] [stats_service.py:164] Ended API call for job d7856ba4-31e1-4d20-9ae0-b67e8f7e2d95, duration: 5.16s
+[2025-01-26 12:44:34] INFO [stats] [stats_service.py:185] Completed job d7856ba4-31e1-4d20-9ae0-b67e8f7e2d95 in 5.63s with status completed
+[2025-01-26 12:46:44] INFO [stats] [stats_service.py:140] Started processing job 815357ac-b40c-4980-b3eb-ac09d52906a3
+[2025-01-26 12:46:44] INFO [stats] [stats_service.py:148] Started API call for job 815357ac-b40c-4980-b3eb-ac09d52906a3
+[2025-01-26 12:46:49] INFO [stats] [stats_service.py:164] Ended API call for job 815357ac-b40c-4980-b3eb-ac09d52906a3, duration: 4.60s
+[2025-01-26 12:46:49] INFO [stats] [stats_service.py:185] Completed job 815357ac-b40c-4980-b3eb-ac09d52906a3 in 5.09s with status completed
+[2025-01-26 12:48:05] INFO [stats] [stats_service.py:140] Started processing job 31a7007c-0226-4a21-baba-da067b231e01
+[2025-01-26 12:48:05] INFO [stats] [stats_service.py:148] Started API call for job 31a7007c-0226-4a21-baba-da067b231e01
+[2025-01-26 12:48:11] INFO [stats] [stats_service.py:164] Ended API call for job 31a7007c-0226-4a21-baba-da067b231e01, duration: 6.39s
+[2025-01-26 12:48:12] INFO [stats] [stats_service.py:185] Completed job 31a7007c-0226-4a21-baba-da067b231e01 in 6.85s with status completed
+[2025-01-26 12:50:30] INFO [stats] [stats_service.py:140] Started processing job 47a8a31e-efdf-4a7b-a866-1c2aef58547a
+[2025-01-26 12:50:30] INFO [stats] [stats_service.py:148] Started API call for job 47a8a31e-efdf-4a7b-a866-1c2aef58547a
+[2025-01-26 12:50:34] INFO [stats] [stats_service.py:164] Ended API call for job 47a8a31e-efdf-4a7b-a866-1c2aef58547a, duration: 4.36s
+[2025-01-26 12:50:35] INFO [stats] [stats_service.py:185] Completed job 47a8a31e-efdf-4a7b-a866-1c2aef58547a in 4.84s with status completed
+[2025-01-26 12:53:18] INFO [stats] [stats_service.py:140] Started processing job 854d7afd-4a86-4798-ab1b-e37ef4e85268
+[2025-01-26 12:53:18] INFO [stats] [stats_service.py:148] Started API call for job 854d7afd-4a86-4798-ab1b-e37ef4e85268
+[2025-01-26 12:53:25] INFO [stats] [stats_service.py:164] Ended API call for job 854d7afd-4a86-4798-ab1b-e37ef4e85268, duration: 6.51s
+[2025-01-26 12:53:25] INFO [stats] [stats_service.py:185] Completed job 854d7afd-4a86-4798-ab1b-e37ef4e85268 in 6.98s with status completed
+[2025-01-26 12:53:53] INFO [stats] [stats_service.py:140] Started processing job 7cb69815-44b7-44a0-879c-fd0691fad5f4
+[2025-01-26 12:53:53] INFO [stats] [stats_service.py:148] Started API call for job 7cb69815-44b7-44a0-879c-fd0691fad5f4
+[2025-01-26 12:53:58] INFO [stats] [stats_service.py:164] Ended API call for job 7cb69815-44b7-44a0-879c-fd0691fad5f4, duration: 4.46s
+[2025-01-26 12:53:58] INFO [stats] [stats_service.py:185] Completed job 7cb69815-44b7-44a0-879c-fd0691fad5f4 in 5.03s with status completed
+[2025-01-26 12:55:01] INFO [stats] [stats_service.py:140] Started processing job ebe6ee82-a1ef-4acb-82a1-87e282b378db
+[2025-01-26 12:55:01] INFO [stats] [stats_service.py:148] Started API call for job ebe6ee82-a1ef-4acb-82a1-87e282b378db
+[2025-01-26 12:55:05] INFO [stats] [stats_service.py:164] Ended API call for job ebe6ee82-a1ef-4acb-82a1-87e282b378db, duration: 4.84s
+[2025-01-26 12:55:06] INFO [stats] [stats_service.py:185] Completed job ebe6ee82-a1ef-4acb-82a1-87e282b378db in 5.31s with status completed
+[2025-01-26 14:07:39] INFO [stats] [stats_service.py:140] Started processing job 013458d0-eee7-478c-bb5f-c19a849f0870
+[2025-01-26 14:07:39] INFO [stats] [stats_service.py:148] Started API call for job 013458d0-eee7-478c-bb5f-c19a849f0870
+[2025-01-26 14:07:46] INFO [stats] [stats_service.py:164] Ended API call for job 013458d0-eee7-478c-bb5f-c19a849f0870, duration: 7.06s
+[2025-01-26 14:07:47] INFO [stats] [stats_service.py:185] Completed job 013458d0-eee7-478c-bb5f-c19a849f0870 in 7.60s with status completed
+[2025-01-26 14:11:56] INFO [stats] [stats_service.py:140] Started processing job ecd5ceaf-e9b4-494d-bb4e-84c5126ef2d7
+[2025-01-26 14:11:56] INFO [stats] [stats_service.py:148] Started API call for job ecd5ceaf-e9b4-494d-bb4e-84c5126ef2d7
+[2025-01-26 14:12:03] INFO [stats] [stats_service.py:164] Ended API call for job ecd5ceaf-e9b4-494d-bb4e-84c5126ef2d7, duration: 7.11s
+[2025-01-26 14:12:03] INFO [stats] [stats_service.py:185] Completed job ecd5ceaf-e9b4-494d-bb4e-84c5126ef2d7 in 7.59s with status completed
+[2025-01-26 14:14:16] INFO [stats] [stats_service.py:140] Started processing job cf3ca24d-b83c-4506-90ab-556d5bd5d175
+[2025-01-26 14:14:16] INFO [stats] [stats_service.py:148] Started API call for job cf3ca24d-b83c-4506-90ab-556d5bd5d175
+[2025-01-26 14:14:19] INFO [stats] [stats_service.py:164] Ended API call for job cf3ca24d-b83c-4506-90ab-556d5bd5d175, duration: 3.27s
+[2025-01-26 14:14:20] INFO [stats] [stats_service.py:185] Completed job cf3ca24d-b83c-4506-90ab-556d5bd5d175 in 3.75s with status completed
+[2025-01-26 14:19:42] INFO [stats] [stats_service.py:140] Started processing job e173d24a-6beb-43b6-b9e6-77527799f6a9
+[2025-01-26 14:19:43] INFO [stats] [stats_service.py:148] Started API call for job e173d24a-6beb-43b6-b9e6-77527799f6a9
+[2025-01-26 14:19:51] INFO [stats] [stats_service.py:164] Ended API call for job e173d24a-6beb-43b6-b9e6-77527799f6a9, duration: 8.50s
+[2025-01-26 14:19:52] INFO [stats] [stats_service.py:185] Completed job e173d24a-6beb-43b6-b9e6-77527799f6a9 in 9.07s with status completed
+[2025-01-26 14:23:11] INFO [stats] [stats_service.py:140] Started processing job 99c2d43b-a9ee-4232-8c18-d2f1102a7c0e
+[2025-01-26 14:23:12] INFO [stats] [stats_service.py:148] Started API call for job 99c2d43b-a9ee-4232-8c18-d2f1102a7c0e
+[2025-01-26 14:23:15] INFO [stats] [stats_service.py:164] Ended API call for job 99c2d43b-a9ee-4232-8c18-d2f1102a7c0e, duration: 3.28s
+[2025-01-26 14:23:15] INFO [stats] [stats_service.py:185] Completed job 99c2d43b-a9ee-4232-8c18-d2f1102a7c0e in 3.73s with status completed
+[2025-01-26 14:25:12] INFO [stats] [stats_service.py:140] Started processing job a40a297c-0851-4497-bf39-e8c3add64f2e
+[2025-01-26 14:25:12] INFO [stats] [stats_service.py:148] Started API call for job a40a297c-0851-4497-bf39-e8c3add64f2e
+[2025-01-26 14:25:21] INFO [stats] [stats_service.py:164] Ended API call for job a40a297c-0851-4497-bf39-e8c3add64f2e, duration: 8.92s
+[2025-01-26 14:25:21] INFO [stats] [stats_service.py:185] Completed job a40a297c-0851-4497-bf39-e8c3add64f2e in 9.42s with status completed
+[2025-01-26 14:28:14] INFO [stats] [stats_service.py:140] Started processing job c5a7957f-26e6-431b-b552-de8eff4ab260
+[2025-01-26 14:28:14] INFO [stats] [stats_service.py:148] Started API call for job c5a7957f-26e6-431b-b552-de8eff4ab260
+[2025-01-26 14:28:18] INFO [stats] [stats_service.py:164] Ended API call for job c5a7957f-26e6-431b-b552-de8eff4ab260, duration: 4.07s
+[2025-01-26 14:28:19] INFO [stats] [stats_service.py:185] Completed job c5a7957f-26e6-431b-b552-de8eff4ab260 in 4.59s with status completed
+[2025-01-26 14:30:24] INFO [stats] [stats_service.py:140] Started processing job eb933f7a-ec3b-4275-94d6-2f23af617b8f
+[2025-01-26 14:30:24] INFO [stats] [stats_service.py:148] Started API call for job eb933f7a-ec3b-4275-94d6-2f23af617b8f
+[2025-01-26 14:30:28] INFO [stats] [stats_service.py:164] Ended API call for job eb933f7a-ec3b-4275-94d6-2f23af617b8f, duration: 4.10s
+[2025-01-26 14:30:29] INFO [stats] [stats_service.py:185] Completed job eb933f7a-ec3b-4275-94d6-2f23af617b8f in 4.74s with status completed
+[2025-01-26 14:32:08] INFO [stats] [stats_service.py:140] Started processing job 0e77b5cd-9ca4-437a-a10e-32ec47cb5800
+[2025-01-26 14:32:08] INFO [stats] [stats_service.py:148] Started API call for job 0e77b5cd-9ca4-437a-a10e-32ec47cb5800
+[2025-01-26 14:32:11] INFO [stats] [stats_service.py:164] Ended API call for job 0e77b5cd-9ca4-437a-a10e-32ec47cb5800, duration: 3.89s
+[2025-01-26 14:32:12] INFO [stats] [stats_service.py:185] Completed job 0e77b5cd-9ca4-437a-a10e-32ec47cb5800 in 4.34s with status completed
+[2025-01-26 14:34:49] INFO [stats] [stats_service.py:140] Started processing job 994887da-e059-457d-80aa-c79b8fdcf59c
+[2025-01-26 14:34:49] INFO [stats] [stats_service.py:148] Started API call for job 994887da-e059-457d-80aa-c79b8fdcf59c
+[2025-01-26 14:34:56] INFO [stats] [stats_service.py:164] Ended API call for job 994887da-e059-457d-80aa-c79b8fdcf59c, duration: 7.37s
+[2025-01-26 14:34:56] INFO [stats] [stats_service.py:185] Completed job 994887da-e059-457d-80aa-c79b8fdcf59c in 7.86s with status completed
+[2025-01-26 14:36:03] INFO [stats] [stats_service.py:140] Started processing job 216fde55-8763-4bc1-aa67-06f020535e05
+[2025-01-26 14:36:03] INFO [stats] [stats_service.py:148] Started API call for job 216fde55-8763-4bc1-aa67-06f020535e05
+[2025-01-26 14:36:09] INFO [stats] [stats_service.py:164] Ended API call for job 216fde55-8763-4bc1-aa67-06f020535e05, duration: 5.40s
+[2025-01-26 14:36:09] INFO [stats] [stats_service.py:185] Completed job 216fde55-8763-4bc1-aa67-06f020535e05 in 5.87s with status completed
+[2025-01-26 14:36:43] INFO [stats] [stats_service.py:140] Started processing job 31c7ad11-369b-4f9b-99aa-437cd7efb94d
+[2025-01-26 14:36:43] INFO [stats] [stats_service.py:148] Started API call for job 31c7ad11-369b-4f9b-99aa-437cd7efb94d
+[2025-01-26 14:36:50] INFO [stats] [stats_service.py:164] Ended API call for job 31c7ad11-369b-4f9b-99aa-437cd7efb94d, duration: 6.83s
+[2025-01-26 14:36:50] INFO [stats] [stats_service.py:185] Completed job 31c7ad11-369b-4f9b-99aa-437cd7efb94d in 7.31s with status completed
+[2025-01-26 14:39:45] INFO [stats] [stats_service.py:140] Started processing job e70b8874-db0a-4576-ba39-66b6bade144a
+[2025-01-26 14:39:45] INFO [stats] [stats_service.py:148] Started API call for job e70b8874-db0a-4576-ba39-66b6bade144a
+[2025-01-26 14:39:48] INFO [stats] [stats_service.py:164] Ended API call for job e70b8874-db0a-4576-ba39-66b6bade144a, duration: 3.59s
+[2025-01-26 14:39:49] INFO [stats] [stats_service.py:185] Completed job e70b8874-db0a-4576-ba39-66b6bade144a in 4.08s with status completed
+[2025-01-26 14:42:51] INFO [stats] [stats_service.py:140] Started processing job 85a071dd-0a7a-495b-9c28-95ea45004b64
+[2025-01-26 14:42:51] INFO [stats] [stats_service.py:148] Started API call for job 85a071dd-0a7a-495b-9c28-95ea45004b64
+[2025-01-26 14:42:59] INFO [stats] [stats_service.py:164] Ended API call for job 85a071dd-0a7a-495b-9c28-95ea45004b64, duration: 8.05s
+[2025-01-26 14:43:00] INFO [stats] [stats_service.py:185] Completed job 85a071dd-0a7a-495b-9c28-95ea45004b64 in 8.54s with status completed
+[2025-01-26 14:49:24] INFO [stats] [stats_service.py:140] Started processing job 7d778c4a-adc0-4367-8e58-56fcc5091e71
+[2025-01-26 14:49:24] INFO [stats] [stats_service.py:148] Started API call for job 7d778c4a-adc0-4367-8e58-56fcc5091e71
+[2025-01-26 14:49:30] INFO [stats] [stats_service.py:164] Ended API call for job 7d778c4a-adc0-4367-8e58-56fcc5091e71, duration: 5.29s
+[2025-01-26 14:49:30] INFO [stats] [stats_service.py:185] Completed job 7d778c4a-adc0-4367-8e58-56fcc5091e71 in 5.79s with status completed
+[2025-01-26 14:51:25] INFO [stats] [stats_service.py:140] Started processing job a64c618d-2dac-4e69-8e43-26640dd5353e
+[2025-01-26 14:51:25] INFO [stats] [stats_service.py:148] Started API call for job a64c618d-2dac-4e69-8e43-26640dd5353e
+[2025-01-26 14:51:32] INFO [stats] [stats_service.py:164] Ended API call for job a64c618d-2dac-4e69-8e43-26640dd5353e, duration: 7.72s
+[2025-01-26 14:51:33] INFO [stats] [stats_service.py:185] Completed job a64c618d-2dac-4e69-8e43-26640dd5353e in 8.17s with status completed
+[2025-01-26 15:13:51] INFO [stats] [stats_service.py:140] Started processing job 1c79cf94-af3d-4fa9-b682-e1d75d35ef19
+[2025-01-26 15:13:51] INFO [stats] [stats_service.py:148] Started API call for job 1c79cf94-af3d-4fa9-b682-e1d75d35ef19
+[2025-01-26 15:13:58] INFO [stats] [stats_service.py:164] Ended API call for job 1c79cf94-af3d-4fa9-b682-e1d75d35ef19, duration: 6.42s
+[2025-01-26 15:13:59] INFO [stats] [stats_service.py:185] Completed job 1c79cf94-af3d-4fa9-b682-e1d75d35ef19 in 7.60s with status completed
+[2025-01-26 15:16:32] INFO [stats] [stats_service.py:140] Started processing job 6ed4dd5f-1444-492c-ac66-86d6a3a7d731
+[2025-01-26 15:16:32] INFO [stats] [stats_service.py:148] Started API call for job 6ed4dd5f-1444-492c-ac66-86d6a3a7d731
+[2025-01-26 15:16:39] INFO [stats] [stats_service.py:164] Ended API call for job 6ed4dd5f-1444-492c-ac66-86d6a3a7d731, duration: 7.43s
+[2025-01-26 15:16:40] INFO [stats] [stats_service.py:185] Completed job 6ed4dd5f-1444-492c-ac66-86d6a3a7d731 in 8.05s with status completed
+[2025-01-26 15:21:29] INFO [stats] [stats_service.py:140] Started processing job 7a6a6b83-c5de-4954-99cc-53bf55f42f37
+[2025-01-26 15:21:29] INFO [stats] [stats_service.py:148] Started API call for job 7a6a6b83-c5de-4954-99cc-53bf55f42f37
+[2025-01-26 15:21:34] INFO [stats] [stats_service.py:164] Ended API call for job 7a6a6b83-c5de-4954-99cc-53bf55f42f37, duration: 5.31s
+[2025-01-26 15:21:35] INFO [stats] [stats_service.py:185] Completed job 7a6a6b83-c5de-4954-99cc-53bf55f42f37 in 5.97s with status completed
+[2025-01-26 15:25:00] INFO [stats] [stats_service.py:140] Started processing job 2d95d4b5-9f52-4e3b-a4f1-00b06b9b7714
+[2025-01-26 15:25:00] INFO [stats] [stats_service.py:148] Started API call for job 2d95d4b5-9f52-4e3b-a4f1-00b06b9b7714
+[2025-01-26 15:25:07] INFO [stats] [stats_service.py:164] Ended API call for job 2d95d4b5-9f52-4e3b-a4f1-00b06b9b7714, duration: 7.20s
+[2025-01-26 15:25:08] INFO [stats] [stats_service.py:185] Completed job 2d95d4b5-9f52-4e3b-a4f1-00b06b9b7714 in 7.71s with status completed
+[2025-01-26 15:26:24] INFO [stats] [stats_service.py:140] Started processing job 6138e869-d994-4ce2-96bf-094d786a8c8a
+[2025-01-26 15:26:24] INFO [stats] [stats_service.py:148] Started API call for job 6138e869-d994-4ce2-96bf-094d786a8c8a
+[2025-01-26 15:26:28] INFO [stats] [stats_service.py:164] Ended API call for job 6138e869-d994-4ce2-96bf-094d786a8c8a, duration: 4.15s
+[2025-01-26 15:26:29] INFO [stats] [stats_service.py:185] Completed job 6138e869-d994-4ce2-96bf-094d786a8c8a in 4.69s with status completed
+[2025-01-26 15:26:56] INFO [stats] [stats_service.py:140] Started processing job 58af810c-fd6f-41d7-8ce4-0461d2c2d52f
+[2025-01-26 15:26:56] INFO [stats] [stats_service.py:148] Started API call for job 58af810c-fd6f-41d7-8ce4-0461d2c2d52f
+[2025-01-26 15:27:08] INFO [stats] [stats_service.py:164] Ended API call for job 58af810c-fd6f-41d7-8ce4-0461d2c2d52f, duration: 12.03s
+[2025-01-26 15:27:09] INFO [stats] [stats_service.py:185] Completed job 58af810c-fd6f-41d7-8ce4-0461d2c2d52f in 12.60s with status completed
+[2025-01-26 15:29:37] INFO [stats] [stats_service.py:140] Started processing job 5add59a4-3db9-4e56-b855-8e3b9ab44b74
+[2025-01-26 15:29:37] INFO [stats] [stats_service.py:148] Started API call for job 5add59a4-3db9-4e56-b855-8e3b9ab44b74
+[2025-01-26 15:29:43] INFO [stats] [stats_service.py:164] Ended API call for job 5add59a4-3db9-4e56-b855-8e3b9ab44b74, duration: 6.44s
+[2025-01-26 15:29:44] INFO [stats] [stats_service.py:185] Completed job 5add59a4-3db9-4e56-b855-8e3b9ab44b74 in 7.02s with status completed
+[2025-01-26 15:30:18] INFO [stats] [stats_service.py:140] Started processing job 74561319-e962-47d7-ac97-f8e51af5439c
+[2025-01-26 15:30:18] INFO [stats] [stats_service.py:148] Started API call for job 74561319-e962-47d7-ac97-f8e51af5439c
+[2025-01-26 15:30:25] INFO [stats] [stats_service.py:164] Ended API call for job 74561319-e962-47d7-ac97-f8e51af5439c, duration: 7.28s
+[2025-01-26 15:30:26] INFO [stats] [stats_service.py:185] Completed job 74561319-e962-47d7-ac97-f8e51af5439c in 7.88s with status completed
+[2025-01-26 15:33:12] INFO [stats] [stats_service.py:140] Started processing job dfe74373-97c6-40cd-b18a-c9732c360969
+[2025-01-26 15:33:12] INFO [stats] [stats_service.py:148] Started API call for job dfe74373-97c6-40cd-b18a-c9732c360969
+[2025-01-26 15:33:18] INFO [stats] [stats_service.py:164] Ended API call for job dfe74373-97c6-40cd-b18a-c9732c360969, duration: 5.96s
+[2025-01-26 15:33:19] INFO [stats] [stats_service.py:185] Completed job dfe74373-97c6-40cd-b18a-c9732c360969 in 6.54s with status completed
+[2025-01-26 15:37:03] INFO [stats] [stats_service.py:140] Started processing job d24fc831-b0a4-4302-9274-459516bf95ae
+[2025-01-26 15:37:03] INFO [stats] [stats_service.py:148] Started API call for job d24fc831-b0a4-4302-9274-459516bf95ae
+[2025-01-26 15:37:10] INFO [stats] [stats_service.py:164] Ended API call for job d24fc831-b0a4-4302-9274-459516bf95ae, duration: 7.57s
+[2025-01-26 15:37:11] INFO [stats] [stats_service.py:185] Completed job d24fc831-b0a4-4302-9274-459516bf95ae in 8.19s with status completed
+[2025-01-26 15:39:38] INFO [stats] [stats_service.py:140] Started processing job ea11f42d-9414-4a8f-8a39-89f766e5e935
+[2025-01-26 15:39:38] INFO [stats] [stats_service.py:148] Started API call for job ea11f42d-9414-4a8f-8a39-89f766e5e935
+[2025-01-26 15:39:43] INFO [stats] [stats_service.py:164] Ended API call for job ea11f42d-9414-4a8f-8a39-89f766e5e935, duration: 5.47s
+[2025-01-26 15:39:44] INFO [stats] [stats_service.py:185] Completed job ea11f42d-9414-4a8f-8a39-89f766e5e935 in 6.11s with status completed
+[2025-01-26 15:41:48] INFO [stats] [stats_service.py:140] Started processing job 54eceb06-eab3-4c88-a03f-59540b0bc27c
+[2025-01-26 15:41:48] INFO [stats] [stats_service.py:148] Started API call for job 54eceb06-eab3-4c88-a03f-59540b0bc27c
+[2025-01-26 15:41:58] INFO [stats] [stats_service.py:164] Ended API call for job 54eceb06-eab3-4c88-a03f-59540b0bc27c, duration: 10.04s
+[2025-01-26 15:41:59] INFO [stats] [stats_service.py:185] Completed job 54eceb06-eab3-4c88-a03f-59540b0bc27c in 10.68s with status completed
+[2025-01-26 15:53:23] INFO [stats] [stats_service.py:140] Started processing job 78e29734-ba34-4e6b-927c-4f657aa8e8b7
+[2025-01-26 15:53:23] INFO [stats] [stats_service.py:148] Started API call for job 78e29734-ba34-4e6b-927c-4f657aa8e8b7
+[2025-01-26 15:53:29] INFO [stats] [stats_service.py:164] Ended API call for job 78e29734-ba34-4e6b-927c-4f657aa8e8b7, duration: 6.70s
+[2025-01-26 15:53:30] INFO [stats] [stats_service.py:185] Completed job 78e29734-ba34-4e6b-927c-4f657aa8e8b7 in 7.28s with status completed
+[2025-01-26 15:56:48] INFO [stats] [stats_service.py:140] Started processing job 7321157e-217a-4580-9c13-6e173c652062
+[2025-01-26 15:56:48] INFO [stats] [stats_service.py:148] Started API call for job 7321157e-217a-4580-9c13-6e173c652062
+[2025-01-26 15:56:53] INFO [stats] [stats_service.py:164] Ended API call for job 7321157e-217a-4580-9c13-6e173c652062, duration: 4.51s
+[2025-01-26 15:56:54] INFO [stats] [stats_service.py:185] Completed job 7321157e-217a-4580-9c13-6e173c652062 in 5.14s with status completed
+[2025-01-26 16:18:46] INFO [stats] [stats_service.py:140] Started processing job 3cdabbad-a27b-4031-a5a9-613604420dca
+[2025-01-26 16:18:46] INFO [stats] [stats_service.py:148] Started API call for job 3cdabbad-a27b-4031-a5a9-613604420dca
+[2025-01-26 16:18:51] INFO [stats] [stats_service.py:164] Ended API call for job 3cdabbad-a27b-4031-a5a9-613604420dca, duration: 4.55s
+[2025-01-26 16:18:52] INFO [stats] [stats_service.py:185] Completed job 3cdabbad-a27b-4031-a5a9-613604420dca in 5.18s with status completed
+[2025-01-26 16:22:28] INFO [stats] [stats_service.py:140] Started processing job 012692d0-a168-4960-8f86-60d5197227c4
+[2025-01-26 16:22:28] INFO [stats] [stats_service.py:148] Started API call for job 012692d0-a168-4960-8f86-60d5197227c4
+[2025-01-26 16:22:33] INFO [stats] [stats_service.py:164] Ended API call for job 012692d0-a168-4960-8f86-60d5197227c4, duration: 4.30s
+[2025-01-26 16:22:33] INFO [stats] [stats_service.py:185] Completed job 012692d0-a168-4960-8f86-60d5197227c4 in 4.92s with status completed
+[2025-01-26 16:25:07] INFO [stats] [stats_service.py:140] Started processing job f31e7e5b-51a0-42f2-9d94-fd72b9329f4f
+[2025-01-26 16:25:07] INFO [stats] [stats_service.py:148] Started API call for job f31e7e5b-51a0-42f2-9d94-fd72b9329f4f
+[2025-01-26 16:25:10] INFO [stats] [stats_service.py:164] Ended API call for job f31e7e5b-51a0-42f2-9d94-fd72b9329f4f, duration: 3.18s
+[2025-01-26 16:25:11] INFO [stats] [stats_service.py:185] Completed job f31e7e5b-51a0-42f2-9d94-fd72b9329f4f in 3.79s with status completed
+[2025-01-26 16:27:26] INFO [stats] [stats_service.py:140] Started processing job 5e5ea0db-3111-4d9f-93ca-f3c7c6b14171
+[2025-01-26 16:27:26] INFO [stats] [stats_service.py:148] Started API call for job 5e5ea0db-3111-4d9f-93ca-f3c7c6b14171
+[2025-01-26 16:27:33] INFO [stats] [stats_service.py:164] Ended API call for job 5e5ea0db-3111-4d9f-93ca-f3c7c6b14171, duration: 7.05s
+[2025-01-26 16:27:34] INFO [stats] [stats_service.py:185] Completed job 5e5ea0db-3111-4d9f-93ca-f3c7c6b14171 in 7.70s with status completed
+[2025-01-26 16:45:07] INFO [stats] [stats_service.py:140] Started processing job e54c05b0-5e09-4533-9e2c-f2167881a5fd
+[2025-01-26 16:45:08] INFO [stats] [stats_service.py:185] Completed job e54c05b0-5e09-4533-9e2c-f2167881a5fd in 1.03s with status completed
+[2025-01-26 16:55:17] INFO [stats] [stats_service.py:140] Started processing job 4a797318-0d76-48af-9bb7-55a23e26d26a
+[2025-01-26 16:55:18] INFO [stats] [stats_service.py:185] Completed job 4a797318-0d76-48af-9bb7-55a23e26d26a in 0.87s with status completed

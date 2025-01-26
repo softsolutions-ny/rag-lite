@@ -102,26 +102,34 @@ class ChatRepository:
         
         return threads
 
-    async def add_message(self, thread_id: uuid.UUID, role: str, content: str, model: Optional[str] = None) -> ChatMessage:
-        """Add a message to a thread"""
+    async def add_message(
+        self,
+        thread_id: uuid.UUID,
+        role: str,
+        content: str,
+        model: Optional[str] = None,
+        image_url: Optional[str] = None
+    ) -> ChatMessage:
+        """Add a new message to a thread."""
         try:
             now = datetime.utcnow()
-            message = ChatMessage(
+            db_message = ChatMessage(
                 thread_id=thread_id,
                 role=role,
                 content=content,
                 model=model,
+                image_url=image_url,
                 created_at=now
             )
-            self.db.add(message)
+            self.db.add(db_message)
             
             if self.is_async:
                 await self.db.commit()
-                await self.db.refresh(message)
+                await self.db.refresh(db_message)
             else:
                 self.db.commit()
-                self.db.refresh(message)
-            return message
+                self.db.refresh(db_message)
+            return db_message
         except Exception as e:
             if self.is_async:
                 await self.db.rollback()

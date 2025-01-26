@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     UPLOAD_DIR: Path = Path(__file__).parent.parent.parent / "uploads"
     MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
     
+    # Google Cloud Storage settings
+    GCS_BUCKET_NAME: str = os.getenv("GCS_BUCKET_NAME", "")
+    GOOGLE_APPLICATION_CREDENTIALS: Path = Path(__file__).parent.parent.parent / os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "credentials/service-account-key.json")
+    
     # Database URLs
     @property
     def DATABASE_URL_BASE(self) -> str:

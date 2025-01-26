@@ -9,7 +9,7 @@ export interface ChatMessage {
   content: string;
   role: "user" | "assistant" | "system" | "data";
   model?: string;
-  imageUrl?: string;
+  image_url?: string;
 }
 
 interface ChatMessageProps {
@@ -28,13 +28,14 @@ export function ChatMessage({ message }: ChatMessageProps) {
       {isSystem ? (
         <div className="flex w-full justify-center">
           <div className="prose max-w-[75%] space-y-2">
-            {message.imageUrl && (
-              <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
-                <Image
-                  src={message.imageUrl}
-                  alt="Shared image"
-                  fill
-                  className="object-cover"
+            {message.image_url && (
+              <div className="mt-2 overflow-hidden rounded-lg">
+                <img
+                  src={message.image_url}
+                  alt="Uploaded content"
+                  className="max-h-96 w-auto object-contain"
+                  loading="lazy"
+                  crossOrigin="anonymous"
                 />
               </div>
             )}

@@ -174,12 +174,13 @@ async def create_chat_message(
         if not thread:
             raise HTTPException(status_code=404, detail="Thread not found")
         
-        # Store the message
+        # Store the message with image_url if present
         db_message = await chat_repo.add_message(
             thread_id=UUID(message.thread_id),
             role=message.role,
             content=message.content,
-            model=message.model
+            model=message.model,
+            image_url=message.image_url
         )
         
         # Update thread's timestamp while preserving all other fields

@@ -7,17 +7,20 @@ class ChatMessageBase(BaseModel):
     role: str
     content: str
     model: Optional[str] = None
+    image_url: Optional[str] = None
 
 class ChatMessageCreate(BaseModel):
     thread_id: str
     role: str
     content: str
     model: Optional[str] = None
+    image_url: Optional[str] = None
 
 class ChatMessage(ChatMessageBase):
     id: UUID4
     thread_id: UUID4
     created_at: datetime
+    image_url: Optional[str] = None
 
     class Config:
         from_attributes = True

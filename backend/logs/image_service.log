@@ -211,3 +211,433 @@ LINE 1: ... INTO images (id, filename, user_id, uploaded_at, storage_pa...
 [2025-01-25 11:17:36] INFO [image_service] [image_service.py:29] Starting image processing for job f14a1e1d-adaa-4a9e-91ab-387b6ada98de
 [2025-01-25 11:17:41] INFO [image_service] [image_service.py:92] Stored image with ID: 0efedf72-fd22-4039-919b-9750a601b898
 [2025-01-25 11:17:41] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.77
+[2025-01-26 11:02:56] INFO [image_service] [image_service.py:29] Starting image processing for job c3318b20-7c6e-4fa4-aa1e-245033530a8f
+[2025-01-26 11:03:06] INFO [image_service] [image_service.py:92] Stored image with ID: 0d675b76-1310-4cc2-b67b-1f7ed44ccfbf
+[2025-01-26 11:03:06] INFO [image_service] [image_service.py:119] Returning result with processing time: 10.54
+[2025-01-26 11:04:34] INFO [image_service] [image_service.py:29] Starting image processing for job 0bdf8c7d-32a7-4f74-b231-a4b87a23d827
+[2025-01-26 11:04:40] INFO [image_service] [image_service.py:92] Stored image with ID: b70e30a9-1bc8-4664-beee-27ba7f592685
+[2025-01-26 11:04:40] INFO [image_service] [image_service.py:119] Returning result with processing time: 6.2
+[2025-01-26 11:08:44] INFO [image_service] [image_service.py:29] Starting image processing for job 2fb45f3d-fb19-45af-bc0e-ac363548834c
+[2025-01-26 11:08:49] INFO [image_service] [image_service.py:92] Stored image with ID: fd0a4c77-c3b7-45d0-b7e2-48525b87552c
+[2025-01-26 11:08:49] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.7
+[2025-01-26 11:14:35] INFO [image_service] [image_service.py:29] Starting image processing for job 8c1daa93-ca8f-4be7-9a80-63d303437760
+[2025-01-26 11:14:39] INFO [image_service] [image_service.py:92] Stored image with ID: 4ef23cad-20cb-4bc0-a67e-007500b5af6c
+[2025-01-26 11:14:39] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.38
+[2025-01-26 11:26:16] INFO [image_service] [image_service.py:29] Starting image processing for job b4f367f3-7863-4558-a5b7-cb06ae78f170
+[2025-01-26 11:26:24] INFO [image_service] [image_service.py:92] Stored image with ID: eb4cf00c-d60b-4c2c-b5ad-685558aebef7
+[2025-01-26 11:26:24] INFO [image_service] [image_service.py:119] Returning result with processing time: 7.33
+[2025-01-26 11:26:42] INFO [image_service] [image_service.py:29] Starting image processing for job 82b4b58b-586b-4576-8683-ad69fde2f8df
+[2025-01-26 11:26:47] INFO [image_service] [image_service.py:92] Stored image with ID: 3dedbfe7-2d4b-4e88-8034-b1ce1d30f722
+[2025-01-26 11:26:47] INFO [image_service] [image_service.py:119] Returning result with processing time: 5.16
+[2025-01-26 11:41:22] INFO [image_service] [image_service.py:29] Starting image processing for job 2a1458fd-a533-4a25-aedb-522ecadecfba
+[2025-01-26 11:41:26] INFO [image_service] [image_service.py:92] Stored image with ID: 86128bf6-394f-4809-8119-d216746373bd
+[2025-01-26 11:41:27] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.7
+[2025-01-26 11:45:46] INFO [image_service] [image_service.py:29] Starting image processing for job 6a79efbe-a325-4d00-95a5-f01df815c5c9
+[2025-01-26 11:45:54] INFO [image_service] [image_service.py:92] Stored image with ID: 7c349f15-f2de-4c56-a377-a5216d96657d
+[2025-01-26 11:45:54] INFO [image_service] [image_service.py:119] Returning result with processing time: 7.91
+[2025-01-26 11:50:17] INFO [image_service] [image_service.py:29] Starting image processing for job 639f7167-feae-444e-85b9-a9a1bffb0b97
+[2025-01-26 11:50:22] INFO [image_service] [image_service.py:92] Stored image with ID: a99e6704-1a80-45c1-9993-2e4e08c5f886
+[2025-01-26 11:50:22] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.76
+[2025-01-26 11:51:35] INFO [image_service] [image_service.py:29] Starting image processing for job 486d3268-79fa-4a9e-87c7-1b392e2f32ed
+[2025-01-26 11:51:42] INFO [image_service] [image_service.py:92] Stored image with ID: 1133979b-86de-4f1d-8c0b-fdf684c8950f
+[2025-01-26 11:51:42] INFO [image_service] [image_service.py:119] Returning result with processing time: 7.15
+[2025-01-26 11:56:45] INFO [image_service] [image_service.py:29] Starting image processing for job ce66c212-53f2-445a-a51f-8bfd391f54f8
+[2025-01-26 11:56:48] INFO [image_service] [image_service.py:92] Stored image with ID: f445ecfa-402a-4206-9261-8f8ef387db0d
+[2025-01-26 11:56:48] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.52
+[2025-01-26 12:01:47] INFO [image_service] [image_service.py:29] Starting image processing for job 75af43e1-64f1-4c20-ae34-d44c16a2fc84
+[2025-01-26 12:01:52] INFO [image_service] [image_service.py:92] Stored image with ID: 66c457e6-2e8f-4cdd-a20e-b8a93674e6a9
+[2025-01-26 12:01:52] INFO [image_service] [image_service.py:119] Returning result with processing time: 4.8
+[2025-01-26 12:03:58] INFO [image_service] [image_service.py:29] Starting image processing for job 88819580-5806-454d-839a-bdebaf44bfd3
+[2025-01-26 12:04:04] INFO [image_service] [image_service.py:92] Stored image with ID: 1b56ac7c-5dd2-4320-b909-aa47c38e9df3
+[2025-01-26 12:04:04] INFO [image_service] [image_service.py:119] Returning result with processing time: 5.55
+[2025-01-26 12:07:04] INFO [image_service] [image_service.py:29] Starting image processing for job 57faa5c3-270d-4618-8370-63103b0e294a
+[2025-01-26 12:07:10] INFO [image_service] [image_service.py:92] Stored image with ID: 732b280d-9fc5-4847-bcdb-df6832e000cf
+[2025-01-26 12:07:10] INFO [image_service] [image_service.py:119] Returning result with processing time: 5.57
+[2025-01-26 12:08:53] INFO [image_service] [image_service.py:29] Starting image processing for job 4cb98da5-6121-4e2c-861a-7477712fa76e
+[2025-01-26 12:08:59] INFO [image_service] [image_service.py:92] Stored image with ID: 391ffdd2-02ab-43e4-9f4f-e25fdd2f0232
+[2025-01-26 12:08:59] INFO [image_service] [image_service.py:119] Returning result with processing time: 6.13
+[2025-01-26 12:09:21] INFO [image_service] [image_service.py:29] Starting image processing for job 003952fb-8ea6-4f21-b420-b4652a254cf4
+[2025-01-26 12:09:24] INFO [image_service] [image_service.py:92] Stored image with ID: 9db64774-02cd-4cc3-a9d6-b0018ec1dd7c
+[2025-01-26 12:09:24] INFO [image_service] [image_service.py:119] Returning result with processing time: 3.57
+[2025-01-26 12:19:04] INFO [image_service] [image_service.py:29] Starting image processing for job af5b8345-3739-4c32-95e8-ab3c3fadf853
+[2025-01-26 12:19:11] INFO [image_service] [image_service.py:92] Stored image with ID: d7e60e09-ef13-4a5d-8d3f-888f2ae8c1bf
+[2025-01-26 12:19:11] INFO [image_service] [image_service.py:119] Returning result with processing time: 7.34
+[2025-01-26 12:21:39] INFO [image_service] [image_service.py:29] Starting image processing for job b54d9f71-2f00-4b0d-a758-5bc04b4691ae
+[2025-01-26 12:21:48] INFO [image_service] [image_service.py:92] Stored image with ID: 54c9a9ce-8759-4681-8d2f-f049629a3556
+[2025-01-26 12:21:48] INFO [image_service] [image_service.py:119] Returning result with processing time: 8.33
+[2025-01-26 12:22:11] INFO [image_service] [image_service.py:31] Starting image processing for job 2661489d-2969-4bc3-9760-b463c25cfa6b
+[2025-01-26 12:22:21] INFO [image_service] [image_service.py:140] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/085afea8-d855-4499-8247-3362a3d76279.jpg
+[2025-01-26 12:22:21] ERROR [image_service] [image_service.py:146] Error in job 2661489d-2969-4bc3-9760-b463c25cfa6b: Error processing image: 'SyncStorageManager' object has no attribute 'gcs_client'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/image_service.py", line 93, in process_image
+    bucket = storage.gcs_client.bucket(settings.GCS_BUCKET_NAME)
+             ^^^^^^^^^^^^^^^^^^
+AttributeError: 'SyncStorageManager' object has no attribute 'gcs_client'
+[2025-01-26 12:24:09] INFO [image_service] [image_service.py:31] Starting image processing for job 71d96045-8d92-43e8-a1c8-fccc431025b4
+[2025-01-26 12:24:18] INFO [image_service] [image_service.py:140] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/d722bf9f-d83e-4fc8-8908-916614f8ce67.jpg
+[2025-01-26 12:24:18] ERROR [image_service] [image_service.py:146] Error in job 71d96045-8d92-43e8-a1c8-fccc431025b4: Error processing image: 'SyncStorageManager' object has no attribute 'gcs_client'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/image_service.py", line 93, in process_image
+    blob = storage.bucket.blob(gcs_key)
+             ^^^^^^^^^^^^^^^^^^
+AttributeError: 'SyncStorageManager' object has no attribute 'gcs_client'
+[2025-01-26 12:25:59] INFO [image_service] [image_service.py:31] Starting image processing for job efa09c01-c105-46ab-ab04-e1f85d18e3db
+[2025-01-26 12:26:04] INFO [image_service] [image_service.py:140] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/e4e8f066-992d-4b6d-8a1a-cc04e3fe25d2.jpg
+[2025-01-26 12:26:04] ERROR [image_service] [image_service.py:146] Error in job efa09c01-c105-46ab-ab04-e1f85d18e3db: Error processing image: 'SyncStorageManager' object has no attribute 'gcs_client'
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/image_service.py", line 93, in process_image
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(settings.GOOGLE_APPLICATION_CREDENTIALS)
+             ^^^^^^^^^^^^^^^^^^
+AttributeError: 'SyncStorageManager' object has no attribute 'gcs_client'
+[2025-01-26 12:26:41] INFO [image_service] [image_service.py:31] Starting image processing for job 773206e5-bfa9-4b13-b2cc-d157fd1c3192
+[2025-01-26 12:26:47] INFO [image_service] [image_service.py:98] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/667e2d8c-ba50-4010-80e2-875e0cfc748a/japan-vintage-9.jpg
+[2025-01-26 12:26:47] INFO [image_service] [image_service.py:110] Created database record for image 667e2d8c-ba50-4010-80e2-875e0cfc748a
+[2025-01-26 12:26:47] INFO [image_service] [image_service.py:131] Successfully processed and stored image 667e2d8c-ba50-4010-80e2-875e0cfc748a
+[2025-01-26 12:26:47] INFO [image_service] [image_service.py:142] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/8afee253-3e9a-4d87-a43b-648785c40fcc.jpg
+[2025-01-26 12:30:49] INFO [image_service] [image_service.py:31] Starting image processing for job 4f317a58-7783-4cab-9b68-7eefb187fb58
+[2025-01-26 12:30:54] INFO [image_service] [image_service.py:98] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/edb0495f-acdc-487d-b390-a551c39cf152/japan-vintage-5.jpg
+[2025-01-26 12:30:54] INFO [image_service] [image_service.py:110] Created database record for image edb0495f-acdc-487d-b390-a551c39cf152
+[2025-01-26 12:30:54] INFO [image_service] [image_service.py:131] Successfully processed and stored image edb0495f-acdc-487d-b390-a551c39cf152
+[2025-01-26 12:30:54] INFO [image_service] [image_service.py:142] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/7a445fdc-cf24-452a-ae99-de828b753c3d.jpg
+[2025-01-26 12:32:54] INFO [image_service] [image_service.py:31] Starting image processing for job 325d6c88-171a-4c62-8bda-98d440eb6750
+[2025-01-26 12:33:03] INFO [image_service] [image_service.py:167] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/488bafa7-27a9-41ae-9e30-6fa722b88a8f.jpg
+[2025-01-26 12:33:03] ERROR [image_service] [image_service.py:173] Error in job 325d6c88-171a-4c62-8bda-98d440eb6750: Error processing image: 412 POST https://storage.googleapis.com/upload/storage/v1/b/elucide/o?uploadType=multipart&predefinedAcl=publicRead: {
+  "error": {
+    "code": 412,
+    "message": "The member bindings allUsers and allAuthenticatedUsers are not allowed since public access prevention is enforced.",
+    "errors": [
+      {
+        "message": "The member bindings allUsers and allAuthenticatedUsers are not allowed since public access prevention is enforced.",
+        "domain": "global",
+        "reason": "conditionNotMet",
+        "locationType": "header",
+        "location": "If-Match"
+      }
+    ]
+  }
+}
+: ('Request failed with status code', 412, 'Expected one of', <HTTPStatus.OK: 200>)
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 2604, in _prep_and_do_upload
+    created_json = self._do_upload(
+                   ^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 2410, in _do_upload
+    response = self._do_multipart_upload(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 1923, in _do_multipart_upload
+    response = upload.transmit(
+               ^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/resumable_media/requests/upload.py", line 153, in transmit
+    return _request_helpers.wait_and_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/resumable_media/requests/_request_helpers.py", line 155, in wait_and_retry
+    response = func()
+               ^^^^^^
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/resumable_media/requests/upload.py", line 149, in retriable_request
+    self._process_response(result)
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/resumable_media/_upload.py", line 125, in _process_response
+    _helpers.require_status_code(response, (http.client.OK,), self._get_status_code)
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/resumable_media/_helpers.py", line 108, in require_status_code
+    raise common.InvalidResponse(
+google.resumable_media.common.InvalidResponse: ('Request failed with status code', 412, 'Expected one of', <HTTPStatus.OK: 200>)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/app/services/image_service.py", line 103, in process_image
+    blob.upload_from_filename(
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 2926, in upload_from_filename
+    self._handle_filename_and_upload(
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 2796, in _handle_filename_and_upload
+    self._prep_and_do_upload(
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 2622, in _prep_and_do_upload
+    _raise_from_invalid_response(exc)
+  File "/Users/arekhalpern/Code/soloprojects/2025/elucide/backend/.venv/lib/python3.11/site-packages/google/cloud/storage/blob.py", line 4778, in _raise_from_invalid_response
+    raise exceptions.from_http_status(response.status_code, message, response=response)
+google.api_core.exceptions.PreconditionFailed: 412 POST https://storage.googleapis.com/upload/storage/v1/b/elucide/o?uploadType=multipart&predefinedAcl=publicRead: {
+  "error": {
+    "code": 412,
+    "message": "The member bindings allUsers and allAuthenticatedUsers are not allowed since public access prevention is enforced.",
+    "errors": [
+      {
+        "message": "The member bindings allUsers and allAuthenticatedUsers are not allowed since public access prevention is enforced.",
+        "domain": "global",
+        "reason": "conditionNotMet",
+        "locationType": "header",
+        "location": "If-Match"
+      }
+    ]
+  }
+}
+: ('Request failed with status code', 412, 'Expected one of', <HTTPStatus.OK: 200>)
+[2025-01-26 12:35:12] INFO [image_service] [image_service.py:31] Starting image processing for job 5158f070-9d1e-4cd3-a530-436cb4309202
+[2025-01-26 12:35:18] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/ce978693-4db4-43ad-a07a-a833f3a013f5/japan-vintage-7.jpg
+[2025-01-26 12:35:18] INFO [image_service] [image_service.py:116] Created database record for image ce978693-4db4-43ad-a07a-a833f3a013f5
+[2025-01-26 12:35:18] INFO [image_service] [image_service.py:137] Successfully processed and stored image ce978693-4db4-43ad-a07a-a833f3a013f5
+[2025-01-26 12:35:18] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/b601421e-67a5-4cde-bf03-1a4d7788c791.jpg
+[2025-01-26 12:36:57] INFO [image_service] [image_service.py:31] Starting image processing for job f79e3611-3d66-4e8a-9b3a-650aa0150279
+[2025-01-26 12:37:03] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/78062d47-a313-4155-822a-c359462e1a24/japan-vintage-11.jpg
+[2025-01-26 12:37:03] INFO [image_service] [image_service.py:116] Created database record for image 78062d47-a313-4155-822a-c359462e1a24
+[2025-01-26 12:37:03] INFO [image_service] [image_service.py:137] Successfully processed and stored image 78062d47-a313-4155-822a-c359462e1a24
+[2025-01-26 12:37:03] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/782bb80f-1536-42b7-a613-16cfec901cc7.jpg
+[2025-01-26 12:39:42] INFO [image_service] [image_service.py:31] Starting image processing for job 2f09631a-f9eb-4667-8273-7d3ad86f086f
+[2025-01-26 12:39:55] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/4d8b3f1e-cf6e-4cac-93fe-6ebafbde967b/japan-vintage-12.jpg
+[2025-01-26 12:39:55] INFO [image_service] [image_service.py:116] Created database record for image 4d8b3f1e-cf6e-4cac-93fe-6ebafbde967b
+[2025-01-26 12:39:55] INFO [image_service] [image_service.py:137] Successfully processed and stored image 4d8b3f1e-cf6e-4cac-93fe-6ebafbde967b
+[2025-01-26 12:39:55] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/73b18b86-459c-4e7a-8586-a85dbdb1ea6e.jpg
+[2025-01-26 12:40:20] INFO [image_service] [image_service.py:31] Starting image processing for job 7df2eefa-7b31-4be4-bab4-4be439e51907
+[2025-01-26 12:40:28] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/416a72b2-e0ad-4c89-87f6-f2c49f4d6ba7/japan-vintage-4.jpg
+[2025-01-26 12:40:28] INFO [image_service] [image_service.py:116] Created database record for image 416a72b2-e0ad-4c89-87f6-f2c49f4d6ba7
+[2025-01-26 12:40:28] INFO [image_service] [image_service.py:137] Successfully processed and stored image 416a72b2-e0ad-4c89-87f6-f2c49f4d6ba7
+[2025-01-26 12:40:28] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/73dbfd3b-cb4f-47ed-a56e-bc3549e52543.jpg
+[2025-01-26 12:44:29] INFO [image_service] [image_service.py:31] Starting image processing for job d7856ba4-31e1-4d20-9ae0-b67e8f7e2d95
+[2025-01-26 12:44:34] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/87d3cc9e-a58b-4c27-abf4-e9edd840ba41/japan-vintage-8.jpg
+[2025-01-26 12:44:34] INFO [image_service] [image_service.py:116] Created database record for image 87d3cc9e-a58b-4c27-abf4-e9edd840ba41
+[2025-01-26 12:44:34] INFO [image_service] [image_service.py:137] Successfully processed and stored image 87d3cc9e-a58b-4c27-abf4-e9edd840ba41
+[2025-01-26 12:44:34] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/d085659f-ff2b-40ce-a807-56206d9bb4c2.jpg
+[2025-01-26 12:46:44] INFO [image_service] [image_service.py:31] Starting image processing for job 815357ac-b40c-4980-b3eb-ac09d52906a3
+[2025-01-26 12:46:49] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/8996eac4-cc19-401d-8599-f6f5d945a862/japan-vintage-7.jpg
+[2025-01-26 12:46:49] INFO [image_service] [image_service.py:116] Created database record for image 8996eac4-cc19-401d-8599-f6f5d945a862
+[2025-01-26 12:46:49] INFO [image_service] [image_service.py:137] Successfully processed and stored image 8996eac4-cc19-401d-8599-f6f5d945a862
+[2025-01-26 12:46:49] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/7202c3b7-2688-4bbf-b6b1-79bee3956c03.jpg
+[2025-01-26 12:48:05] INFO [image_service] [image_service.py:31] Starting image processing for job 31a7007c-0226-4a21-baba-da067b231e01
+[2025-01-26 12:48:12] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/e0f03cf0-82a7-4502-927b-3c91d2c00143/japan-vintage-9.jpg
+[2025-01-26 12:48:12] INFO [image_service] [image_service.py:116] Created database record for image e0f03cf0-82a7-4502-927b-3c91d2c00143
+[2025-01-26 12:48:12] INFO [image_service] [image_service.py:137] Successfully processed and stored image e0f03cf0-82a7-4502-927b-3c91d2c00143
+[2025-01-26 12:48:12] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/7039b39b-302e-45a3-be42-42c50350f85c.jpg
+[2025-01-26 12:50:30] INFO [image_service] [image_service.py:31] Starting image processing for job 47a8a31e-efdf-4a7b-a866-1c2aef58547a
+[2025-01-26 12:50:35] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/59660564-2f49-4fc7-a3d4-6c824d8372d3/japan-vintage-10.jpg
+[2025-01-26 12:50:35] INFO [image_service] [image_service.py:116] Created database record for image 59660564-2f49-4fc7-a3d4-6c824d8372d3
+[2025-01-26 12:50:35] INFO [image_service] [image_service.py:137] Successfully processed and stored image 59660564-2f49-4fc7-a3d4-6c824d8372d3
+[2025-01-26 12:50:35] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/8eb492d7-2978-41ed-ac1a-aa7236ef42ed.jpg
+[2025-01-26 12:53:18] INFO [image_service] [image_service.py:31] Starting image processing for job 854d7afd-4a86-4798-ab1b-e37ef4e85268
+[2025-01-26 12:53:25] INFO [image_service] [image_service.py:104] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/d3c9de47-d762-4b90-a8f6-701f22611aca/japan-vintage-9.jpg
+[2025-01-26 12:53:25] INFO [image_service] [image_service.py:116] Created database record for image d3c9de47-d762-4b90-a8f6-701f22611aca
+[2025-01-26 12:53:25] INFO [image_service] [image_service.py:137] Successfully processed and stored image d3c9de47-d762-4b90-a8f6-701f22611aca
+[2025-01-26 12:53:25] INFO [image_service] [image_service.py:148] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/2cf4621c-64b3-4600-9334-59ed5cf84910.jpg
+[2025-01-26 12:53:53] INFO [image_service] [image_service.py:32] Starting image processing for job 7cb69815-44b7-44a0-879c-fd0691fad5f4
+[2025-01-26 12:53:58] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/6b603ca9-56bc-4179-bd58-270b5347d0f5/japan-vintage-11.jpg
+[2025-01-26 12:53:58] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 12:53:58] INFO [image_service] [image_service.py:125] Created database record for image 6b603ca9-56bc-4179-bd58-270b5347d0f5
+[2025-01-26 12:53:58] INFO [image_service] [image_service.py:151] Successfully processed and stored image 6b603ca9-56bc-4179-bd58-270b5347d0f5
+[2025-01-26 12:53:58] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/0b386cb0-b820-4682-8212-f9fe38b6bb2f.jpg
+[2025-01-26 12:55:01] INFO [image_service] [image_service.py:32] Starting image processing for job ebe6ee82-a1ef-4acb-82a1-87e282b378db
+[2025-01-26 12:55:06] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/658b193c-2e3e-40b8-b0fc-5c62d676888b/japan-vintage-4.jpg
+[2025-01-26 12:55:06] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 12:55:06] INFO [image_service] [image_service.py:125] Created database record for image 658b193c-2e3e-40b8-b0fc-5c62d676888b
+[2025-01-26 12:55:06] INFO [image_service] [image_service.py:151] Successfully processed and stored image 658b193c-2e3e-40b8-b0fc-5c62d676888b
+[2025-01-26 12:55:06] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/dfca3115-cf5c-4f00-87e0-fa761ab811bb.jpg
+[2025-01-26 14:07:39] INFO [image_service] [image_service.py:32] Starting image processing for job 013458d0-eee7-478c-bb5f-c19a849f0870
+[2025-01-26 14:07:47] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/d6b76552-4da9-48f3-839a-59dfd1a89491/japan-vintage-8.jpg
+[2025-01-26 14:07:47] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:07:47] INFO [image_service] [image_service.py:125] Created database record for image d6b76552-4da9-48f3-839a-59dfd1a89491
+[2025-01-26 14:07:47] INFO [image_service] [image_service.py:151] Successfully processed and stored image d6b76552-4da9-48f3-839a-59dfd1a89491
+[2025-01-26 14:07:47] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/e3d85ce3-0639-4723-ae14-56a1a48f5456.jpg
+[2025-01-26 14:11:56] INFO [image_service] [image_service.py:32] Starting image processing for job ecd5ceaf-e9b4-494d-bb4e-84c5126ef2d7
+[2025-01-26 14:12:03] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/d07a76fc-eda4-4733-a84d-533744385cc9/japan-vintage-5.jpg
+[2025-01-26 14:12:03] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:12:03] INFO [image_service] [image_service.py:125] Created database record for image d07a76fc-eda4-4733-a84d-533744385cc9
+[2025-01-26 14:12:03] INFO [image_service] [image_service.py:151] Successfully processed and stored image d07a76fc-eda4-4733-a84d-533744385cc9
+[2025-01-26 14:12:03] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/d639822d-f895-4ab8-8409-7a9093963c1c.jpg
+[2025-01-26 14:14:16] INFO [image_service] [image_service.py:32] Starting image processing for job cf3ca24d-b83c-4506-90ab-556d5bd5d175
+[2025-01-26 14:14:19] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/b0ffe013-d429-4771-ab9d-13ecb3040481/japan-vintage-7.jpg
+[2025-01-26 14:14:19] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:14:20] INFO [image_service] [image_service.py:125] Created database record for image b0ffe013-d429-4771-ab9d-13ecb3040481
+[2025-01-26 14:14:20] INFO [image_service] [image_service.py:151] Successfully processed and stored image b0ffe013-d429-4771-ab9d-13ecb3040481
+[2025-01-26 14:14:20] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/7750bcdf-858c-4204-ae2c-a1dde7790da0.jpg
+[2025-01-26 14:19:42] INFO [image_service] [image_service.py:32] Starting image processing for job e173d24a-6beb-43b6-b9e6-77527799f6a9
+[2025-01-26 14:19:52] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/5da15c9f-685d-471a-9a1b-97bed9050e60/japan-vintage-6.jpg
+[2025-01-26 14:19:52] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:19:52] INFO [image_service] [image_service.py:125] Created database record for image 5da15c9f-685d-471a-9a1b-97bed9050e60
+[2025-01-26 14:19:52] INFO [image_service] [image_service.py:151] Successfully processed and stored image 5da15c9f-685d-471a-9a1b-97bed9050e60
+[2025-01-26 14:19:52] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/48e046cc-a4b2-47d7-8afe-92a40079fa5b.jpg
+[2025-01-26 14:23:11] INFO [image_service] [image_service.py:32] Starting image processing for job 99c2d43b-a9ee-4232-8c18-d2f1102a7c0e
+[2025-01-26 14:23:15] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/3a10cc29-9902-4133-9c2a-bbc27c45221b/japan-vintage-11.jpg
+[2025-01-26 14:23:15] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:23:15] INFO [image_service] [image_service.py:125] Created database record for image 3a10cc29-9902-4133-9c2a-bbc27c45221b
+[2025-01-26 14:23:15] INFO [image_service] [image_service.py:151] Successfully processed and stored image 3a10cc29-9902-4133-9c2a-bbc27c45221b
+[2025-01-26 14:23:15] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/a69d889f-e50d-4a3f-adfb-c79e910f3ed8.jpg
+[2025-01-26 14:25:12] INFO [image_service] [image_service.py:32] Starting image processing for job a40a297c-0851-4497-bf39-e8c3add64f2e
+[2025-01-26 14:25:21] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/d8ec4cf3-1864-4a0f-9db4-77617332ef4f/japan-vintage-6.jpg
+[2025-01-26 14:25:21] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:25:21] INFO [image_service] [image_service.py:125] Created database record for image d8ec4cf3-1864-4a0f-9db4-77617332ef4f
+[2025-01-26 14:25:21] INFO [image_service] [image_service.py:151] Successfully processed and stored image d8ec4cf3-1864-4a0f-9db4-77617332ef4f
+[2025-01-26 14:25:21] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/f87fbf68-636a-4466-bc55-2bb11d1c5719.jpg
+[2025-01-26 14:28:14] INFO [image_service] [image_service.py:32] Starting image processing for job c5a7957f-26e6-431b-b552-de8eff4ab260
+[2025-01-26 14:28:19] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/cd6faf14-d0c2-4484-b96e-4c150ca5b406/japan-vintage-10.jpg
+[2025-01-26 14:28:19] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:28:19] INFO [image_service] [image_service.py:125] Created database record for image cd6faf14-d0c2-4484-b96e-4c150ca5b406
+[2025-01-26 14:28:19] INFO [image_service] [image_service.py:151] Successfully processed and stored image cd6faf14-d0c2-4484-b96e-4c150ca5b406
+[2025-01-26 14:28:19] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/506c82a8-2811-4f23-8813-45b4918c9c53.jpg
+[2025-01-26 14:30:24] INFO [image_service] [image_service.py:32] Starting image processing for job eb933f7a-ec3b-4275-94d6-2f23af617b8f
+[2025-01-26 14:30:29] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/85496012-e99b-4342-8f74-5c4864fc95f8/japan-vintage-10.jpg
+[2025-01-26 14:30:29] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:30:29] INFO [image_service] [image_service.py:125] Created database record for image 85496012-e99b-4342-8f74-5c4864fc95f8
+[2025-01-26 14:30:29] INFO [image_service] [image_service.py:151] Successfully processed and stored image 85496012-e99b-4342-8f74-5c4864fc95f8
+[2025-01-26 14:30:29] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/5ec7e06e-8160-4b71-867b-073872574a1d.jpg
+[2025-01-26 14:32:08] INFO [image_service] [image_service.py:32] Starting image processing for job 0e77b5cd-9ca4-437a-a10e-32ec47cb5800
+[2025-01-26 14:32:12] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/e68c0668-d4c1-460f-b956-238500f04fd1/japan-vintage-11.jpg
+[2025-01-26 14:32:12] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:32:12] INFO [image_service] [image_service.py:125] Created database record for image e68c0668-d4c1-460f-b956-238500f04fd1
+[2025-01-26 14:32:12] INFO [image_service] [image_service.py:151] Successfully processed and stored image e68c0668-d4c1-460f-b956-238500f04fd1
+[2025-01-26 14:32:12] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/53b33f89-7dbc-4205-a2ac-08cfb054f2ff.jpg
+[2025-01-26 14:34:49] INFO [image_service] [image_service.py:32] Starting image processing for job 994887da-e059-457d-80aa-c79b8fdcf59c
+[2025-01-26 14:34:56] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/213da8cf-e95f-4817-aeb6-ed59bf6a1c95/japan-vintage-4.jpg
+[2025-01-26 14:34:56] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:34:56] INFO [image_service] [image_service.py:125] Created database record for image 213da8cf-e95f-4817-aeb6-ed59bf6a1c95
+[2025-01-26 14:34:56] INFO [image_service] [image_service.py:151] Successfully processed and stored image 213da8cf-e95f-4817-aeb6-ed59bf6a1c95
+[2025-01-26 14:34:56] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/603b9f81-e169-471c-bd71-9a9057661154.jpg
+[2025-01-26 14:36:03] INFO [image_service] [image_service.py:32] Starting image processing for job 216fde55-8763-4bc1-aa67-06f020535e05
+[2025-01-26 14:36:09] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/a6db4fcb-2df6-4489-9cc6-7971f73ecb19/japan-vintage-7.jpg
+[2025-01-26 14:36:09] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:36:09] INFO [image_service] [image_service.py:125] Created database record for image a6db4fcb-2df6-4489-9cc6-7971f73ecb19
+[2025-01-26 14:36:09] INFO [image_service] [image_service.py:151] Successfully processed and stored image a6db4fcb-2df6-4489-9cc6-7971f73ecb19
+[2025-01-26 14:36:09] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/0f03da9d-9b13-4c16-a838-8f56952b07e8.jpg
+[2025-01-26 14:36:43] INFO [image_service] [image_service.py:32] Starting image processing for job 31c7ad11-369b-4f9b-99aa-437cd7efb94d
+[2025-01-26 14:36:50] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/0b106f9f-76d0-48f1-96e3-518a717feff9/japan-vintage-9.jpg
+[2025-01-26 14:36:50] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:36:50] INFO [image_service] [image_service.py:125] Created database record for image 0b106f9f-76d0-48f1-96e3-518a717feff9
+[2025-01-26 14:36:50] INFO [image_service] [image_service.py:151] Successfully processed and stored image 0b106f9f-76d0-48f1-96e3-518a717feff9
+[2025-01-26 14:36:50] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/98a123f6-1729-4d9c-8ab5-a4818afc4723.jpg
+[2025-01-26 14:39:45] INFO [image_service] [image_service.py:32] Starting image processing for job e70b8874-db0a-4576-ba39-66b6bade144a
+[2025-01-26 14:39:49] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/54033365-7785-4ec3-907d-54e366cacab2/japan-vintage-11.jpg
+[2025-01-26 14:39:49] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:39:49] INFO [image_service] [image_service.py:125] Created database record for image 54033365-7785-4ec3-907d-54e366cacab2
+[2025-01-26 14:39:49] INFO [image_service] [image_service.py:151] Successfully processed and stored image 54033365-7785-4ec3-907d-54e366cacab2
+[2025-01-26 14:39:49] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/a86e8cea-5e81-41a3-844c-52a2ba1fe60d.jpg
+[2025-01-26 14:42:51] INFO [image_service] [image_service.py:32] Starting image processing for job 85a071dd-0a7a-495b-9c28-95ea45004b64
+[2025-01-26 14:43:00] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/245305d5-67ec-4b50-a8c1-673345d2cbcc/japan-vintage-5.jpg
+[2025-01-26 14:43:00] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:43:00] INFO [image_service] [image_service.py:125] Created database record for image 245305d5-67ec-4b50-a8c1-673345d2cbcc
+[2025-01-26 14:43:00] INFO [image_service] [image_service.py:151] Successfully processed and stored image 245305d5-67ec-4b50-a8c1-673345d2cbcc
+[2025-01-26 14:43:00] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/19946be6-a8bf-46d3-857f-02ed86c75881.jpg
+[2025-01-26 14:49:24] INFO [image_service] [image_service.py:32] Starting image processing for job 7d778c4a-adc0-4367-8e58-56fcc5091e71
+[2025-01-26 14:49:30] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/c2df20af-aad3-43e1-aaf1-055e596d0f9f/japan-vintage-7.jpg
+[2025-01-26 14:49:30] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:49:30] INFO [image_service] [image_service.py:125] Created database record for image c2df20af-aad3-43e1-aaf1-055e596d0f9f
+[2025-01-26 14:49:30] INFO [image_service] [image_service.py:151] Successfully processed and stored image c2df20af-aad3-43e1-aaf1-055e596d0f9f
+[2025-01-26 14:49:30] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/4fce068e-0edf-406b-9054-ab2baf93a707.jpg
+[2025-01-26 14:51:25] INFO [image_service] [image_service.py:32] Starting image processing for job a64c618d-2dac-4e69-8e43-26640dd5353e
+[2025-01-26 14:51:33] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/6eb37d19-4040-448e-91f1-933919cc8ef2/japan-vintage-10.jpg
+[2025-01-26 14:51:33] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 14:51:33] INFO [image_service] [image_service.py:125] Created database record for image 6eb37d19-4040-448e-91f1-933919cc8ef2
+[2025-01-26 14:51:33] INFO [image_service] [image_service.py:151] Successfully processed and stored image 6eb37d19-4040-448e-91f1-933919cc8ef2
+[2025-01-26 14:51:33] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/d9d56b66-3cc8-4b3e-ac8b-91533c1ae48d.jpg
+[2025-01-26 15:13:51] INFO [image_service] [image_service.py:32] Starting image processing for job 1c79cf94-af3d-4fa9-b682-e1d75d35ef19
+[2025-01-26 15:13:59] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/5193b699-b567-4890-8a63-99b70d5430af/japan-vintage-9.jpg
+[2025-01-26 15:13:59] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:13:59] INFO [image_service] [image_service.py:125] Created database record for image 5193b699-b567-4890-8a63-99b70d5430af
+[2025-01-26 15:13:59] INFO [image_service] [image_service.py:151] Successfully processed and stored image 5193b699-b567-4890-8a63-99b70d5430af
+[2025-01-26 15:13:59] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/ab27f049-a304-46de-a46c-d5e31d385a19.jpg
+[2025-01-26 15:16:32] INFO [image_service] [image_service.py:32] Starting image processing for job 6ed4dd5f-1444-492c-ac66-86d6a3a7d731
+[2025-01-26 15:16:40] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/c7258d89-6c8e-41df-b2bb-5876cdeca55c/japan-vintage-1.jpg
+[2025-01-26 15:16:40] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:16:40] INFO [image_service] [image_service.py:125] Created database record for image c7258d89-6c8e-41df-b2bb-5876cdeca55c
+[2025-01-26 15:16:40] INFO [image_service] [image_service.py:151] Successfully processed and stored image c7258d89-6c8e-41df-b2bb-5876cdeca55c
+[2025-01-26 15:16:40] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/b56107b9-4629-4719-807a-aafe7dcdbe87.jpg
+[2025-01-26 15:21:29] INFO [image_service] [image_service.py:32] Starting image processing for job 7a6a6b83-c5de-4954-99cc-53bf55f42f37
+[2025-01-26 15:21:35] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/d5040a5a-6193-4851-ac33-3637ebc78f2b/japan-vintage-9.jpg
+[2025-01-26 15:21:35] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:21:35] INFO [image_service] [image_service.py:125] Created database record for image d5040a5a-6193-4851-ac33-3637ebc78f2b
+[2025-01-26 15:21:35] INFO [image_service] [image_service.py:151] Successfully processed and stored image d5040a5a-6193-4851-ac33-3637ebc78f2b
+[2025-01-26 15:21:35] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/11bf2805-65d1-492e-9b84-62e494ff2646.jpg
+[2025-01-26 15:25:00] INFO [image_service] [image_service.py:32] Starting image processing for job 2d95d4b5-9f52-4e3b-a4f1-00b06b9b7714
+[2025-01-26 15:25:08] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/a9c8120c-bf33-47b5-a2d9-6b5309133cd1/japan-vintage-6.jpg
+[2025-01-26 15:25:08] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:25:08] INFO [image_service] [image_service.py:125] Created database record for image a9c8120c-bf33-47b5-a2d9-6b5309133cd1
+[2025-01-26 15:25:08] INFO [image_service] [image_service.py:151] Successfully processed and stored image a9c8120c-bf33-47b5-a2d9-6b5309133cd1
+[2025-01-26 15:25:08] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/dc8b8fa8-a0ab-4240-ba69-73a6afb9bde7.jpg
+[2025-01-26 15:26:24] INFO [image_service] [image_service.py:32] Starting image processing for job 6138e869-d994-4ce2-96bf-094d786a8c8a
+[2025-01-26 15:26:29] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/9a52b08a-722f-429f-b69b-793b9c612245/japan-vintage-7.jpg
+[2025-01-26 15:26:29] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:26:29] INFO [image_service] [image_service.py:125] Created database record for image 9a52b08a-722f-429f-b69b-793b9c612245
+[2025-01-26 15:26:29] INFO [image_service] [image_service.py:151] Successfully processed and stored image 9a52b08a-722f-429f-b69b-793b9c612245
+[2025-01-26 15:26:29] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/921b4974-9f9e-48e4-bb5a-4f8806fab2f0.jpg
+[2025-01-26 15:26:56] INFO [image_service] [image_service.py:32] Starting image processing for job 58af810c-fd6f-41d7-8ce4-0461d2c2d52f
+[2025-01-26 15:27:09] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/8c2b6d18-2763-4a1d-9ab5-e488e5c1b17a/japan-vintage-6.jpg
+[2025-01-26 15:27:09] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:27:09] INFO [image_service] [image_service.py:125] Created database record for image 8c2b6d18-2763-4a1d-9ab5-e488e5c1b17a
+[2025-01-26 15:27:09] INFO [image_service] [image_service.py:151] Successfully processed and stored image 8c2b6d18-2763-4a1d-9ab5-e488e5c1b17a
+[2025-01-26 15:27:09] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/5adf76be-62a1-472d-af34-78ac83e7fb44.jpg
+[2025-01-26 15:29:37] INFO [image_service] [image_service.py:32] Starting image processing for job 5add59a4-3db9-4e56-b855-8e3b9ab44b74
+[2025-01-26 15:29:44] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/5a6626de-0901-406e-bd06-ecf0e1d6bea2/japan-vintage-7.jpg
+[2025-01-26 15:29:44] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:29:44] INFO [image_service] [image_service.py:125] Created database record for image 5a6626de-0901-406e-bd06-ecf0e1d6bea2
+[2025-01-26 15:29:44] INFO [image_service] [image_service.py:151] Successfully processed and stored image 5a6626de-0901-406e-bd06-ecf0e1d6bea2
+[2025-01-26 15:29:44] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/4a66d618-9b7e-49c2-9347-d403f961093e.jpg
+[2025-01-26 15:30:18] INFO [image_service] [image_service.py:32] Starting image processing for job 74561319-e962-47d7-ac97-f8e51af5439c
+[2025-01-26 15:30:26] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/99c1bdcb-2e69-456f-a606-031a2281bc4c/japan-vintage-8.jpg
+[2025-01-26 15:30:26] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:30:26] INFO [image_service] [image_service.py:125] Created database record for image 99c1bdcb-2e69-456f-a606-031a2281bc4c
+[2025-01-26 15:30:26] INFO [image_service] [image_service.py:151] Successfully processed and stored image 99c1bdcb-2e69-456f-a606-031a2281bc4c
+[2025-01-26 15:30:26] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/d1441197-0e61-4a0e-99db-ea86932d94f5.jpg
+[2025-01-26 15:33:12] INFO [image_service] [image_service.py:32] Starting image processing for job dfe74373-97c6-40cd-b18a-c9732c360969
+[2025-01-26 15:33:19] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/58076862-1a17-4186-94b0-7c674b3ccbb0/japan-vintage-5.jpg
+[2025-01-26 15:33:19] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:33:19] INFO [image_service] [image_service.py:125] Created database record for image 58076862-1a17-4186-94b0-7c674b3ccbb0
+[2025-01-26 15:33:19] INFO [image_service] [image_service.py:151] Successfully processed and stored image 58076862-1a17-4186-94b0-7c674b3ccbb0
+[2025-01-26 15:33:19] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/0d38ec07-b016-4f92-894b-ee987a25b7fe.jpg
+[2025-01-26 15:37:03] INFO [image_service] [image_service.py:32] Starting image processing for job d24fc831-b0a4-4302-9274-459516bf95ae
+[2025-01-26 15:37:11] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/e1cc0509-9a53-4f53-afc5-e548756021e7/japan-vintage-6.jpg
+[2025-01-26 15:37:11] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:37:11] INFO [image_service] [image_service.py:125] Created database record for image e1cc0509-9a53-4f53-afc5-e548756021e7
+[2025-01-26 15:37:11] INFO [image_service] [image_service.py:151] Successfully processed and stored image e1cc0509-9a53-4f53-afc5-e548756021e7
+[2025-01-26 15:37:11] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/ec40b3ea-fbd4-4734-9901-1767438ff3d6.jpg
+[2025-01-26 15:39:38] INFO [image_service] [image_service.py:32] Starting image processing for job ea11f42d-9414-4a8f-8a39-89f766e5e935
+[2025-01-26 15:39:44] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/689d8d7d-d337-4d8d-92bb-797b4881eac3/japan-vintage-3.jpg
+[2025-01-26 15:39:44] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:39:44] INFO [image_service] [image_service.py:125] Created database record for image 689d8d7d-d337-4d8d-92bb-797b4881eac3
+[2025-01-26 15:39:44] INFO [image_service] [image_service.py:151] Successfully processed and stored image 689d8d7d-d337-4d8d-92bb-797b4881eac3
+[2025-01-26 15:39:44] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/af46ec0b-4c35-4dbc-b914-e9108da69db7.jpg
+[2025-01-26 15:41:48] INFO [image_service] [image_service.py:32] Starting image processing for job 54eceb06-eab3-4c88-a03f-59540b0bc27c
+[2025-01-26 15:41:59] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/e7e36744-d0de-4292-8743-5d508c8b73b0/japan-vintage-5.jpg
+[2025-01-26 15:41:59] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:41:59] INFO [image_service] [image_service.py:125] Created database record for image e7e36744-d0de-4292-8743-5d508c8b73b0
+[2025-01-26 15:41:59] INFO [image_service] [image_service.py:151] Successfully processed and stored image e7e36744-d0de-4292-8743-5d508c8b73b0
+[2025-01-26 15:41:59] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/a6d8d079-d9d4-45b2-9076-aaa941cbb59a.jpg
+[2025-01-26 15:53:23] INFO [image_service] [image_service.py:32] Starting image processing for job 78e29734-ba34-4e6b-927c-4f657aa8e8b7
+[2025-01-26 15:53:30] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/37bebe83-20db-4b89-9b8c-75f11a536c23/japan-vintage-6.jpg
+[2025-01-26 15:53:30] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:53:30] INFO [image_service] [image_service.py:125] Created database record for image 37bebe83-20db-4b89-9b8c-75f11a536c23
+[2025-01-26 15:53:30] INFO [image_service] [image_service.py:151] Successfully processed and stored image 37bebe83-20db-4b89-9b8c-75f11a536c23
+[2025-01-26 15:53:30] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/2cff65e7-07a6-4f4f-b6e4-840fafe12185.jpg
+[2025-01-26 15:56:48] INFO [image_service] [image_service.py:32] Starting image processing for job 7321157e-217a-4580-9c13-6e173c652062
+[2025-01-26 15:56:54] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/a4c6a112-5be7-4676-af9f-79c3374bb009/japan-vintage-3.jpg
+[2025-01-26 15:56:54] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 15:56:54] INFO [image_service] [image_service.py:125] Created database record for image a4c6a112-5be7-4676-af9f-79c3374bb009
+[2025-01-26 15:56:54] INFO [image_service] [image_service.py:151] Successfully processed and stored image a4c6a112-5be7-4676-af9f-79c3374bb009
+[2025-01-26 15:56:54] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/103d2724-6e6a-48c9-879e-adcfed44a640.jpg
+[2025-01-26 16:18:46] INFO [image_service] [image_service.py:32] Starting image processing for job 3cdabbad-a27b-4031-a5a9-613604420dca
+[2025-01-26 16:18:51] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/a5f4e269-d204-4b39-a093-5db9e0499418/japan-vintage-5.jpg
+[2025-01-26 16:18:51] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 16:18:52] INFO [image_service] [image_service.py:125] Created database record for image a5f4e269-d204-4b39-a093-5db9e0499418
+[2025-01-26 16:18:52] INFO [image_service] [image_service.py:151] Successfully processed and stored image a5f4e269-d204-4b39-a093-5db9e0499418
+[2025-01-26 16:18:52] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/8a0a37fd-e770-4a3b-bc5e-5a497e303576.jpg
+[2025-01-26 16:22:28] INFO [image_service] [image_service.py:32] Starting image processing for job 012692d0-a168-4960-8f86-60d5197227c4
+[2025-01-26 16:22:33] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/71bf049b-cdf4-48ea-87a4-d137a60e16e0/japan-vintage-6.jpg
+[2025-01-26 16:22:33] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 16:22:33] INFO [image_service] [image_service.py:125] Created database record for image 71bf049b-cdf4-48ea-87a4-d137a60e16e0
+[2025-01-26 16:22:33] INFO [image_service] [image_service.py:151] Successfully processed and stored image 71bf049b-cdf4-48ea-87a4-d137a60e16e0
+[2025-01-26 16:22:33] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/0ef2ba1b-b3ad-4ec7-9307-9ae661c533c5.jpg
+[2025-01-26 16:25:07] INFO [image_service] [image_service.py:32] Starting image processing for job f31e7e5b-51a0-42f2-9d94-fd72b9329f4f
+[2025-01-26 16:25:11] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/3d86cc23-ad9d-47f6-9658-5856550c88f5/japan-vintage-8.jpg
+[2025-01-26 16:25:11] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 16:25:11] INFO [image_service] [image_service.py:125] Created database record for image 3d86cc23-ad9d-47f6-9658-5856550c88f5
+[2025-01-26 16:25:11] INFO [image_service] [image_service.py:151] Successfully processed and stored image 3d86cc23-ad9d-47f6-9658-5856550c88f5
+[2025-01-26 16:25:11] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/777ebbb6-c2d8-417b-b0f2-1bf8d7a6dbe2.jpg
+[2025-01-26 16:27:26] INFO [image_service] [image_service.py:32] Starting image processing for job 5e5ea0db-3111-4d9f-93ca-f3c7c6b14171
+[2025-01-26 16:27:34] INFO [image_service] [image_service.py:105] Uploaded image to GCS at users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/2e9b5cad-2e5b-4026-a240-171fc310385d/japan-vintage-6.jpg
+[2025-01-26 16:27:34] INFO [image_service] [image_service.py:113] Generated signed URL for image
+[2025-01-26 16:27:34] INFO [image_service] [image_service.py:125] Created database record for image 2e9b5cad-2e5b-4026-a240-171fc310385d
+[2025-01-26 16:27:34] INFO [image_service] [image_service.py:151] Successfully processed and stored image 2e9b5cad-2e5b-4026-a240-171fc310385d
+[2025-01-26 16:27:34] INFO [image_service] [image_service.py:162] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/11bef434-134a-4b6d-b6e8-32429f2c8a64.jpg
+[2025-01-26 16:45:07] INFO [image_service] [image_service.py:32] Starting image upload for job e54c05b0-5e09-4533-9e2c-f2167881a5fd
+[2025-01-26 16:45:08] INFO [image_service] [image_service.py:72] Image available at public URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/cbb55627-721a-4765-93a7-09a04c4d013e/japan-vintage-9.jpg
+[2025-01-26 16:45:08] INFO [image_service] [image_service.py:84] Created database record for image cbb55627-721a-4765-93a7-09a04c4d013e
+[2025-01-26 16:45:09] INFO [image_service] [image_service.py:99] Successfully uploaded and stored image cbb55627-721a-4765-93a7-09a04c4d013e
+[2025-01-26 16:45:09] INFO [image_service] [image_service.py:110] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/49b19733-21a2-4ab8-ae4c-d68a6e8f8cc5.jpg
+[2025-01-26 16:55:17] INFO [image_service] [image_service.py:32] Starting image upload for job 4a797318-0d76-48af-9bb7-55a23e26d26a
+[2025-01-26 16:55:18] INFO [image_service] [image_service.py:72] Image available at public URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/71520a59-f886-419a-9d47-418fb5496699/japan-vintage-7.jpg
+[2025-01-26 16:55:18] INFO [image_service] [image_service.py:84] Created database record for image 71520a59-f886-419a-9d47-418fb5496699
+[2025-01-26 16:55:18] INFO [image_service] [image_service.py:99] Successfully uploaded and stored image 71520a59-f886-419a-9d47-418fb5496699
+[2025-01-26 16:55:18] INFO [image_service] [image_service.py:110] Cleaned up temporary file: /Users/arekhalpern/Code/soloprojects/2025/elucide/backend/uploads/d8a3638d-f185-41b4-a2b6-2f660c8ccc99.jpg

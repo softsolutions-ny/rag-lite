@@ -16,11 +16,7 @@ import { useAuthFetch } from "@/lib/store/api";
 
 interface ChatInputProps {
   isLoading: boolean;
-  onSubmit: (
-    message: string,
-    imageUrl?: string,
-    imageAnalysis?: string
-  ) => void;
+  onSubmit: (message: string, image_url?: string, analysis?: string) => void;
   onStop?: () => void;
   model: ModelType;
   onModelChange: (model: ModelType) => void;
@@ -38,52 +34,89 @@ export function ChatInput({
   const [input, setInput] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [pendingImage, setPendingImage] = useState<{
+    url: string;
+    file: File;
+  } | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageStore = useImageStore();
   const authFetch = useAuthFetch();
 
   const handleImageUpload = async (file: File) => {
     if (!file) return;
 
     setIsUploading(true);
-    setIsAnalyzing(true);
     try {
-      const response = await imageStore.uploadImages([file]);
-      const jobId = response.jobs[0].job_id;
-      const imageUrl = URL.createObjectURL(file);
+      console.log("[ChatInput] Starting image upload");
+      const formData = new FormData();
+      formData.append("files", file);
 
-      // Wait for analysis to complete before sending any messages
-      const interval = setInterval(async () => {
-        try {
-          const response = await authFetch(`/api/v1/jobs/${jobId}`);
-          const data = await response.json();
-          if (data.status === "completed" || data.status === "error") {
-            clearInterval(interval);
-            if (data.status === "completed" && data.analysis) {
-              // Send both image and analysis together
-              onSubmit("", imageUrl, data.analysis.description);
-            }
-            setIsAnalyzing(false);
-          }
-        } catch (error) {
-          console.error("Failed to get image analysis:", error);
-          clearInterval(interval);
-          setIsAnalyzing(false);
-        }
-      }, 1000);
+      const response = await authFetch("/api/v1/images", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      console.log("[ChatInput] Image upload response:", data);
+
+      if (data.images?.[0]?.url) {
+        console.log(
+          "[ChatInput] Setting image preview with URL:",
+          data.images[0].url
+        );
+        setPendingImage({
+          url: data.images[0].url,
+          file,
+        });
+      }
     } catch (error) {
-      console.error("Failed to upload image:", error);
-      setIsAnalyzing(false);
+      console.error("[ChatInput] Failed to upload image:", error);
     } finally {
       setIsUploading(false);
     }
   };
 
   const handleSubmit = async () => {
-    if (!input.trim()) return;
-    onSubmit(input);
+    if (!input.trim() && !pendingImage) return;
+
+    if (pendingImage) {
+      try {
+        // Only analyze if there's a prompt
+        if (input.trim()) {
+          console.log("[ChatInput] Sending image for analysis");
+          setIsAnalyzing(true);
+          const response = await authFetch("/api/v1/images/analyze", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: pendingImage.url,
+              prompt: input,
+            }),
+          });
+
+          const data = await response.json();
+          console.log("[ChatInput] Analysis response:", data);
+
+          // Send both the image and its analysis
+          onSubmit(input, pendingImage.url, data.analysis);
+        } else {
+          // Just send the image without analysis if no prompt
+          onSubmit("", pendingImage.url);
+        }
+      } catch (error) {
+        console.error("[ChatInput] Failed to analyze image:", error);
+        // Still send the message with image but without analysis
+        onSubmit(input, pendingImage.url);
+      } finally {
+        setIsAnalyzing(false);
+      }
+    } else {
+      onSubmit(input);
+    }
+
     setInput("");
+    setPendingImage(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -105,9 +138,35 @@ export function ChatInput({
 
   return (
     <div className="relative flex w-full max-w-3xl flex-col self-center rounded-lg border bg-background p-2">
-      {isAnalyzing && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-lg bg-background/50 backdrop-blur-[1px]">
-          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+      {pendingImage && (
+        <div className="absolute left-2 bottom-[calc(100%+0.5rem)] flex items-center gap-2 p-2 rounded-lg bg-background border">
+          <div className="relative w-16 h-16 overflow-hidden rounded-md">
+            <img
+              src={pendingImage.url}
+              alt="Upload preview"
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <button
+            onClick={() => setPendingImage(null)}
+            className="absolute -top-2 -right-2 p-1 rounded-full bg-background border hover:bg-muted"
+            disabled={isLoading}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
       )}
       <div className="relative flex flex-col pb-7">
@@ -120,24 +179,30 @@ export function ChatInput({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={
-              model === "agent-gpt4o"
+              pendingImage
+                ? "Describe what you'd like to know about this image..."
+                : model === "agent-gpt4o"
                 ? "Chat with Agent GPT-4o..."
                 : "Type a message..."
             }
             className="flex-1 resize-none bg-transparent px-2 py-1.5 outline-none"
-            disabled={isLoading || isAnalyzing}
+            disabled={isLoading}
           />
           <Button
             size="icon"
             variant="ghost"
             onClick={isLoading ? onStop : handleSubmit}
-            disabled={isLoading ? false : !input.trim() || isAnalyzing}
+            disabled={isLoading ? false : !input.trim() && !pendingImage}
             className={`text-muted-foreground transition-all duration-200 ${
               isLoading ? "hover:text-destructive" : "hover:text-foreground"
             }`}
           >
-            {isLoading ? (
-              <StopCircle className="h-4 w-4" />
+            {isLoading || isAnalyzing ? (
+              isAnalyzing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <StopCircle className="h-4 w-4" />
+              )
             ) : (
               <CornerDownLeft className="h-4 w-4" />
             )}
@@ -147,7 +212,7 @@ export function ChatInput({
           <ModelSelector
             model={model}
             onChange={onModelChange}
-            disabled={disableModelChange}
+            disabled={disableModelChange || isLoading}
           />
           {model === "agent-gpt4o" && (
             <span className="text-[10px] text-muted-foreground flex items-center gap-1">
@@ -171,7 +236,7 @@ export function ChatInput({
           size="icon"
           className="absolute right-2 top-[calc(100%-22px)] h-5 w-5 text-muted-foreground"
           onClick={() => fileInputRef.current?.click()}
-          disabled={isLoading || isUploading || isAnalyzing}
+          disabled={isLoading || isUploading || !!pendingImage}
         >
           {isUploading ? (
             <Loader2 className="h-3 w-3 animate-spin" />

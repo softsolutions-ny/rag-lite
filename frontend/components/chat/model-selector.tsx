@@ -13,7 +13,8 @@ export type ModelType =
   | "gpt-4o-mini"
   | "gpt-4o"
   | "deepseek-reasoner"
-  | "agent-gpt4o";
+  | "agent-gpt4o"
+  | "n8n";
 
 interface ModelSelectorProps {
   model: ModelType;
@@ -42,6 +43,7 @@ export function ModelSelector({
         <SelectItem value="gpt-4o-mini">gpt-4o-mini</SelectItem>
         <SelectItem value="deepseek-reasoner">deepseek-reasoner</SelectItem>
         <SelectItem value="agent-gpt4o">Agent</SelectItem>
+        <SelectItem value="n8n">n8n</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -70,6 +70,7 @@ class ChatMessage(Base):
     role = Column(String, nullable=False)  # user, assistant, system
     content = Column(Text, nullable=False)
     model = Column(String)  # gpt-4o-mini, deepseek-reasoner
+    image_url = Column(String, nullable=True)  # URL for message images
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     
     # Relationships
@@ -82,5 +83,6 @@ class ChatMessage(Base):
             "role": self.role,
             "content": self.content,
             "model": self.model,
+            "image_url": self.image_url,
             "created_at": self.created_at.isoformat(),
         } 

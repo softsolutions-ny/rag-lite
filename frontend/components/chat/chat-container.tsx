@@ -16,12 +16,12 @@ import { useThreadsStore } from "@/lib/store";
 
 // Extend the Message and CreateMessage types from ai package
 interface Message extends AIMessage {
-  imageUrl?: string;
+  image_url?: string;
   model?: string;
 }
 
 interface CreateMessage extends AICreateMessage {
-  imageUrl?: string;
+  image_url?: string;
 }
 
 export function ChatContainer() {
@@ -36,6 +36,7 @@ export function ChatContainer() {
   );
   const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [isLoadingThread, setIsLoadingThread] = useState(false);
+  const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const { threads, fetchThreads, updateThread, createThread } =
     useThreadsStore();
 
@@ -74,7 +75,7 @@ export function ChatContainer() {
               content: msg.content,
               role: msg.role,
               model: msg.model,
-              imageUrl: msg.imageUrl,
+              image_url: msg.image_url,
             }))
           );
           // Set model from first message if it exists
@@ -94,12 +95,19 @@ export function ChatContainer() {
     fetchMessages();
   }, [currentThreadId]);
 
-  const { messages, isLoading, append, stop } = useChat({
+  const {
+    messages: chatMessages,
+    isLoading,
+    append,
+    stop,
+  } = useChat({
     api:
       model === "agent-gpt4o"
         ? "/api/agent"
         : model === "deepseek-reasoner"
         ? "/api/deepseek"
+        : model === "n8n"
+        ? "/api/n8n"
         : "/api/chat",
     body: {
       model,
@@ -111,7 +119,6 @@ export function ChatContainer() {
       console.log("[ChatContainer] Message stream finished");
       if (currentThreadId) {
         try {
-          // Find the current thread to preserve its title
           const currentThread = threads.find((t) => t.id === currentThreadId);
           if (currentThread) {
             await updateThread(currentThreadId, {
@@ -133,24 +140,36 @@ export function ChatContainer() {
     },
   });
 
+  // Combine local and chat messages
+  const allMessages = useMemo(
+    () => [...localMessages, ...chatMessages],
+    [localMessages, chatMessages]
+  );
+
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   useEffect(() => {
-    console.log("[ChatContainer] Messages updated:", messages);
+    console.log("[ChatContainer] Messages updated:", allMessages);
     scrollToBottom();
-  }, [messages, scrollToBottom]);
+  }, [allMessages, scrollToBottom]);
 
   const handleMessageSubmit = async (
     content: string,
-    imageUrl?: string,
+    image_url?: string,
     imageAnalysis?: string
   ) => {
     if (!userId) return;
 
     try {
-      console.log("[ChatContainer] Submitting message:", content);
+      console.log("[ChatContainer] Submitting message:", {
+        content,
+        image_url,
+        imageAnalysis,
+        currentThreadId,
+        model,
+      });
       if (!currentThreadId) {
         const newThread = await createThread(userId);
         console.log("[ChatContainer] Created new thread:", newThread.id);
@@ -159,24 +178,86 @@ export function ChatContainer() {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      // If we have both image and analysis, send them together
-      if (imageUrl && imageAnalysis) {
-        await append({
-          content: imageAnalysis,
-          role: "system",
-          imageUrl,
-        } as CreateMessage);
-      }
-
-      // Only send user message if there's content
-      if (content.trim()) {
-        await append({
-          content,
+      // If we have an image and analysis, handle it locally and store in DB
+      if (image_url && imageAnalysis) {
+        // Create user message with image
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          content: content || "Analyzing image...",
           role: "user",
-        } as CreateMessage);
+          image_url: image_url.trim(),
+          model,
+        };
+
+        // Create assistant message with analysis
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: imageAnalysis,
+          role: "assistant",
+          model,
+        };
+
+        // Store messages in DB
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            thread_id: currentThreadId,
+            role: userMessage.role,
+            content: userMessage.content,
+            model: userMessage.model,
+            image_url: userMessage.image_url,
+          }),
+        });
+
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            thread_id: currentThreadId,
+            role: assistantMessage.role,
+            content: assistantMessage.content,
+            model: assistantMessage.model,
+          }),
+        });
+
+        // Update UI
+        setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
+
+        // Update thread timestamp
+        if (currentThreadId) {
+          try {
+            const currentThread = threads.find((t) => t.id === currentThreadId);
+            if (currentThread) {
+              await updateThread(currentThreadId, {
+                title: currentThread.title || undefined,
+                updated_at: new Date().toISOString(),
+              });
+            }
+          } catch (error) {
+            console.error(
+              "[ChatContainer] Error updating thread timestamp:",
+              error
+            );
+          }
+        }
+      } else {
+        // For regular messages, use the chat API
+        if (content.trim()) {
+          await append({
+            content,
+            role: "user",
+            image_url,
+            model,
+          } as CreateMessage);
+        }
       }
 
-      console.log("[ChatContainer] Message appended successfully");
+      console.log("[ChatContainer] All messages appended successfully");
     } catch (error) {
       console.error("[ChatContainer] Error submitting message:", error);
     }
@@ -188,12 +269,12 @@ export function ChatContainer() {
 
   const memoizedMessages = useMemo(
     () =>
-      messages
+      allMessages
         .filter((message) => message.role !== "data")
         .map((message) => (
           <ChatMessage key={message.id} message={message as Message} />
         )),
-    [messages]
+    [allMessages]
   );
 
   return (
@@ -202,7 +283,7 @@ export function ChatContainer() {
         <ScrollArea className="h-full">
           <div className="flex flex-col gap-4 px-4">
             {memoizedMessages}
-            {messages.length === 0 && !isLoadingThread && (
+            {allMessages.length === 0 && !isLoadingThread && (
               <div className="flex h-[50vh] items-center justify-center text-center">
                 <div className="max-w-md space-y-4">
                   <h2 className="text-2xl font-semibold">Welcome to Elucide</h2>
@@ -227,7 +308,7 @@ export function ChatContainer() {
             onStop={handleStop}
             model={model}
             onModelChange={setModel}
-            disableModelChange={messages.length > 0}
+            disableModelChange={allMessages.length > 0}
           />
         </div>
       </div>
