@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # OpenAI settings
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     
+    # Groq settings
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    
     # Firecrawl settings
     FIRECRAWL_API_KEY: str = os.getenv("FIRECRAWL_API_KEY", "")
     

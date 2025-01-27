@@ -1,27 +1,21 @@
 "use client";
 
-import {
-  useChat,
-  Message as AIMessage,
-  CreateMessage as AICreateMessage,
-} from "ai/react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ScrollArea } from "../ui/scroll-area";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { ModelType } from "./model-selector";
+import { ModelType } from "@/lib/ai-config";
 import { useAuth } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useThreadsStore } from "@/lib/store";
+import { useChat } from "@/lib/hooks/useChat";
 
-// Extend the Message and CreateMessage types from ai package
-interface Message extends AIMessage {
+interface Message {
+  id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
   image_url?: string;
   model?: string;
-}
-
-interface CreateMessage extends AICreateMessage {
-  image_url?: string;
 }
 
 export function ChatContainer() {
@@ -44,6 +38,11 @@ export function ChatContainer() {
   useEffect(() => {
     const param = searchParams.get("thread");
     setCurrentThreadId(param as string | undefined);
+    if (!param) {
+      // Clear messages when no thread is selected
+      setInitialMessages([]);
+      setLocalMessages([]);
+    }
   }, [searchParams]);
 
   // Fetch threads when user ID is available
@@ -101,19 +100,7 @@ export function ChatContainer() {
     append,
     stop,
   } = useChat({
-    api:
-      model === "agent-gpt4o"
-        ? "/api/agent"
-        : model === "deepseek-reasoner"
-        ? "/api/deepseek"
-        : model === "n8n"
-        ? "/api/n8n"
-        : "/api/chat",
-    body: {
-      model,
-      threadId: currentThreadId,
-    },
-    id: currentThreadId ?? "new",
+    model,
     initialMessages,
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");
@@ -251,9 +238,7 @@ export function ChatContainer() {
           await append({
             content,
             role: "user",
-            image_url,
-            model,
-          } as CreateMessage);
+          });
         }
       }
 
@@ -270,10 +255,13 @@ export function ChatContainer() {
   const memoizedMessages = useMemo(
     () =>
       allMessages
-        .filter((message) => message.role !== "data")
-        .map((message) => (
-          <ChatMessage key={message.id} message={message as Message} />
-        )),
+        .filter(
+          (message) =>
+            message.role === "user" ||
+            message.role === "assistant" ||
+            message.role === "system"
+        )
+        .map((message) => <ChatMessage key={message.id} message={message} />),
     [allMessages]
   );
 

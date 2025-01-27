@@ -5,6 +5,7 @@ from typing import Optional, List
 import logging
 from sqlalchemy import select, update
 from datetime import datetime
+from fastapi.responses import StreamingResponse
 
 from app.db.session import get_db
 from app.db.repositories.chat import ChatRepository
@@ -17,11 +18,13 @@ from app.schemas.chat import (
     ChatThreadUpdate,
     ChatThreadWithMessages
 )
+from app.services.chat_service import ChatService
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+chat_service = ChatService()
 
 class ThreadCreate(BaseModel):
     user_id: str
@@ -82,6 +85,12 @@ class FolderResponse(BaseModel):
         json_encoders = {
             datetime: lambda dt: dt.isoformat()
         }
+
+class StreamRequest(BaseModel):
+    messages: List[dict]
+    model: str
+    temperature: Optional[float] = 0.7
+    max_tokens: Optional[int] = 1000
 
 @router.post("/threads", response_model=ThreadResponse)
 async def create_chat_thread(
@@ -303,4 +312,28 @@ async def delete_folder(folder_id: UUID, db: AsyncSession = Depends(get_db)):
         await db.commit()
     except Exception as e:
         logger.error(f"Error deleting folder: {e}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/chat")
+async def chat(
+    request: StreamRequest
+):
+    """Stream chat completions."""
+    try:
+        return StreamingResponse(
+            chat_service.stream_chat(
+                messages=request.messages,
+                model=request.model,
+                temperature=request.temperature,
+                max_tokens=request.max_tokens
+            ),
+            media_type="text/event-stream"
+        )
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/models")
+async def get_available_models():
+    """Get available Groq models"""
+    return chat_service.get_available_models() 

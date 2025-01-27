@@ -8,6 +8,3 @@ You excel at understanding context and maintaining coherent conversations.
 export const IMAGE_ANALYSIS_PROMPT = (imageDescription: string) => 
   `The image depicts ${imageDescription}\n\nAssistant: What else would you like to know about this image?`;
 
-export const N8N_SYSTEM_PROMPT = `You are an AI assistant powered by n8n integration.
-You can process requests and provide responses through the n8n workflow.
-Always maintain a helpful and informative tone.`; 

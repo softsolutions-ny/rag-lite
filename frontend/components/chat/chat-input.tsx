@@ -10,9 +10,10 @@ import {
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "../ui/button";
 import { useState, useRef, useEffect } from "react";
-import { ModelType, ModelSelector } from "./model-selector";
-import { useImageStore } from "@/lib/store/images";
+import { ModelType } from "@/lib/ai-config";
+import { ModelSelector } from "./model-selector";
 import { useAuthFetch } from "@/lib/store/api";
+import Image from "next/image";
 
 interface ChatInputProps {
   isLoading: boolean;
@@ -141,10 +142,12 @@ export function ChatInput({
       {pendingImage && (
         <div className="absolute left-2 bottom-[calc(100%+0.5rem)] flex items-center gap-2 p-2 rounded-lg bg-background border">
           <div className="relative w-16 h-16 overflow-hidden rounded-md">
-            <img
+            <Image
               src={pendingImage.url}
               alt="Upload preview"
-              className="object-cover w-full h-full"
+              className="object-cover"
+              fill
+              sizes="64px"
             />
           </div>
           <button
@@ -181,8 +184,8 @@ export function ChatInput({
             placeholder={
               pendingImage
                 ? "Describe what you'd like to know about this image..."
-                : model === "agent-gpt4o"
-                ? "Chat with Agent GPT-4o..."
+                : model === "agent-1"
+                ? "Chat with Agent GPT-4..."
                 : "Type a message..."
             }
             className="flex-1 resize-none bg-transparent px-2 py-1.5 outline-none"
@@ -214,7 +217,7 @@ export function ChatInput({
             onChange={onModelChange}
             disabled={disableModelChange || isLoading}
           />
-          {model === "agent-gpt4o" && (
+          {model === "agent-1" && (
             <span className="text-[10px] text-muted-foreground flex items-center gap-1">
               <Bot className="h-3 w-3" />
               Agent Mode

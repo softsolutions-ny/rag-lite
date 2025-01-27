@@ -1,14 +1,27 @@
-import { streamText } from "ai";
-import { modelConfigs, ChatMessage, storeMessage, validateApiKey, ModelType } from '@/lib/ai-config';
+import { modelConfigs, ModelType, storeMessage } from '@/lib/ai-config';
+import { LangChainService } from '@/lib/services/langchain';
 import { IMAGE_ANALYSIS_PROMPT } from '@/lib/prompts';
 
 // Set the runtime to edge
 export const runtime = "edge";
 
+const langchain = new LangChainService();
+
+interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+// Extend Response type for Edge runtime
+interface EdgeResponse extends Response {
+  waitUntil?: (promise: Promise<unknown>) => void;
+}
+
 export async function POST(req: Request) {
   try {
     const { messages, model, threadId } = await req.json();
     const modelType = model as ModelType;
+    const config = modelConfigs[modelType];
 
     // Route agent requests to agent endpoint
     if (modelType === "agent-1") {
@@ -21,9 +34,6 @@ export async function POST(req: Request) {
       });
       return response;
     }
-
-    const config = modelConfigs[modelType];
-    validateApiKey(config.provider);
 
     // Add system prompt if not present
     const hasSystemPrompt = messages.some((msg: ChatMessage) => msg.role === 'system');
@@ -53,26 +63,56 @@ export async function POST(req: Request) {
       model: modelType,
     });
 
-    const result = await streamText({
-      model: config.model,
-      messages: finalMessages.map((message: ChatMessage) => ({
-        content: message.content,
-        role: message.role,
-      })),
-      temperature: config.temperature,
-      maxTokens: config.maxTokens,
-      onFinish: async ({ text }) => {
+    // Create a TransformStream for the chat response
+    const encoder = new TextEncoder();
+    const stream = new TransformStream();
+    const writer = stream.writable.getWriter();
+
+    // Create a promise that will resolve when the streaming is complete
+    const streamComplete = new Promise(async (resolve, reject) => {
+      let lastChunk = '';
+      try {
+        const chatStream = langchain.streamChat({
+          messages: finalMessages,
+          model: modelType,
+        });
+
+        for await (const chunk of chatStream) {
+          lastChunk = chunk;
+          await writer.write(encoder.encode(`data: ${chunk}\n\n`));
+        }
+        await writer.write(encoder.encode('data: [DONE]\n\n'));
+
         // Store the assistant's response
         await storeMessage({
           thread_id: threadId,
           role: "assistant",
-          content: text,
+          content: lastChunk,
           model: modelType,
         });
-      },
+
+        resolve(undefined);
+      } catch (error) {
+        console.error('Error in stream:', error);
+        reject(error);
+      } finally {
+        await writer.close();
+      }
     });
 
-    return result.toDataStreamResponse();
+    // Return the stream immediately while the background task continues
+    const response = new Response(stream.readable, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    }) as EdgeResponse;
+
+    // Attach the background task to the response
+    response.waitUntil?.(streamComplete);
+
+    return response;
   } catch (error) {
     console.error("Chat API error:", error);
     if (error instanceof Error && error.name === 'AbortError') {

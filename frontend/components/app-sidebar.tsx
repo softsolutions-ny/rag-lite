@@ -87,6 +87,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     if (!userId) return;
 
     try {
+      // First navigate to /dashboard/chat to clear the current thread
+      router.push("/dashboard/chat");
+
+      // Small delay to ensure state is cleared
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Then create and navigate to the new thread
       const thread = await createThread(userId);
       router.push(`/dashboard/chat?thread=${thread.id}`);
     } catch (error) {
