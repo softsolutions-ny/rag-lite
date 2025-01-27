@@ -619,3 +619,6 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 [2025-01-26 17:34:59] INFO [images] [images.py:237] Analysis completed successfully
 [2025-01-26 17:36:42] INFO [images] [images.py:29] Received 1 files
 [2025-01-26 17:38:23] INFO [images] [images.py:29] Received 1 files
+[2025-01-27 14:49:21] INFO [images] [images.py:29] Received 1 files
+[2025-01-27 14:49:25] INFO [images] [images.py:196] Analyzing image at URL: https://storage.googleapis.com/elucide/users/user_2rUfnyh68uZAwot0qzRLALTdVOc/images/6e05733f-a59a-47be-a0c6-d46d1b3beca7/0b4af037-719d-4087-a0c3-bef81592fe32.jpg with prompt: describe
+[2025-01-27 14:49:33] INFO [images] [images.py:237] Analysis completed successfully

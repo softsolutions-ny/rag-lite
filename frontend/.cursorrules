@@ -1,0 +1,77 @@
+PROJECT STRUCTURE
+
+BACKEND:
+
+├── README.md
+├── __pycache__
+│   └── celery_app.cpython-311.pyc
+├── alembic
+│   ├── env.py
+│   └── script.py.mako
+├── alembic.ini
+├── app
+│   ├── __init__.py
+│   └── main.py
+├── celery_app.py
+├── credentials
+│   └── service-account-key.json
+├── logs
+│   ├── chat_endpoints.log
+│   ├── chat_service.log
+│   ├── extraction_endpoints.log
+│   ├── extraction_service.log
+│   ├── image_service.log
+│   ├── images.log
+│   ├── main.log
+│   ├── stats.log
+│   ├── storage.log
+│   ├── sync_storage.log
+│   └── web_endpoints.log
+├── package.json
+├── pnpm-lock.yaml
+├── requirements
+│   ├── base.txt
+│   ├── dev.txt
+│   └── prod.txt
+├── tests
+│   └── __init__.py
+└── uploads
+    └── 745cb31b-acd8-472b-8c8c-1d3f74db5dee.jpg
+
+
+FRONTEND:
+
+── README.md
+├── app
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components
+│   ├── app-header.tsx
+│   ├── app-sidebar.tsx
+│   ├── login-form.tsx
+│   ├── search-form.tsx
+│   ├── theme-provider.tsx
+│   ├── theme-toggle.tsx
+│   └── version-switcher.tsx
+├── components.json
+├── lib
+│   ├── ai-config.ts
+│   ├── types.ts
+│   └── utils.ts
+├── middleware.ts
+├── next-env.d.ts
+├── next.config.mjs
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── public
+│   ├── apple-icon.svg
+│   ├── dark-bg-1.png
+│   ├── dark-bg.png
+│   ├── elucide-bg-1.png
+│   ├── github-icon.svg
+│   └── google-icon.svg
+├── tailwind.config.ts
+└── tsconfig.json   

@@ -22,6 +22,10 @@ export async function POST(req: Request) {
 
     console.log('[ChatAPI] Processing request:', { threadId, model: modelType });
 
+    if (!threadId) {
+      throw new Error('Thread ID is required for chat memory');
+    }
+
     // Route agent requests to agent endpoint
     if (modelType === "agent-1") {
       console.log('[ChatAPI] Routing to agent endpoint');

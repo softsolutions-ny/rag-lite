@@ -8,6 +8,7 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from langchain.memory import ConversationBufferWindowMemory
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class ChatService:
             }
         }
         self.models = {}
+        self.memories = {}
 
     def _get_model(self, model_name: str):
         if model_name in self.models:
@@ -91,6 +93,15 @@ class ChatService:
         self.models[model_name] = model
         return model
 
+    def _get_memory(self, thread_id: str):
+        if thread_id not in self.memories:
+            self.memories[thread_id] = ConversationBufferWindowMemory(
+                return_messages=True,
+                memory_key="chat_history",
+                k=10,  # Keep last 10 messages
+            )
+        return self.memories[thread_id]
+
     def _format_messages(self, messages: list[Dict[str, str]]):
         formatted_messages = []
         for msg in messages:
@@ -102,25 +113,54 @@ class ChatService:
                 formatted_messages.append(SystemMessage(content=msg["content"]))
         return formatted_messages
 
+    async def _combine_with_memory(self, formatted_messages: list, memory: ConversationBufferWindowMemory):
+        # Get the last user message for memory input
+        last_user_msg = next((msg for msg in reversed(formatted_messages) if isinstance(msg, HumanMessage)), None)
+        if last_user_msg:
+            # Load memory variables synchronously since the new version doesn't support async
+            history = memory.load_memory_variables({"input": last_user_msg.content})
+            chat_history = history.get("chat_history", [])
+            return chat_history + formatted_messages
+        return formatted_messages
+
     async def stream_chat(
         self,
         messages: list[Dict[str, str]],
         model: str,
+        thread_id: str,
         temperature: float = 0.7,
         max_tokens: int = 1000,
     ) -> AsyncGenerator[str, None]:
         """
-        Stream chat completions using LangChain
+        Stream chat completions using LangChain with memory
         """
         try:
+            logger.info(f"Starting chat stream for thread {thread_id}")
             llm = self._get_model(model)
             formatted_messages = self._format_messages(messages)
+            memory = self._get_memory(thread_id)
+
+            # Combine memory with current messages
+            final_messages = await self._combine_with_memory(formatted_messages, memory)
+            logger.info(f"Combined {len(final_messages)} messages for thread {thread_id}")
 
             # Create a simple chain that just passes through the messages to the LLM
             chain = llm | StrOutputParser()
 
-            async for chunk in chain.astream(formatted_messages):
+            # Stream the response and accumulate it
+            accumulated_response = ""
+            last_user_msg = messages[-1]["content"] if messages else ""
+            
+            async for chunk in chain.astream(final_messages):
+                accumulated_response += chunk
                 yield chunk
+
+            # Save to memory after completion
+            memory.save_context(
+                {"input": last_user_msg},
+                {"output": accumulated_response}
+            )
+            logger.info(f"Saved context to memory for thread {thread_id}")
 
         except Exception as e:
             logger.error(f"Error in stream_chat: {str(e)}")

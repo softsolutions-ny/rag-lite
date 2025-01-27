@@ -327,17 +327,20 @@ async def chat(
 
         # Store the user's message
         last_message = request.messages[-1]
-        await chat_repo.add_message(
-            thread_id=UUID(request.thread_id),
-            role=last_message["role"],
-            content=last_message["content"],
-            model=request.model
-        )
+        async with db:  # Use async context manager for transaction
+            await chat_repo.add_message(
+                thread_id=UUID(request.thread_id),
+                role=last_message["role"],
+                content=last_message["content"],
+                model=request.model
+            )
+            await db.commit()
 
         # Get chat response
         chat_stream = chat_service.stream_chat(
             messages=request.messages,
             model=request.model,
+            thread_id=request.thread_id,
             temperature=request.temperature,
             max_tokens=request.max_tokens
         )
@@ -345,17 +348,22 @@ async def chat(
         # Create a wrapper generator that stores the assistant's response
         async def stream_and_store():
             accumulated_response = ""
-            async for chunk in chat_stream:
-                accumulated_response += chunk
-                yield chunk
+            try:
+                async for chunk in chat_stream:
+                    accumulated_response += chunk
+                    yield chunk
 
-            # Store the assistant's response after streaming is complete
-            await chat_repo.add_message(
-                thread_id=UUID(request.thread_id),
-                role="assistant",
-                content=accumulated_response,
-                model=request.model
-            )
+                # Store the assistant's response after streaming is complete
+                async with db:  # Use async context manager for transaction
+                    await chat_repo.add_message(
+                        thread_id=UUID(request.thread_id),
+                        role="assistant",
+                        content=accumulated_response,
+                        model=request.model
+                    )
+                    await db.commit()
+            finally:
+                await db.close()  # Ensure connection is closed
 
         return StreamingResponse(
             stream_and_store(),
@@ -363,7 +371,12 @@ async def chat(
         )
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
+        await db.close()  # Close connection on error
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        # Ensure connection is closed if not already
+        if not db.closed:
+            await db.close()
 
 @router.get("/models")
 async def get_available_models():
