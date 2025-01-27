@@ -11,6 +11,7 @@ interface Message {
 interface UseChatOptions {
   initialMessages?: Message[];
   model: ModelType;
+  threadId: string;
   onFinish?: (message: Message) => void;
   onError?: (error: Error) => void;
 }
@@ -18,6 +19,7 @@ interface UseChatOptions {
 export function useChat({
   initialMessages = [],
   model,
+  threadId,
   onFinish,
   onError,
 }: UseChatOptions) {
@@ -65,6 +67,7 @@ export function useChat({
           body: JSON.stringify({
             messages: [...initialMessages, userMessage],
             model,
+            thread_id: threadId,
           }),
           signal: abortControllerRef.current.signal,
         });
@@ -114,7 +117,7 @@ export function useChat({
         abortControllerRef.current = null;
       }
     },
-    [initialMessages, model, onFinish, onError, authFetch]
+    [initialMessages, model, threadId, onFinish, onError, authFetch]
   );
 
   const stop = useCallback(() => {

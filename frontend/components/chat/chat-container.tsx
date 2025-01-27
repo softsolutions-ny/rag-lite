@@ -101,6 +101,7 @@ export function ChatContainer() {
     stop,
   } = useChat({
     model,
+    threadId: currentThreadId || "",
     initialMessages,
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");

@@ -89,6 +89,7 @@ class FolderResponse(BaseModel):
 class StreamRequest(BaseModel):
     messages: List[dict]
     model: str
+    thread_id: str
     temperature: Optional[float] = 0.7
     max_tokens: Optional[int] = 1000
 
@@ -316,17 +317,48 @@ async def delete_folder(folder_id: UUID, db: AsyncSession = Depends(get_db)):
 
 @router.post("/chat")
 async def chat(
-    request: StreamRequest
+    request: StreamRequest,
+    db: AsyncSession = Depends(get_db)
 ):
-    """Stream chat completions."""
+    """Stream chat completions and store messages."""
     try:
+        # Create chat repository
+        chat_repo = ChatRepository(db)
+
+        # Store the user's message
+        last_message = request.messages[-1]
+        await chat_repo.add_message(
+            thread_id=UUID(request.thread_id),
+            role=last_message["role"],
+            content=last_message["content"],
+            model=request.model
+        )
+
+        # Get chat response
+        chat_stream = chat_service.stream_chat(
+            messages=request.messages,
+            model=request.model,
+            temperature=request.temperature,
+            max_tokens=request.max_tokens
+        )
+
+        # Create a wrapper generator that stores the assistant's response
+        async def stream_and_store():
+            accumulated_response = ""
+            async for chunk in chat_stream:
+                accumulated_response += chunk
+                yield chunk
+
+            # Store the assistant's response after streaming is complete
+            await chat_repo.add_message(
+                thread_id=UUID(request.thread_id),
+                role="assistant",
+                content=accumulated_response,
+                model=request.model
+            )
+
         return StreamingResponse(
-            chat_service.stream_chat(
-                messages=request.messages,
-                model=request.model,
-                temperature=request.temperature,
-                max_tokens=request.max_tokens
-            ),
+            stream_and_store(),
             media_type="text/event-stream"
         )
     except Exception as e:

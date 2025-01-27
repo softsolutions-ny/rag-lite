@@ -1,11 +1,8 @@
-import { modelConfigs, ModelType, storeMessage } from '@/lib/ai-config';
-import { LangChainService } from '@/lib/services/langchain';
+import { modelConfigs, ModelType } from '@/lib/ai-config';
 import { IMAGE_ANALYSIS_PROMPT } from '@/lib/prompts';
 
 // Set the runtime to edge
 export const runtime = "edge";
-
-const langchain = new LangChainService();
 
 interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -23,8 +20,11 @@ export async function POST(req: Request) {
     const modelType = model as ModelType;
     const config = modelConfigs[modelType];
 
+    console.log('[ChatAPI] Processing request:', { threadId, model: modelType });
+
     // Route agent requests to agent endpoint
     if (modelType === "agent-1") {
+      console.log('[ChatAPI] Routing to agent endpoint');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/agent`, {
         method: "POST",
         headers: {
@@ -54,46 +54,49 @@ export async function POST(req: Request) {
       return message;
     });
 
-    // Store the user's message
-    const lastMessage = messages[messages.length - 1];
-    await storeMessage({
-      thread_id: threadId,
-      role: lastMessage.role,
-      content: lastMessage.content,
-      model: modelType,
-    });
-
     // Create a TransformStream for the chat response
-    const encoder = new TextEncoder();
     const stream = new TransformStream();
     const writer = stream.writable.getWriter();
 
     // Create a promise that will resolve when the streaming is complete
     const streamComplete = new Promise(async (resolve, reject) => {
-      let lastChunk = '';
       try {
-        const chatStream = langchain.streamChat({
-          messages: finalMessages,
-          model: modelType,
+        console.log('[ChatAPI] Starting chat stream');
+        
+        // Make request to backend chat endpoint
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messages: finalMessages,
+            model: modelType,
+            thread_id: threadId,
+            temperature: 0.7,
+            max_tokens: 1000,
+          }),
         });
 
-        for await (const chunk of chatStream) {
-          lastChunk = chunk;
-          await writer.write(encoder.encode(`data: ${chunk}\n\n`));
+        if (!response.ok) {
+          throw new Error(`Backend chat error: ${response.statusText}`);
         }
-        await writer.write(encoder.encode('data: [DONE]\n\n'));
 
-        // Store the assistant's response
-        await storeMessage({
-          thread_id: threadId,
-          role: "assistant",
-          content: lastChunk,
-          model: modelType,
-        });
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('No response stream available');
+        }
 
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          await writer.write(value);
+        }
+
+        console.log('[ChatAPI] Chat stream completed');
         resolve(undefined);
       } catch (error) {
-        console.error('Error in stream:', error);
+        console.error('[ChatAPI] Error in stream:', error);
         reject(error);
       } finally {
         await writer.close();
@@ -114,7 +117,7 @@ export async function POST(req: Request) {
 
     return response;
   } catch (error) {
-    console.error("Chat API error:", error);
+    console.error("[ChatAPI] Error:", error);
     if (error instanceof Error && error.name === 'AbortError') {
       return new Response('Request aborted by user', { status: 499 });
     }
