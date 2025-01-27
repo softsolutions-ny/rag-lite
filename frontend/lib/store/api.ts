@@ -22,8 +22,8 @@ export async function fetchApi<T>(
   return response.json();
 }
 
-export function createEndpoint(path: string, type: 'chat' | 'extraction' = 'chat') {
-  return `/api/v1/${type}${path}`;
+export function createEndpoint(path: string) {
+  return `/api/v1/chat${path}`;
 }
 
 export const endpoints = {
@@ -39,10 +39,6 @@ export const endpoints = {
     update: (id: string) => createEndpoint(`/threads/${id}`),
     delete: (id: string) => createEndpoint(`/threads/${id}`),
     messages: (id: string) => createEndpoint(`/threads/${id}/messages`),
-  },
-  extraction: {
-    start: () => createEndpoint('/extract', 'extraction'),
-    status: (jobId: string) => createEndpoint(`/extract/${jobId}`, 'extraction'),
   },
 };
 
@@ -70,35 +66,15 @@ export function useAuthFetch() {
 }
 
 // Common API response types
-export interface APIResponse {
-  jobs: Array<{
-    job_id: string;
-    filename: string;
-  }>;
-}
-
 export interface JobStatusResponse {
   status: "pending" | "processing" | "completed" | "error";
   error?: string;
-  analysis?: any;
+  analysis?: Record<string, unknown>;
   image?: {
-    analysis: any;
+    analysis: Record<string, unknown>;
   };
   stats?: {
     duration_seconds: number;
   };
   processing_time?: number;
-}
-
-export interface ExtractionResponse {
-  job_id: string;
-  status: string;
-  message: string;
-}
-
-export interface ExtractionStatusResponse {
-  status: "completed" | "failed" | "processing" | "pending";
-  data?: any;
-  error?: string;
-  progress?: any;
 } 
