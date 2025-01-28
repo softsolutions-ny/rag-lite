@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Folder, CreateFolderData, UpdateFolderData } from '../types';
-import { StateCreator, StoreApi } from 'zustand';
+import { StoreApi } from 'zustand';
 
 interface FoldersState {
   folders: Folder[];
@@ -15,9 +15,8 @@ interface FoldersState {
 }
 
 type SetState = StoreApi<FoldersState>['setState'];
-type GetState = StoreApi<FoldersState>['getState'];
 
-export const useFoldersStore = create<FoldersState>((set: SetState, get: GetState) => ({
+export const useFoldersStore = create<FoldersState>((set: SetState) => ({
   folders: [],
   isLoading: false,
   error: null,

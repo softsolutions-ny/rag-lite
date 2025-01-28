@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 // Set the runtime to edge for better performance
 export const runtime = "edge";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const response = await fetch('https://n8n-self-hosted-1-h40x.onrender.com/webhook/ed8f1e7b-24d6-492e-8670-eb08cc37ddf4/chat', {
       method: 'GET',

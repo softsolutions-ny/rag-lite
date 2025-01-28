@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
-  PlusIcon,
   Loader2,
   MoreHorizontal,
   Pencil,
@@ -21,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Thread, Folder } from "@/lib/types";
 import { useFoldersStore, useThreadsStore } from "@/lib/store";
 import { useAuth } from "@clerk/nextjs";
@@ -56,7 +55,6 @@ export function ThreadList({
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
     new Set()
   );
-  const inputRef = useRef<HTMLInputElement>(null);
   const { userId } = useAuth();
   const { moveThreadToFolder, fetchThreads } = useThreadsStore();
   const { deleteFolder, updateFolder } = useFoldersStore();
@@ -70,15 +68,6 @@ export function ThreadList({
         next.add(folderId);
       }
       return next;
-    });
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "numeric",
-      day: "numeric",
-      year: "2-digit",
     });
   };
 
@@ -248,7 +237,15 @@ export function ThreadList({
   }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 p-2">
+      <Button
+        variant="ghost"
+        className="flex justify-start gap-2"
+        onClick={onNewThread}
+      >
+        <ChevronRight className="h-4 w-4" />
+        New Thread
+      </Button>
       <div className="flex flex-col gap-1">
         {/* Render folders first */}
         {folders.map((folder) => {
