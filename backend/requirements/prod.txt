@@ -3,4 +3,3 @@
 # Production-specific dependencies
 gunicorn==21.2.0
 uvicorn[standard]==0.25.0
-firecrawl==1.10.2 
