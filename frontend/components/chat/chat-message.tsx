@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
-
 export interface ChatMessage {
   id: string;
   content: string;
@@ -30,7 +29,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <div className="prose max-w-[75%] space-y-2">
             {message.image_url && (
               <div className="mt-2 overflow-hidden rounded-lg">
-                <img
+                <Image
                   src={message.image_url}
                   alt="Uploaded content"
                   className="max-h-96 w-auto object-contain"
