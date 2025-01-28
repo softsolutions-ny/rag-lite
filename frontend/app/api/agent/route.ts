@@ -5,7 +5,7 @@ import { LangChainService } from '@/lib/services/langchain';
 
 const langchain = new LangChainService();
 
-export async function determineAction(message: string): Promise<AgentAction> {
+async function determineAction(message: string): Promise<AgentAction> {
   const modelType = 'agent-1';
   const config = modelConfigs[modelType];
 
