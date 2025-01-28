@@ -327,12 +327,10 @@ async def chat(
 
         # Store the user's message
         last_message = request.messages[-1]
-        # Sanitize content by removing null bytes and ensuring valid UTF-8
-        sanitized_content = last_message["content"].replace('\x00', '').encode('utf-8', errors='ignore').decode('utf-8')
         await chat_repo.add_message(
             thread_id=UUID(request.thread_id),
             role=last_message["role"],
-            content=sanitized_content,
+            content=last_message["content"],
             model=request.model
         )
 
@@ -353,21 +351,17 @@ async def chat(
                 yield chunk
 
             # Store the assistant's response after streaming is complete
-            # Sanitize accumulated response before storing
-            sanitized_response = accumulated_response.replace('\x00', '').encode('utf-8', errors='ignore').decode('utf-8')
             await chat_repo.add_message(
                 thread_id=UUID(request.thread_id),
                 role="assistant",
-                content=sanitized_response,
+                content=accumulated_response,
                 model=request.model
             )
 
         return StreamingResponse(
             stream_and_store(),
-            media_type="text/event-stream",
-            background=db  # Keep the session alive by attaching it to the response
+            media_type="text/event-stream"
         )
-
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
         raise HTTPException(status_code=500, detail=str(e))
