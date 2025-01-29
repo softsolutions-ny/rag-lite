@@ -10,6 +10,10 @@ cd "$(dirname "$0")/.."
 echo "Installing dependencies..."
 pip install -r ./requirements/prod.txt
 
+# Install alembic explicitly
+echo "Installing alembic..."
+pip install alembic
+
 # Run database migrations
 echo "Running database migrations..."
 ENV=production python -m alembic upgrade head
