@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppHeader } from "@/components/app-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Suspense } from "react";
 
 export default function DashboardLayout({
   children,
@@ -10,7 +11,9 @@ export default function DashboardLayout({
   return (
     <div className="fixed inset-0 overflow-hidden">
       <SidebarProvider>
-        <AppSidebar />
+        <Suspense fallback={<div className="w-64 bg-background" />}>
+          <AppSidebar />
+        </Suspense>
         <SidebarInset>
           <div className="relative flex h-full flex-col">
             <div className="sticky top-0 z-10">
