@@ -20,6 +20,8 @@ interface Message {
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLength = useRef<number>(0);
+  const isLoadingRef = useRef(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const { userId } = useAuth();
@@ -52,19 +54,27 @@ export function ChatContainer() {
     }
   }, [userId, fetchThreads]);
 
-  // Fetch existing messages when thread is selected
+  // Fetch messages only when thread changes
   useEffect(() => {
+    let isMounted = true;
+
     const fetchMessages = async () => {
       if (!currentThreadId) {
         setInitialMessages([]);
         return;
       }
 
+      if (isLoadingRef.current) return;
+
+      isLoadingRef.current = true;
       setIsLoadingThread(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${currentThreadId}/messages`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${currentThreadId}/messages`,
+          { cache: "no-store" }
         );
+
+        if (!isMounted) return;
 
         if (response.ok) {
           const messages = await response.json();
@@ -87,11 +97,19 @@ export function ChatContainer() {
       } catch (error) {
         console.error("Error fetching messages:", error);
       } finally {
-        setIsLoadingThread(false);
+        if (isMounted) {
+          isLoadingRef.current = false;
+          setIsLoadingThread(false);
+        }
       }
     };
 
     fetchMessages();
+
+    return () => {
+      isMounted = false;
+      isLoadingRef.current = false;
+    };
   }, [currentThreadId]);
 
   const {
@@ -134,13 +152,33 @@ export function ChatContainer() {
     [localMessages, chatMessages]
   );
 
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // Memoize message rendering
+  const memoizedMessages = useMemo(
+    () =>
+      allMessages
+        .filter(
+          (message) =>
+            message.role === "user" ||
+            message.role === "assistant" ||
+            message.role === "system"
+        )
+        .map((message) => <ChatMessage key={message.id} message={message} />),
+    [allMessages]
+  );
+
+  // Optimize scroll behavior
+  const scrollToBottom = useCallback((smooth = true) => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: smooth ? "smooth" : "auto",
+    });
   }, []);
 
   useEffect(() => {
-    console.log("[ChatContainer] Messages updated:", allMessages);
-    scrollToBottom();
+    if (allMessages.length > 0) {
+      const isNewMessage = allMessages.length > prevMessagesLength.current;
+      scrollToBottom(!isNewMessage);
+      prevMessagesLength.current = allMessages.length;
+    }
   }, [allMessages, scrollToBottom]);
 
   const handleMessageSubmit = async (
@@ -255,19 +293,6 @@ export function ChatContainer() {
   const handleStop = useCallback(() => {
     stop();
   }, [stop]);
-
-  const memoizedMessages = useMemo(
-    () =>
-      allMessages
-        .filter(
-          (message) =>
-            message.role === "user" ||
-            message.role === "assistant" ||
-            message.role === "system"
-        )
-        .map((message) => <ChatMessage key={message.id} message={message} />),
-    [allMessages]
-  );
 
   return (
     <>

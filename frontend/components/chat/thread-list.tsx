@@ -30,7 +30,6 @@ interface ThreadListProps {
   folders: Folder[];
   folderedThreads: Map<string, Thread[]>;
   currentThreadId?: string;
-  onNewThread: () => void;
   onSelectThread: (threadId: string) => void;
   onDeleteThread?: (threadId: string) => void;
   onRenameThread?: (threadId: string, newTitle: string) => void;
@@ -42,7 +41,6 @@ export function ThreadList({
   folders,
   folderedThreads,
   currentThreadId,
-  onNewThread,
   onSelectThread,
   onDeleteThread,
   onRenameThread,
@@ -238,14 +236,12 @@ export function ThreadList({
 
   return (
     <div className="flex flex-col gap-1 p-2">
-      <Button
-        variant="ghost"
-        className="flex justify-start gap-2"
-        onClick={onNewThread}
-      >
-        <ChevronRight className="h-4 w-4" />
-        New Thread
-      </Button>
+      {/* Empty state when no threads or folders exist */}
+      {threads.length === 0 && folders.length === 0 && (
+        <div className="px-2 py-3 text-sm text-muted-foreground">
+          Start a conversation by typing in the chat input below.
+        </div>
+      )}
       <div className="flex flex-col gap-1">
         {/* Render folders first */}
         {folders.map((folder) => {

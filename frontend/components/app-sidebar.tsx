@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useAuth } from "@clerk/nextjs";
+import { debounce } from "lodash";
 
 import {
   Sidebar,
@@ -75,13 +76,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [isNewFolderDialogOpen, setIsNewFolderDialogOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
 
-  // Fetch threads and folders when userId is available
+  // Debounced fetch functions
+  const debouncedFetch = useMemo(
+    () =>
+      debounce((uid: string) => {
+        fetchThreads(uid);
+        fetchFolders(uid);
+      }, 1000),
+    [fetchThreads, fetchFolders]
+  );
+
+  // Only fetch on mount and userId change
   useEffect(() => {
     if (userId) {
-      fetchThreads(userId);
-      fetchFolders(userId);
+      debouncedFetch(userId);
     }
-  }, [userId, fetchThreads, fetchFolders]);
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [userId, debouncedFetch]);
 
   const handleNewThread = async () => {
     if (!userId) return;
@@ -140,8 +153,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }
   };
 
-  // Organize threads by folders
-  const organizedThreads = React.useMemo(() => {
+  // Memoize organized threads calculation
+  const organizedThreads = useMemo(() => {
+    if (isLoadingThreads || isLoadingFolders)
+      return { unfoldered: [], foldered: new Map() };
+
     // Sort threads by updated_at date
     const sortedThreads = [...threads].sort(
       (a, b) =>
@@ -171,7 +187,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       unfoldered,
       foldered,
     };
-  }, [threads, folders]);
+  }, [threads, folders, isLoadingThreads, isLoadingFolders]);
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -245,7 +261,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               folders={folders}
               folderedThreads={organizedThreads.foldered}
               currentThreadId={currentThreadId}
-              onNewThread={handleNewThread}
               onSelectThread={handleSelectThread}
               onDeleteThread={handleDeleteThread}
               onRenameThread={handleRenameThread}

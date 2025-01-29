@@ -15,7 +15,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isSignedIn) {
-      router.push("/dashboard");
+      router.push("/dashboard/chat");
     }
   }, [isSignedIn, router]);
 
@@ -27,7 +27,7 @@ export default function Home() {
     signIn.authenticateWithRedirect({
       strategy,
       redirectUrl: "/sso-callback",
-      redirectUrlComplete: "/dashboard",
+      redirectUrlComplete: "/dashboard/chat",
     });
   };
 

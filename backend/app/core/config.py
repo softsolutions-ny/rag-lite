@@ -184,43 +184,48 @@ if db_url:
 settings.UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Create database engines with schema configuration
-engine_args = {
+base_engine_args = {
     "echo": True,
-    "poolclass": NullPool,  # Disable SQLAlchemy pooling since we're using PgBouncer
+    "poolclass": NullPool,  # Disable SQLAlchemy pooling
     "connect_args": {
         "server_settings": {
-            "search_path": "elucide,public",
-            "statement_cache_size": "0",
-            "prepared_statements": "false"
+            "search_path": "elucide,public"
         }
-    },  # Apply these settings in both environments
-    "pool_pre_ping": False,
+    },
     "execution_options": {
         "isolation_level": "READ COMMITTED"
     }
 }
 
-# Add SSL settings for production
+# Add production-specific settings
 if ENV == "production":
-    engine_args["connect_args"]["ssl"] = "require"
+    base_engine_args["pool_pre_ping"] = False
+    base_engine_args["connect_args"]["ssl"] = "require"
+    base_engine_args["connect_args"]["server_settings"].update({
+        "statement_cache_size": "0",
+        "prepared_statements": "false"
+    })
+else:
+    base_engine_args["pool_pre_ping"] = True
 
 logger.info("Creating database engines with schema: elucide,public")
 # Create database engines
 async_engine = create_async_engine(
     settings.DATABASE_URL_ASYNC,
-    **engine_args
+    **base_engine_args
 )
 
 # Sync engine uses the same configuration but with options instead of server_settings
 sync_engine_args = {
-    **engine_args,
+    **base_engine_args,
     "connect_args": {
-        "options": "-c search_path=elucide,public -c statement_cache_size=0"
+        "options": "-c search_path=elucide,public"
     }
 }
 
 if ENV == "production":
     sync_engine_args["connect_args"]["sslmode"] = "require"
+    sync_engine_args["connect_args"]["options"] += " -c statement_cache_size=0"
 
 sync_engine = create_engine(
     settings.DATABASE_URL_SYNC,
@@ -229,7 +234,7 @@ sync_engine = create_engine(
 
 # Add logging for connection details
 logger.info(f"Async Database URL (masked): {urlparse(settings.DATABASE_URL_ASYNC).hostname}")
-logger.info(f"Async Engine Arguments: {engine_args}")
+logger.info(f"Async Engine Arguments: {base_engine_args}")
 logger.info(f"Sync Engine Arguments: {sync_engine_args}")
 
 logger.info("Creating session factories")
