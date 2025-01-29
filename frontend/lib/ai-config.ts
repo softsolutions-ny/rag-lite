@@ -15,7 +15,6 @@ export interface ModelConfig {
   maxTokens: number;
   temperature: number;
   systemPrompt: string;
-  endpoint?: string;
 }
 
 export const modelConfigs: Record<ModelType, ModelConfig> = {
@@ -97,16 +96,4 @@ export async function storeMessage(messageData: {
   }
 
   return response;
-}
-
-export function validateApiKey(provider: 'openai' | 'deepseek' | 'n8n') {
-  if (provider === 'openai' && !process.env.OPENAI_API_KEY) {
-    throw new Error('OpenAI API key not configured');
-  }
-  if (provider === 'deepseek' && !process.env.DEEPSEEK_API_KEY) {
-    throw new Error('DeepSeek API key not configured');
-  }
-  if (provider === 'n8n' && !process.env.N8N_API_URL) {
-    throw new Error('N8N API URL not configured');
-  }
 }
