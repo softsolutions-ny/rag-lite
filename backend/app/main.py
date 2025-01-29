@@ -16,9 +16,9 @@ async def root():
 
 # Configure CORS with settings
 default_origins = [
-    "http://localhost:3000",
-    "https://elucide.vercel.app",
-    "https://elucide-*.vercel.app"  # Allow all Vercel preview deployments
+    "http://localhost:3000",  # Keep local development
+    "https://elucide.vercel.app",  # Main production domain
+    "https://*.vercel.app"  # Broader wildcard for all Vercel deployments
 ]
 origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else default_origins
 
