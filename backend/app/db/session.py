@@ -2,29 +2,36 @@ from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 import logging
 
 logger = logging.getLogger(__name__)
 
-# Configure engine with PgBouncer settings
+# Configure engine with PgBouncer transaction mode settings
 engine_args = {
     "echo": True,
-    "pool_pre_ping": True,
+    "poolclass": NullPool,  # Disable SQLAlchemy pooling since we're using PgBouncer
     "connect_args": {
-        "options": "-c search_path=elucide,public"
+        "options": "-c search_path=elucide,public",
+        "server_settings": {
+            "statement_cache_size": "0",  # Required for PgBouncer transaction mode
+            "prepared_statements": "false"  # Disable prepared statements
+        }
     }
 }
 
 # Add SSL requirement for production
 if settings.ENV == "production":
     engine_args["connect_args"]["sslmode"] = "require"
-    # Disable prepared statements only for asyncpg
-    if "asyncpg" in settings.DATABASE_URL_ASYNC:
-        engine_args["connect_args"].update({
-            "prepared_statement_cache_size": 0
-        })
+    # Additional settings for PgBouncer transaction mode
+    engine_args.update({
+        "pool_pre_ping": False,  # Disable pool pre-ping with PgBouncer
+        "execution_options": {
+            "isolation_level": "READ_COMMITTED"
+        }
+    })
 
 logger.info(f"Creating async engine with args: {engine_args}")
 
@@ -34,7 +41,7 @@ async_engine = create_async_engine(
     **engine_args
 )
 
-# Create async session factory
+# Create async session factory with specific settings for PgBouncer
 AsyncSessionLocal = sessionmaker(
     async_engine,
     class_=AsyncSession,
