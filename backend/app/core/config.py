@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 from urllib.parse import urlparse, parse_qs
 import logging
 import sys
+from sqlalchemy.pool import NullPool
 
 # Configure logging
 logging.basicConfig(
@@ -142,16 +143,23 @@ class Settings(BaseSettings):
     def DATABASE_URL_ASYNC(self) -> str:
         """Get async database URL."""
         if self.ENV == "production":
-            # Convert to asyncpg URL for production, ensuring clean URL
-            base_url = self.SUPABASE_DATABASE_URL.split('?')[0]  # Remove any query parameters
-            return base_url.replace("postgresql://", "postgresql+asyncpg://")
+            # Ensure credentials are properly included
+            url = self.SUPABASE_DATABASE_URL
+            if not url.startswith("postgresql://postgres.jplojzerdrxmmknoehpi:"):
+                logger.warning("Database URL missing credentials, attempting to reconstruct")
+                url = f"postgresql://postgres.jplojzerdrxmmknoehpi:JKgxGcf1JPoFQaeCYA1f9T0nTpL6Ix@{urlparse(url).netloc}/postgres"
+            return url.replace("postgresql://", "postgresql+asyncpg://")
         return self.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
     @property
     def DATABASE_URL_SYNC(self) -> str:
         """Get sync database URL."""
         if self.ENV == "production":
-            return self.SUPABASE_DATABASE_URL.split('?')[0]  # Remove any query parameters
+            url = self.SUPABASE_DATABASE_URL
+            if not url.startswith("postgresql://postgres.jplojzerdrxmmknoehpi:"):
+                logger.warning("Database URL missing credentials, attempting to reconstruct")
+                url = f"postgresql://postgres.jplojzerdrxmmknoehpi:JKgxGcf1JPoFQaeCYA1f9T0nTpL6Ix@{urlparse(url).netloc}/postgres"
+            return url
         return self.DATABASE_URL
     
     class Config:
@@ -178,20 +186,46 @@ settings.UPLOAD_DIR.mkdir(exist_ok=True)
 # Create database engines with schema configuration
 engine_args = {
     "echo": True,
+    "poolclass": NullPool,  # Disable SQLAlchemy pooling since we're using PgBouncer
     "connect_args": {
-        "server_settings": {"search_path": "elucide,public"}
-    } if ENV == "production" else {},  # Only set server_settings in production
-    "pool_pre_ping": True,
-    "pool_size": 20,  # Increased for connection pooler
-    "max_overflow": 0,  # Disabled overflow for pooler stability
-    "pool_timeout": 30,  # Added timeout for pooler
-    "pool_recycle": 1800  # Recycle connections every 30 minutes
+        "ssl": "require",  # Use require mode for asyncpg
+        "server_settings": {
+            "search_path": "elucide,public",
+            "statement_cache_size": "0",
+            "prepared_statements": "false"
+        }
+    } if ENV == "production" else {},
+    "pool_pre_ping": False,  # Disable pool pre-ping with PgBouncer
+    "execution_options": {
+        "isolation_level": "READ COMMITTED"
+    }
 }
 
 logger.info("Creating database engines with schema: elucide,public")
 # Create database engines
-async_engine = create_async_engine(settings.DATABASE_URL_ASYNC, **engine_args)
-sync_engine = create_engine(settings.DATABASE_URL_SYNC, **engine_args)
+async_engine = create_async_engine(
+    settings.DATABASE_URL_ASYNC,
+    **engine_args
+)
+
+# Sync engine uses the same configuration but with options instead of server_settings
+sync_engine_args = {
+    **engine_args,
+    "connect_args": {
+        "sslmode": "require",  # Use require mode for psycopg2
+        "options": "-c search_path=elucide,public"
+    } if ENV == "production" else {}
+}
+
+sync_engine = create_engine(
+    settings.DATABASE_URL_SYNC,
+    **sync_engine_args
+)
+
+# Add logging for connection details
+logger.info(f"Async Database URL (masked): {urlparse(settings.DATABASE_URL_ASYNC).hostname}")
+logger.info(f"Async Engine Arguments: {engine_args}")
+logger.info(f"Sync Engine Arguments: {sync_engine_args}")
 
 logger.info("Creating session factories")
 # Create session factories
