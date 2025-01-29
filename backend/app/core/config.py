@@ -142,15 +142,16 @@ class Settings(BaseSettings):
     def DATABASE_URL_ASYNC(self) -> str:
         """Get async database URL."""
         if self.ENV == "production":
-            # Convert to asyncpg URL for production
-            return self.SUPABASE_DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+            # Convert to asyncpg URL for production, ensuring clean URL
+            base_url = self.SUPABASE_DATABASE_URL.split('?')[0]  # Remove any query parameters
+            return base_url.replace("postgresql://", "postgresql+asyncpg://")
         return self.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
     @property
     def DATABASE_URL_SYNC(self) -> str:
         """Get sync database URL."""
         if self.ENV == "production":
-            return self.SUPABASE_DATABASE_URL
+            return self.SUPABASE_DATABASE_URL.split('?')[0]  # Remove any query parameters
         return self.DATABASE_URL
     
     class Config:
@@ -178,29 +179,19 @@ settings.UPLOAD_DIR.mkdir(exist_ok=True)
 engine_args = {
     "echo": True,
     "connect_args": {
-        "server_settings": {
-            "search_path": "elucide,public"
-        }
-    },
+        "server_settings": {"search_path": "elucide,public"}
+    } if ENV == "production" else {},  # Only set server_settings in production
     "pool_pre_ping": True,
     "pool_size": 20,  # Increased for connection pooler
-    "max_overflow": 0  # Disabled overflow for pooler stability
+    "max_overflow": 0,  # Disabled overflow for pooler stability
+    "pool_timeout": 30,  # Added timeout for pooler
+    "pool_recycle": 1800  # Recycle connections every 30 minutes
 }
 
 logger.info("Creating database engines with schema: elucide,public")
 # Create database engines
-async_engine = create_async_engine(
-    settings.DATABASE_URL_ASYNC,
-    **engine_args,
-    pool_timeout=30,  # Added timeout for pooler
-    pool_recycle=1800  # Recycle connections every 30 minutes
-)
-sync_engine = create_engine(
-    settings.DATABASE_URL_SYNC,
-    **engine_args,
-    pool_timeout=30,
-    pool_recycle=1800
-)
+async_engine = create_async_engine(settings.DATABASE_URL_ASYNC, **engine_args)
+sync_engine = create_engine(settings.DATABASE_URL_SYNC, **engine_args)
 
 logger.info("Creating session factories")
 # Create session factories
