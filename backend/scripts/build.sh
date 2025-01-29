@@ -12,6 +12,6 @@ pip install -r ./requirements/prod.txt
 
 # Run database migrations
 echo "Running database migrations..."
-ENV=production alembic upgrade head
+ENV=production python -m alembic upgrade head
 
 echo "Build completed successfully!" 
