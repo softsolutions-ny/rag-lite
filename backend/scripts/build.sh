@@ -15,7 +15,8 @@ echo "Installing alembic..."
 pip install alembic
 
 # Run database migrations
-echo "Running database migrations..."
-ENV=production python -m alembic upgrade head
+echo "Running database migrations with production settings..."
+export ENV=production
+python -m alembic upgrade head
 
 echo "Build completed successfully!" 

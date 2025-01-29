@@ -31,7 +31,7 @@ for key in sorted(os.environ.keys()):
         else:
             logger.info(f"{key}: {value}")
 
-# Determine environment and load appropriate .env file
+# Determine environment
 ENV = os.getenv("ENV", "development")
 logger.info(f"Initial ENV value: {ENV}")
 
@@ -39,23 +39,25 @@ if ENV not in ["development", "production"]:
     logger.error(f"Invalid environment: {ENV}")
     raise ValueError(f"Invalid environment: {ENV}. Must be 'development' or 'production'")
 
-env_file = ".env.production" if ENV == "production" else ".env"
-env_path = Path(__file__).parent.parent.parent / env_file
-
-logger.info(f"Looking for environment file: {env_path} (absolute: {env_path.absolute()})")
-
-if not env_path.exists():
-    logger.error(f"Environment file not found: {env_path}")
-    raise FileNotFoundError(f"Environment file not found: {env_path}")
-
-# Load environment variables
-logger.info(f"Loading environment variables from: {env_path}")
-load_dotenv(dotenv_path=env_path, override=True)
+# Only load .env file in development
+if ENV == "development":
+    env_file = ".env"
+    env_path = Path(__file__).parent.parent.parent / env_file
+    
+    logger.info(f"Looking for environment file: {env_path} (absolute: {env_path.absolute()})")
+    
+    if env_path.exists():
+        logger.info(f"Loading environment variables from: {env_path}")
+        load_dotenv(dotenv_path=env_path, override=True)
+    else:
+        logger.warning(f"Development environment file not found: {env_path}")
+else:
+    logger.info("Production environment detected, using system environment variables")
 
 # Verify environment after loading .env
-logger.info(f"ENV after loading .env: {os.getenv('ENV')}")
-logger.info(f"DATABASE_URL after loading .env: {bool(os.getenv('DATABASE_URL'))}")
-logger.info(f"SUPABASE_DATABASE_URL after loading .env: {bool(os.getenv('SUPABASE_DATABASE_URL'))}")
+logger.info(f"ENV after environment setup: {os.getenv('ENV')}")
+logger.info(f"DATABASE_URL available: {bool(os.getenv('DATABASE_URL'))}")
+logger.info(f"SUPABASE_DATABASE_URL available: {bool(os.getenv('SUPABASE_DATABASE_URL'))}")
 
 class Settings(BaseSettings):
     # Environment
