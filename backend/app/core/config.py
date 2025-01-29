@@ -177,13 +177,30 @@ settings.UPLOAD_DIR.mkdir(exist_ok=True)
 # Create database engines with schema configuration
 engine_args = {
     "echo": True,
-    "connect_args": {"options": "-c search_path=elucide,public"}
+    "connect_args": {
+        "server_settings": {
+            "search_path": "elucide,public"
+        }
+    },
+    "pool_pre_ping": True,
+    "pool_size": 20,  # Increased for connection pooler
+    "max_overflow": 0  # Disabled overflow for pooler stability
 }
 
-logger.info("Creating database engines")
+logger.info("Creating database engines with schema: elucide,public")
 # Create database engines
-async_engine = create_async_engine(settings.DATABASE_URL_ASYNC, **engine_args)
-sync_engine = create_engine(settings.DATABASE_URL_SYNC, **engine_args)
+async_engine = create_async_engine(
+    settings.DATABASE_URL_ASYNC,
+    **engine_args,
+    pool_timeout=30,  # Added timeout for pooler
+    pool_recycle=1800  # Recycle connections every 30 minutes
+)
+sync_engine = create_engine(
+    settings.DATABASE_URL_SYNC,
+    **engine_args,
+    pool_timeout=30,
+    pool_recycle=1800
+)
 
 logger.info("Creating session factories")
 # Create session factories
