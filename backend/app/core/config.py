@@ -188,18 +188,21 @@ engine_args = {
     "echo": True,
     "poolclass": NullPool,  # Disable SQLAlchemy pooling since we're using PgBouncer
     "connect_args": {
-        "ssl": "require",  # Use require mode for asyncpg
         "server_settings": {
             "search_path": "elucide,public",
             "statement_cache_size": "0",
             "prepared_statements": "false"
         }
-    } if ENV == "production" else {},
-    "pool_pre_ping": False,  # Disable pool pre-ping with PgBouncer
+    },  # Apply these settings in both environments
+    "pool_pre_ping": False,
     "execution_options": {
         "isolation_level": "READ COMMITTED"
     }
 }
+
+# Add SSL settings for production
+if ENV == "production":
+    engine_args["connect_args"]["ssl"] = "require"
 
 logger.info("Creating database engines with schema: elucide,public")
 # Create database engines
@@ -212,10 +215,12 @@ async_engine = create_async_engine(
 sync_engine_args = {
     **engine_args,
     "connect_args": {
-        "sslmode": "require",  # Use require mode for psycopg2
-        "options": "-c search_path=elucide,public"
-    } if ENV == "production" else {}
+        "options": "-c search_path=elucide,public -c statement_cache_size=0"
+    }
 }
+
+if ENV == "production":
+    sync_engine_args["connect_args"]["sslmode"] = "require"
 
 sync_engine = create_engine(
     settings.DATABASE_URL_SYNC,
