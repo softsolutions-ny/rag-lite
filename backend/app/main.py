@@ -15,7 +15,12 @@ async def root():
     return {"status": "OK", "service": "Elucide API", "version": "0.1.0"}
 
 # Configure CORS with settings
-origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else ["http://localhost:3000"]
+default_origins = [
+    "http://localhost:3000",
+    "https://elucide.vercel.app",
+    "https://elucide-*.vercel.app"  # Allow all Vercel preview deployments
+]
+origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else default_origins
 
 app.add_middleware(
     CORSMiddleware,
