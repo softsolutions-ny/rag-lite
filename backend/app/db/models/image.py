@@ -11,6 +11,7 @@ def utcnow_with_timezone():
 
 class Image(Base):
     __tablename__ = "images"
+    __table_args__ = {'schema': 'elucide'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     filename = Column(String, nullable=False)
@@ -33,11 +34,12 @@ class Image(Base):
 
 class ImageProcessing(Base):
     __tablename__ = "image_processings"
+    __table_args__ = {'schema': 'elucide'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     job_id = Column(String, unique=True, nullable=False)
     user_id = Column(String, nullable=False)
-    image_id = Column(UUID(as_uuid=True), ForeignKey("images.id"))
+    image_id = Column(UUID(as_uuid=True), ForeignKey("elucide.images.id"))
     
     # Processing metadata
     status = Column(String, nullable=False)  # pending, processing, completed, error

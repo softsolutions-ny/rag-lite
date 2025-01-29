@@ -17,6 +17,15 @@ interface ThreadsState {
 
 type SetState = StoreApi<ThreadsState>['setState'];
 
+// Common fetch options for all requests
+const commonFetchOptions: RequestInit = {
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+};
+
 export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
   threads: [],
   isLoading: false,
@@ -26,7 +35,11 @@ export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads?user_id=${userId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads?user_id=${userId}`,
+        {
+          ...commonFetchOptions,
+          method: 'GET',
+        }
       );
       if (!response.ok) throw new Error('Failed to fetch threads');
       const threads = await response.json();
@@ -42,8 +55,8 @@ export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads`,
         {
+          ...commonFetchOptions,
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: userId }),
         }
       );
@@ -66,15 +79,14 @@ export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${threadId}`,
         {
+          ...commonFetchOptions,
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         }
       );
       if (!response.ok) throw new Error('Failed to update thread');
       const updatedThread = await response.json();
 
-      // Update the thread in state, ensuring folder_id is properly updated
       set((state: ThreadsState) => {
         const updatedThreads = state.threads.map((t: Thread) =>
           t.id === threadId
@@ -104,7 +116,10 @@ export const useThreadsStore = create<ThreadsState>((set: SetState) => ({
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${threadId}`,
-        { method: 'DELETE' }
+        {
+          ...commonFetchOptions,
+          method: 'DELETE',
+        }
       );
       if (!response.ok) throw new Error('Failed to delete thread');
       set((state: ThreadsState) => ({

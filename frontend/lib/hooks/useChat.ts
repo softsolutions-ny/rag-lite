@@ -36,6 +36,12 @@ export function useChat({
 
   const append = useCallback(
     async (message: { content: string; role?: 'user' | 'assistant' | 'system' }) => {
+      if (!threadId) {
+        console.error("[useChat] No thread ID provided");
+        if (onError) onError(new Error("No thread ID provided"));
+        return;
+      }
+
       try {
         setIsLoading(true);
         const userMessage: Message = {

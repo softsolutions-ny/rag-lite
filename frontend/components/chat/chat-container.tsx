@@ -158,11 +158,16 @@ export function ChatContainer() {
         currentThreadId,
         model,
       });
-      if (!currentThreadId) {
+
+      // Create a new thread first if we don't have one
+      let threadId = currentThreadId;
+      if (!threadId) {
         const newThread = await createThread(userId);
         console.log("[ChatContainer] Created new thread:", newThread.id);
-        setCurrentThreadId(newThread.id);
-        await router.push(`/dashboard/chat?thread=${newThread.id}`);
+        threadId = newThread.id;
+        setCurrentThreadId(threadId);
+        await router.push(`/dashboard/chat?thread=${threadId}`);
+        // Wait for state to update
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
@@ -192,7 +197,7 @@ export function ChatContainer() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            thread_id: currentThreadId,
+            thread_id: threadId,
             role: userMessage.role,
             content: userMessage.content,
             model: userMessage.model,
@@ -206,7 +211,7 @@ export function ChatContainer() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            thread_id: currentThreadId,
+            thread_id: threadId,
             role: assistantMessage.role,
             content: assistantMessage.content,
             model: assistantMessage.model,
@@ -217,21 +222,19 @@ export function ChatContainer() {
         setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
 
         // Update thread timestamp
-        if (currentThreadId) {
-          try {
-            const currentThread = threads.find((t) => t.id === currentThreadId);
-            if (currentThread) {
-              await updateThread(currentThreadId, {
-                title: currentThread.title || undefined,
-                updated_at: new Date().toISOString(),
-              });
-            }
-          } catch (error) {
-            console.error(
-              "[ChatContainer] Error updating thread timestamp:",
-              error
-            );
+        try {
+          const currentThread = threads.find((t) => t.id === threadId);
+          if (currentThread) {
+            await updateThread(threadId, {
+              title: currentThread.title || undefined,
+              updated_at: new Date().toISOString(),
+            });
           }
+        } catch (error) {
+          console.error(
+            "[ChatContainer] Error updating thread timestamp:",
+            error
+          );
         }
       } else {
         // For regular messages, use the chat API
