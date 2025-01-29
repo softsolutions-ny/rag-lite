@@ -140,23 +140,31 @@ class Settings(BaseSettings):
     
     @property
     def DATABASE_URL_ASYNC(self) -> str:
-        """Async database URL (using asyncpg)"""
-        base_url = self.DATABASE_URL_BASE
-        if not base_url:
-            logger.error("Database URL is not configured")
-            raise ValueError("Database URL is not configured")
-        async_url = f"postgresql+asyncpg://{base_url.replace('postgresql://', '')}"
-        logger.info(f"Async database URL: {urlparse(async_url).scheme}://{urlparse(async_url).hostname}:{urlparse(async_url).port}{urlparse(async_url).path}")
-        return async_url
+        """Get async database URL."""
+        if self.ENV == "production":
+            # Add PgBouncer specific parameters
+            url = self.SUPABASE_DATABASE_URL
+            if "?" not in url:
+                url += "?"
+            else:
+                url += "&"
+            url += "prepared_statement_cache_size=0&statement_cache_size=0"
+            return url.replace("postgresql://", "postgresql+asyncpg://")
+        return self.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
     @property
     def DATABASE_URL_SYNC(self) -> str:
-        """Sync database URL (using psycopg2)"""
-        if not self.DATABASE_URL_BASE:
-            logger.error("Database URL is not configured")
-            raise ValueError("Database URL is not configured")
-        logger.info(f"Sync database URL: {urlparse(self.DATABASE_URL_BASE).scheme}://{urlparse(self.DATABASE_URL_BASE).hostname}:{urlparse(self.DATABASE_URL_BASE).port}{urlparse(self.DATABASE_URL_BASE).path}")
-        return self.DATABASE_URL_BASE
+        """Get sync database URL."""
+        if self.ENV == "production":
+            # Add PgBouncer specific parameters
+            url = self.SUPABASE_DATABASE_URL
+            if "?" not in url:
+                url += "?"
+            else:
+                url += "&"
+            url += "prepared_statement_cache_size=0&statement_cache_size=0"
+            return url
+        return self.DATABASE_URL
     
     class Config:
         case_sensitive = True

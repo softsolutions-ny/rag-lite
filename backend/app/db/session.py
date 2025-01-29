@@ -4,24 +4,43 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.core.config import settings
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Configure engine with PgBouncer settings
+engine_args = {
+    "echo": True,
+    "pool_pre_ping": True,
+    "connect_args": {
+        "statement_cache_size": 0,  # Disable prepared statements for PgBouncer
+        "prepared_statement_cache_size": 0,  # Disable prepared statement cache
+        "options": "-c search_path=elucide,public"
+    }
+}
+
+# Add SSL requirement for production
+if settings.ENV == "production":
+    engine_args["connect_args"]["sslmode"] = "require"
+
+logger.info(f"Creating async engine with args: {engine_args}")
 
 # Create async engine
-engine = create_async_engine(
+async_engine = create_async_engine(
     settings.DATABASE_URL_ASYNC,
-    pool_pre_ping=True,
-    echo=settings.DB_ECHO if hasattr(settings, 'DB_ECHO') else False,
+    **engine_args
 )
 
 # Create async session factory
-async_session_factory = sessionmaker(
-    engine,
+AsyncSessionLocal = sessionmaker(
+    async_engine,
     class_=AsyncSession,
-    expire_on_commit=False,
+    expire_on_commit=False
 )
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Dependency for getting async database sessions."""
-    async with async_session_factory() as session:
+    async with AsyncSessionLocal() as session:
         try:
             yield session
             await session.commit()
