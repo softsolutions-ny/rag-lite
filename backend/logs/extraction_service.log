@@ -1,8 +1,0 @@
-[2025-01-24 10:36:18] INFO [extraction_service] [extraction_service.py:38] Starting extraction for job 9441bcee-31ea-417e-94ed-81c1081b4c1a
-[2025-01-24 10:36:33] INFO [extraction_service] [extraction_service.py:67] Extraction completed for job 9441bcee-31ea-417e-94ed-81c1081b4c1a
-[2025-01-24 10:38:42] INFO [extraction_service] [extraction_service.py:38] Starting extraction for job 0cef1cdb-ef48-4ac9-9546-ba1aa649a59c
-[2025-01-24 10:38:49] INFO [extraction_service] [extraction_service.py:67] Extraction completed for job 0cef1cdb-ef48-4ac9-9546-ba1aa649a59c
-[2025-01-24 10:40:31] INFO [extraction_service] [extraction_service.py:38] Starting extraction for job a5095611-675d-4311-8f1a-a45522784205
-[2025-01-24 10:40:40] INFO [extraction_service] [extraction_service.py:67] Extraction completed for job a5095611-675d-4311-8f1a-a45522784205
-[2025-01-24 10:42:13] INFO [extraction_service] [extraction_service.py:38] Starting extraction for job def217e8-2cfe-489e-b099-8c426c8f3e83
-[2025-01-24 10:43:32] INFO [extraction_service] [extraction_service.py:67] Extraction completed for job def217e8-2cfe-489e-b099-8c426c8f3e83
