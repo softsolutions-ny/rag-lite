@@ -66,6 +66,13 @@ export function useAuthFetch() {
 }
 
 // Common API response types
+export interface APIResponse {
+  jobs: Array<{
+    job_id: string;
+    filename: string;
+  }>;
+}
+
 export interface JobStatusResponse {
   status: "pending" | "processing" | "completed" | "error";
   error?: string;
