@@ -142,28 +142,15 @@ class Settings(BaseSettings):
     def DATABASE_URL_ASYNC(self) -> str:
         """Get async database URL."""
         if self.ENV == "production":
-            # Add PgBouncer specific parameters
-            url = self.SUPABASE_DATABASE_URL
-            if "?" not in url:
-                url += "?"
-            else:
-                url += "&"
-            url += "prepared_statement_cache_size=0&statement_cache_size=0"
-            return url.replace("postgresql://", "postgresql+asyncpg://")
+            # Convert to asyncpg URL for production
+            return self.SUPABASE_DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
         return self.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
     @property
     def DATABASE_URL_SYNC(self) -> str:
         """Get sync database URL."""
         if self.ENV == "production":
-            # Add PgBouncer specific parameters
-            url = self.SUPABASE_DATABASE_URL
-            if "?" not in url:
-                url += "?"
-            else:
-                url += "&"
-            url += "prepared_statement_cache_size=0&statement_cache_size=0"
-            return url
+            return self.SUPABASE_DATABASE_URL
         return self.DATABASE_URL
     
     class Config:

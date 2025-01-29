@@ -13,8 +13,6 @@ engine_args = {
     "echo": True,
     "pool_pre_ping": True,
     "connect_args": {
-        "statement_cache_size": 0,  # Disable prepared statements for PgBouncer
-        "prepared_statement_cache_size": 0,  # Disable prepared statement cache
         "options": "-c search_path=elucide,public"
     }
 }
@@ -22,6 +20,11 @@ engine_args = {
 # Add SSL requirement for production
 if settings.ENV == "production":
     engine_args["connect_args"]["sslmode"] = "require"
+    # Disable prepared statements only for asyncpg
+    if "asyncpg" in settings.DATABASE_URL_ASYNC:
+        engine_args["connect_args"].update({
+            "prepared_statement_cache_size": 0
+        })
 
 logger.info(f"Creating async engine with args: {engine_args}")
 
