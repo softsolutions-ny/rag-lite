@@ -22,12 +22,10 @@ from app.db.models import Base
 
 # Get database URL from environment
 def get_url():
-    user = os.getenv("POSTGRES_USER", "postgres")
-    password = os.getenv("POSTGRES_PASSWORD", "")
-    host = os.getenv("POSTGRES_HOST", "localhost")
-    port = os.getenv("POSTGRES_PORT", "5432")
-    db = os.getenv("POSTGRES_DB", "postgres")
-    return f"postgresql://{user}:{password}@{host}:{port}/{db}"
+    env = os.getenv("ENV", "development")
+    if env == "production":
+        return os.getenv("SUPABASE_DATABASE_URL")
+    return os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres")
 
 # Set the SQLAlchemy URL in the alembic.ini file
 config.set_main_option("sqlalchemy.url", get_url())

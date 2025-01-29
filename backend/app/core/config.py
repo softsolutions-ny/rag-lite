@@ -11,12 +11,12 @@ from contextlib import asynccontextmanager
 load_dotenv()
 
 class Settings(BaseSettings):
+    # Environment
+    ENV: str = os.getenv("ENV", "development")  # 'development' or 'production'
+    
     # Database settings
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "")
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "")
-    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
-    POSTGRES_PORT: int = int(os.getenv("POSTGRES_PORT", "5432"))
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres")
+    SUPABASE_DATABASE_URL: str = os.getenv("SUPABASE_DATABASE_URL", "")
     
     # Redis settings
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
@@ -50,7 +50,12 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL_BASE(self) -> str:
         """Base PostgreSQL URL without driver"""
-        return f"{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        if self.ENV == "production":
+            # Use Supabase in production
+            return self.SUPABASE_DATABASE_URL.replace("postgresql://", "")
+        else:
+            # Use local database in development
+            return self.DATABASE_URL.replace("postgresql://", "")
     
     @property
     def DATABASE_URL_ASYNC(self) -> str:
