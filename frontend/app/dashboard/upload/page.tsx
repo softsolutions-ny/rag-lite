@@ -7,7 +7,7 @@ import JSZip from "jszip";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { useImageStore } from "@/lib/store/images";
-import { ImageResult, FileWithUrl } from "@/lib/types";
+import { FileWithUrl, ImageAnalysis, JobStatus } from "@/lib/types";
 import { JobStatusResponse } from "@/lib/store/api";
 import {
   Dialog,
@@ -105,6 +105,19 @@ const JobStatusMonitor = ({
   return null;
 };
 
+interface ImageResult {
+  jobId: string;
+  filename: string;
+  status: JobStatus;
+  imageUrl?: string;
+  result?: {
+    text: string;
+    analysis?: ImageAnalysis;
+  };
+  processing_time?: number;
+  error?: string;
+}
+
 export default function UploadPage() {
   const [results, setResults] = useState<ImageResult[]>([]);
   const [selectedImage, setSelectedImage] = useState<ImageResult | null>(null);
@@ -112,13 +125,15 @@ export default function UploadPage() {
   const [processingMessage, setProcessingMessage] = useState<string>("");
   const imageStore = useImageStore();
 
-  // Update handleStatusUpdate to use React Query data
   const handleStatusUpdate = useCallback(
     (jobId: string, status: JobStatusResponse) => {
       setResults((prev) =>
         prev.map((s) => {
           if (s.jobId === jobId) {
-            const analysis = status.analysis || status.image?.analysis;
+            // Ensure analysis is properly typed
+            const analysis = (status.analysis || status.image?.analysis) as
+              | ImageAnalysis
+              | undefined;
             const result = analysis
               ? {
                   text: analysis.description,
@@ -128,7 +143,7 @@ export default function UploadPage() {
 
             return {
               ...s,
-              status: status.status,
+              status: status.status as JobStatus,
               result,
               processing_time:
                 status.stats?.duration_seconds || status.processing_time,
@@ -156,13 +171,14 @@ export default function UploadPage() {
         setProcessingMessage(`Uploading ${processedFiles.length} images...`);
         const filesWithUrls = processedFiles.map(createFileWithUrl);
 
-        const response = await imageStore.uploadImages(processedFiles);
+        const response: { jobs: Array<{ job_id: string; filename: string }> } =
+          await imageStore.uploadImages(processedFiles);
 
         const newResults = response.jobs
           .map((job) => ({
             jobId: job.job_id,
             filename: job.filename,
-            status: "pending" as const,
+            status: "pending" as JobStatus,
             imageUrl: filesWithUrls.find((f) => f.file.name === job.filename)
               ?.url,
           }))
