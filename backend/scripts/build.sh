@@ -14,9 +14,20 @@ pip install -r ./requirements/prod.txt
 echo "Installing alembic..."
 pip install alembic
 
-# Run database migrations
-echo "Running database migrations with production settings..."
+# Verify database connection
+echo "Verifying database connection..."
 export ENV=production
-python -m alembic upgrade head
+python verify_db.py
 
-echo "Build completed successfully!" 
+if [ $? -eq 0 ]; then
+    echo "Database connection verified successfully!"
+    
+    # Run database migrations
+    echo "Running database migrations with production settings..."
+    python -m alembic upgrade head
+    
+    echo "Build completed successfully!"
+else
+    echo "Failed to verify database connection. Check your SUPABASE_DATABASE_URL and network settings."
+    exit 1
+fi 
