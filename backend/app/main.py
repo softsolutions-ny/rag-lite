@@ -9,6 +9,11 @@ logger = setup_logger("main")
 
 app = FastAPI(title="Elucide API")
 
+# Add root endpoint here
+@app.get("/")
+async def root():
+    return {"status": "OK", "service": "Elucide API", "version": "0.1.0"}
+
 # Configure CORS with settings
 origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else ["http://localhost:3000"]
 
