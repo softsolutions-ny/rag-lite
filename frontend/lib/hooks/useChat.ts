@@ -46,7 +46,7 @@ export function useChat({
 
         // Start streaming assistant response
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/stream`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/chat`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,6 +57,8 @@ export function useChat({
                 role: msg.role,
                 content: msg.content,
               })),
+              temperature: 0.7,
+              max_tokens: 1000,
             }),
             signal: abortControllerRef.current.signal,
           }
