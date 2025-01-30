@@ -9,6 +9,7 @@ export class MessageCache {
   private static CACHE_PREFIX = 'elucide_chat_';
   private static MESSAGE_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
   private static OPTIMISTIC_PREFIX = 'temp_';
+  private static PENDING_MESSAGES = new Map<string, Message[]>();
 
   static getThreadKey(threadId: string): string {
     return `${this.CACHE_PREFIX}thread_${threadId}`;
@@ -22,9 +23,42 @@ export class MessageCache {
     return `${this.OPTIMISTIC_PREFIX}${Date.now()}_${Math.random().toString(36).slice(2)}`;
   }
 
+  static addPendingMessage(threadId: string, message: Message): void {
+    const pending = this.PENDING_MESSAGES.get(threadId) || [];
+    pending.push(message);
+    this.PENDING_MESSAGES.set(threadId, pending);
+
+    // Also add to cache immediately
+    const cachedMessages = this.getCachedMessages(threadId) || [];
+    this.cacheMessages(threadId, [...cachedMessages, message]);
+  }
+
+  static removePendingMessage(threadId: string, messageId: string): void {
+    const pending = this.PENDING_MESSAGES.get(threadId) || [];
+    const updatedPending = pending.filter(msg => msg.id !== messageId);
+    
+    if (updatedPending.length === 0) {
+      this.PENDING_MESSAGES.delete(threadId);
+    } else {
+      this.PENDING_MESSAGES.set(threadId, updatedPending);
+    }
+  }
+
+  static hasPendingMessages(threadId: string): boolean {
+    return this.PENDING_MESSAGES.has(threadId) && this.PENDING_MESSAGES.get(threadId)!.length > 0;
+  }
+
+  static getPendingMessages(threadId: string): Message[] {
+    return this.PENDING_MESSAGES.get(threadId) || [];
+  }
+
   static cacheMessages(threadId: string, messages: Message[]): void {
+    // Combine with any pending messages
+    const pending = this.PENDING_MESSAGES.get(threadId) || [];
+    const allMessages = [...messages, ...pending];
+    
     const cache: ThreadCache = {
-      messages,
+      messages: allMessages,
       lastUpdated: Date.now(),
     };
     localStorage.setItem(this.getThreadKey(threadId), JSON.stringify(cache));
@@ -44,7 +78,9 @@ export class MessageCache {
         return null;
       }
 
-      return cache.messages;
+      // Combine cached messages with any pending messages
+      const pending = this.PENDING_MESSAGES.get(threadId) || [];
+      return [...cache.messages, ...pending];
     } catch (error) {
       console.error('Error parsing cached messages:', error);
       localStorage.removeItem(this.getThreadKey(threadId));

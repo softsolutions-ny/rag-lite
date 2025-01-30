@@ -91,18 +91,21 @@ export function ChatContainer() {
           (msg) => !MessageCache.isOptimisticId(msg.id)
         );
 
-        setInitialMessages(cleanedMessages);
-        setLocalMessages([]);
-        setModelFromMessages(cleanedMessages);
+        // Check for any pending messages that need to be preserved
+        const pendingMessages =
+          MessageCache.getPendingMessages(currentThreadId);
+        const allMessages = [...cleanedMessages, ...pendingMessages];
 
-        // Cache the fetched messages
+        setInitialMessages(allMessages);
+        setLocalMessages([]);
+        setModelFromMessages(allMessages);
+
+        // Cache the fetched messages (pending messages will be added automatically)
         if (cleanedMessages.length > 0) {
           MessageCache.cacheMessages(currentThreadId, cleanedMessages);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
-        // Clear cache on error to prevent stale data
-        MessageCache.clearCache(currentThreadId);
       } finally {
         if (isMounted) {
           setIsLoadingThread(false);
@@ -248,10 +251,54 @@ export function ChatContainer() {
         });
 
         if (content.trim() && !image_url) {
-          await append({
+          // Create optimistic message
+          const optimisticMessage = {
+            id: MessageCache.generateOptimisticId(),
+            content: content.trim(),
+            role: "user" as const,
+            thread_id: currentThreadId,
+            model,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+
+          // Add to pending messages
+          MessageCache.addPendingMessage(currentThreadId, optimisticMessage);
+
+          // Start the append operation
+          const appendPromise = append({
             content: content.trim(),
             role: "user",
           });
+
+          // Update thread timestamp optimistically
+          try {
+            const currentThread = threads.find((t) => t.id === currentThreadId);
+            if (currentThread) {
+              await updateThread(
+                currentThreadId,
+                {
+                  title: currentThread.title || undefined,
+                  updated_at: new Date().toISOString(),
+                },
+                true
+              );
+            }
+          } catch (error) {
+            console.error(
+              "[ChatContainer] Error updating thread timestamp:",
+              error
+            );
+          }
+
+          // Wait for the append to complete
+          await appendPromise;
+
+          // Remove from pending once complete
+          MessageCache.removePendingMessage(
+            currentThreadId,
+            optimisticMessage.id
+          );
         } else if (image_url && imageAnalysis) {
           // Handle image messages
           const userMessage = await messageActions.createMessage(
@@ -269,8 +316,12 @@ export function ChatContainer() {
             model
           );
 
-          // Update UI
+          // Update UI and cache
           setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
+          MessageCache.cacheMessages(currentThreadId, [
+            userMessage,
+            assistantMessage,
+          ]);
 
           // Update thread timestamp optimistically
           try {
@@ -282,7 +333,7 @@ export function ChatContainer() {
                   title: currentThread.title || undefined,
                   updated_at: new Date().toISOString(),
                 },
-                true // Enable optimistic updates
+                true
               );
             }
           } catch (error) {
@@ -296,6 +347,20 @@ export function ChatContainer() {
         console.log("[ChatContainer] Message submitted successfully");
       } catch (error) {
         console.error("[ChatContainer] Error submitting message:", error);
+        // Remove pending message on error
+        if (content.trim() && !image_url) {
+          const pendingMessages =
+            MessageCache.getPendingMessages(currentThreadId);
+          const failedMessage = pendingMessages.find(
+            (m) => m.content === content.trim()
+          );
+          if (failedMessage) {
+            MessageCache.removePendingMessage(
+              currentThreadId,
+              failedMessage.id
+            );
+          }
+        }
       }
     },
     [userId, currentThreadId, model, append, threads, updateThread]
