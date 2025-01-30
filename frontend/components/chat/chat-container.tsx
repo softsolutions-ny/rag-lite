@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { ScrollArea } from "../ui/scroll-area";
@@ -14,6 +21,7 @@ import { Message } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { MessageCache } from "@/lib/services/cache";
+import { cn } from "@/lib/utils";
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -40,42 +48,34 @@ export function ChatContainer() {
     }
   }, []);
 
-  // Update currentThreadId when URL changes
-  useEffect(() => {
+  // Optimistically update UI on thread change
+  useLayoutEffect(() => {
     const param = searchParams.get("thread");
-    console.log("[ChatContainer] URL thread param changed:", param);
-
-    // Immediately update the current thread ID
-    setCurrentThreadId(param as string | undefined);
-
-    // Clear messages if no thread selected
-    if (!param) {
+    if (param !== currentThreadId) {
+      setCurrentThreadId(param as string | undefined);
       setInitialMessages([]);
       setLocalMessages([]);
-      return;
+
+      if (!param) return;
+
+      // Check cache immediately
+      const cachedMessages = MessageCache.getCachedMessages(param);
+      if (cachedMessages) {
+        const cleanedMessages = cachedMessages.filter(
+          (msg) => !MessageCache.isOptimisticId(msg.id)
+        );
+        setInitialMessages(cleanedMessages);
+        setModelFromMessages(cleanedMessages);
+      } else {
+        setIsLoadingThread(true);
+      }
     }
+  }, [searchParams, currentThreadId, setModelFromMessages]);
 
-    // Check cache first before setting loading state
-    const cachedMessages = MessageCache.getCachedMessages(param);
-    if (cachedMessages) {
-      console.log("[ChatContainer] Using cached messages");
-      // Remove any optimistic messages from cache before using it
-      const cleanedMessages = cachedMessages.filter(
-        (msg) => !MessageCache.isOptimisticId(msg.id)
-      );
-      setInitialMessages(cleanedMessages);
-      setLocalMessages([]);
-      setModelFromMessages(cleanedMessages);
-      return;
-    }
-
-    // Only set loading state if we need to fetch
-    setIsLoadingThread(true);
-  }, [searchParams, setModelFromMessages]);
-
-  // Separate effect for fetching messages to avoid blocking UI
+  // Separate effect for fetching messages
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const fetchMessages = async () => {
       if (!currentThreadId || !isLoadingThread) return;
@@ -84,9 +84,6 @@ export function ChatContainer() {
         const messages = await messageActions.fetchMessages(currentThreadId);
         if (!isMounted) return;
 
-        console.log("[ChatContainer] Fetched messages:", messages.length);
-
-        // Remove any optimistic messages before setting state
         const cleanedMessages = messages.filter(
           (msg) => !MessageCache.isOptimisticId(msg.id)
         );
@@ -95,14 +92,14 @@ export function ChatContainer() {
         setLocalMessages([]);
         setModelFromMessages(cleanedMessages);
 
-        // Cache the fetched messages
         if (cleanedMessages.length > 0) {
           MessageCache.cacheMessages(currentThreadId, cleanedMessages);
         }
       } catch (error) {
-        console.error("Error fetching messages:", error);
-        // Clear cache on error to prevent stale data
-        MessageCache.clearCache(currentThreadId);
+        if (!controller.signal.aborted) {
+          console.error("Error fetching messages:", error);
+          MessageCache.clearCache(currentThreadId);
+        }
       } finally {
         if (isMounted) {
           setIsLoadingThread(false);
@@ -114,6 +111,7 @@ export function ChatContainer() {
 
     return () => {
       isMounted = false;
+      controller.abort();
     };
   }, [currentThreadId, isLoadingThread, setModelFromMessages]);
 
@@ -206,7 +204,7 @@ export function ChatContainer() {
     [localMessages, chatMessages]
   );
 
-  // Memoize message rendering
+  // Optimize message rendering with transition
   const memoizedMessages = useMemo(
     () =>
       allMessages
@@ -216,8 +214,18 @@ export function ChatContainer() {
             message.role === "assistant" ||
             message.role === "system"
         )
-        .map((message) => <ChatMessage key={message.id} message={message} />),
-    [allMessages]
+        .map((message) => (
+          <div
+            key={message.id}
+            className={cn(
+              "transition-opacity duration-200",
+              isLoadingThread ? "opacity-50" : "opacity-100"
+            )}
+          >
+            <ChatMessage message={message} />
+          </div>
+        )),
+    [allMessages, isLoadingThread]
   );
 
   // Optimize scroll behavior
@@ -311,7 +319,12 @@ export function ChatContainer() {
     <>
       <div className="absolute inset-0 bottom-[88px]">
         <ScrollArea className="h-full">
-          <div className="flex flex-col gap-4 px-4">
+          <div
+            className={cn(
+              "flex flex-col gap-4 px-4",
+              isLoadingThread && "pointer-events-none"
+            )}
+          >
             {currentThreadId ? (
               <>
                 {memoizedMessages.length > 0 ? (
