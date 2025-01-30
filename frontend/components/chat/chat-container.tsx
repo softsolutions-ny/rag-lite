@@ -45,8 +45,10 @@ export function ChatContainer() {
     const param = searchParams.get("thread");
     console.log("[ChatContainer] URL thread param changed:", param);
 
-    // Immediately update the current thread ID and clear messages
+    // Immediately update the current thread ID
     setCurrentThreadId(param as string | undefined);
+
+    // Clear messages if no thread selected
     if (!param) {
       setInitialMessages([]);
       setLocalMessages([]);
@@ -57,9 +59,13 @@ export function ChatContainer() {
     const cachedMessages = MessageCache.getCachedMessages(param);
     if (cachedMessages) {
       console.log("[ChatContainer] Using cached messages");
-      setInitialMessages(cachedMessages);
+      // Remove any optimistic messages from cache before using it
+      const cleanedMessages = cachedMessages.filter(
+        (msg) => !MessageCache.isOptimisticId(msg.id)
+      );
+      setInitialMessages(cleanedMessages);
       setLocalMessages([]);
-      setModelFromMessages(cachedMessages);
+      setModelFromMessages(cleanedMessages);
       return;
     }
 
@@ -79,16 +85,24 @@ export function ChatContainer() {
         if (!isMounted) return;
 
         console.log("[ChatContainer] Fetched messages:", messages.length);
-        setInitialMessages(messages);
+
+        // Remove any optimistic messages before setting state
+        const cleanedMessages = messages.filter(
+          (msg) => !MessageCache.isOptimisticId(msg.id)
+        );
+
+        setInitialMessages(cleanedMessages);
         setLocalMessages([]);
-        setModelFromMessages(messages);
+        setModelFromMessages(cleanedMessages);
 
         // Cache the fetched messages
-        if (messages.length > 0) {
-          MessageCache.cacheMessages(currentThreadId, messages);
+        if (cleanedMessages.length > 0) {
+          MessageCache.cacheMessages(currentThreadId, cleanedMessages);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
+        // Clear cache on error to prevent stale data
+        MessageCache.clearCache(currentThreadId);
       } finally {
         if (isMounted) {
           setIsLoadingThread(false);
@@ -121,6 +135,13 @@ export function ChatContainer() {
 
       // Update URL and current thread ID
       setCurrentThreadId(newThread.id);
+
+      // Use replace to avoid adding to history stack
+      window.history.replaceState(
+        {},
+        "",
+        `/dashboard/chat?thread=${newThread.id}`
+      );
       router.replace(`/dashboard/chat?thread=${newThread.id}`, {
         scroll: false,
       });

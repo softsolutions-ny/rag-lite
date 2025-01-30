@@ -73,8 +73,8 @@ export function useChat({
       abortControllerRef.current = new AbortController();
 
       try {
-        // Create optimistic user message
-        const tempId = Date.now().toString();
+        // Create optimistic user message with a temporary ID
+        const tempId = MessageCache.generateOptimisticId();
         const userMessage: Message = {
           id: tempId,
           thread_id: threadId,
@@ -85,7 +85,7 @@ export function useChat({
           updated_at: new Date().toISOString(),
         };
 
-        // Update UI immediately
+        // Update UI immediately with optimistic message
         setMessages((prev) => {
           const updated = [...prev, userMessage];
           MessageCache.cacheMessages(threadId, updated);
@@ -123,8 +123,9 @@ export function useChat({
         let content = '';
 
         // Create optimistic assistant message
+        const assistantTempId = MessageCache.generateOptimisticId();
         const assistantMessage: Message = {
-          id: `temp-${Date.now()}`,
+          id: assistantTempId,
           thread_id: threadId,
           role: 'assistant',
           content: '',
@@ -133,6 +134,7 @@ export function useChat({
           updated_at: new Date().toISOString(),
         };
 
+        // Add optimistic assistant message
         setMessages((prev) => {
           const updated = [...prev, assistantMessage];
           MessageCache.cacheMessages(threadId, updated);
@@ -149,7 +151,7 @@ export function useChat({
           // Update the assistant message as we receive chunks
           setMessages((prev) => {
             const updated = prev.map((msg) =>
-              msg.id === assistantMessage.id
+              msg.id === assistantTempId
                 ? { ...msg, content }
                 : msg
             );
@@ -158,18 +160,46 @@ export function useChat({
           });
         }
 
-        // Store final assistant message in background
-        const finalAssistantMessage = {
-          ...assistantMessage,
-          content,
-        };
-        pendingMessagesRef.current.set(assistantMessage.id, finalAssistantMessage);
+        // Create final messages in the backend
+        const [finalUserMessage, finalAssistantMessage] = await Promise.all([
+          messageActions.createMessage(
+            threadId,
+            userMessage.content,
+            'user',
+            model
+          ),
+          messageActions.createMessage(
+            threadId,
+            content,
+            'assistant',
+            model
+          )
+        ]);
+
+        // Replace optimistic messages with real ones
+        setMessages((prev) => {
+          const updated = prev.map((msg) => {
+            if (msg.id === tempId) return finalUserMessage;
+            if (msg.id === assistantTempId) return finalAssistantMessage;
+            return msg;
+          });
+          MessageCache.cacheMessages(threadId, updated);
+          return updated;
+        });
+
+        // Clean up pending messages
+        pendingMessagesRef.current.delete(tempId);
+        pendingMessagesRef.current.delete(assistantTempId);
 
         onFinish?.();
       } catch (error) {
         if (error instanceof Error && error.name !== 'AbortError') {
           console.error('Chat error:', error);
           onError?.(error);
+          
+          // Clean up optimistic messages on error
+          MessageCache.removeOptimisticMessages(threadId);
+          setMessages((prev) => prev.filter(msg => !MessageCache.isOptimisticId(msg.id)));
         }
       } finally {
         setIsLoading(false);

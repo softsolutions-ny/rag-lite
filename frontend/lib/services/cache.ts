@@ -8,9 +8,18 @@ interface ThreadCache {
 export class MessageCache {
   private static CACHE_PREFIX = 'elucide_chat_';
   private static MESSAGE_CACHE_DURATION = 1000 * 60 * 60; // 1 hour
+  private static OPTIMISTIC_PREFIX = 'temp_';
 
   static getThreadKey(threadId: string): string {
     return `${this.CACHE_PREFIX}thread_${threadId}`;
+  }
+
+  static isOptimisticId(id: string): boolean {
+    return id.startsWith(this.OPTIMISTIC_PREFIX);
+  }
+
+  static generateOptimisticId(): string {
+    return `${this.OPTIMISTIC_PREFIX}${Date.now()}_${Math.random().toString(36).slice(2)}`;
   }
 
   static cacheMessages(threadId: string, messages: Message[]): void {
@@ -25,16 +34,22 @@ export class MessageCache {
     const cacheStr = localStorage.getItem(this.getThreadKey(threadId));
     if (!cacheStr) return null;
 
-    const cache: ThreadCache = JSON.parse(cacheStr);
-    const age = Date.now() - cache.lastUpdated;
+    try {
+      const cache: ThreadCache = JSON.parse(cacheStr);
+      const age = Date.now() - cache.lastUpdated;
 
-    // Return null if cache is too old
-    if (age > this.MESSAGE_CACHE_DURATION) {
+      // Return null if cache is too old
+      if (age > this.MESSAGE_CACHE_DURATION) {
+        localStorage.removeItem(this.getThreadKey(threadId));
+        return null;
+      }
+
+      return cache.messages;
+    } catch (error) {
+      console.error('Error parsing cached messages:', error);
       localStorage.removeItem(this.getThreadKey(threadId));
       return null;
     }
-
-    return cache.messages;
   }
 
   static updateMessageInCache(threadId: string, message: Message): void {
@@ -50,6 +65,25 @@ export class MessageCache {
       updatedMessages.push(message);
     }
 
+    this.cacheMessages(threadId, updatedMessages);
+  }
+
+  static replaceOptimisticMessage(threadId: string, optimisticId: string, realMessage: Message): void {
+    const messages = this.getCachedMessages(threadId);
+    if (!messages) return;
+
+    const updatedMessages = messages.map(msg => 
+      msg.id === optimisticId ? realMessage : msg
+    );
+
+    this.cacheMessages(threadId, updatedMessages);
+  }
+
+  static removeOptimisticMessages(threadId: string): void {
+    const messages = this.getCachedMessages(threadId);
+    if (!messages) return;
+
+    const updatedMessages = messages.filter(msg => !this.isOptimisticId(msg.id));
     this.cacheMessages(threadId, updatedMessages);
   }
 
