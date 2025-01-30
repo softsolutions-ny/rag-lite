@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { debounce } from "lodash";
+import { cn } from "@/lib/utils";
 
 import {
   Sidebar,
@@ -75,6 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const currentThreadId = searchParams.get("thread") || undefined;
   const [isNewFolderDialogOpen, setIsNewFolderDialogOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
+  const [isCreatingThread, setIsCreatingThread] = useState(false);
 
   // Debounced fetch functions for subsequent updates
   const debouncedFetch = useMemo(
@@ -109,18 +111,50 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [userId, fetchThreads, fetchFolders, debouncedFetch]);
 
   const handleNewThread = async () => {
-    if (!userId) return;
+    if (!userId || isCreatingThread) return;
 
     try {
-      // Create the actual thread first
+      setIsCreatingThread(true);
+
+      // Create optimistic thread
+      const tempId = `temp-${Date.now()}`;
+      const optimisticThread: Thread = {
+        id: tempId,
+        user_id: userId,
+        title: "New Thread",
+        label: null,
+        folder_id: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      // Update UI optimistically
+      useThreadsStore.setState((state) => ({
+        threads: [optimisticThread, ...state.threads],
+      }));
+
+      // Create the actual thread
       const thread = await createThread();
 
-      // Update the URL without a full navigation
+      // Update URL without a full navigation
       router.replace(`/dashboard/chat?thread=${thread.id}`, {
         scroll: false,
       });
+
+      // Remove optimistic thread and add real thread
+      useThreadsStore.setState((state) => ({
+        threads: state.threads
+          .filter((t) => t.id !== tempId)
+          .map((t) => (t.id === thread.id ? thread : t)),
+      }));
     } catch (error) {
       console.error("Failed to create thread:", error);
+      // Remove optimistic thread on error
+      useThreadsStore.setState((state) => ({
+        threads: state.threads.filter((t) => t.id !== `temp-${Date.now()}`),
+      }));
+    } finally {
+      setIsCreatingThread(false);
     }
   };
 
@@ -257,8 +291,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     size="icon"
                     className="h-7 w-7"
                     onClick={handleNewThread}
+                    disabled={isCreatingThread}
                   >
-                    <PlusIcon className="h-4 w-4" />
+                    <PlusIcon
+                      className={cn(
+                        "h-4 w-4",
+                        isCreatingThread && "animate-spin"
+                      )}
+                    />
                   </NewChatButton>
                 </TooltipTrigger>
                 <TooltipContent>New chat</TooltipContent>
