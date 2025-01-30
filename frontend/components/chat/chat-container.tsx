@@ -13,6 +13,7 @@ import * as messageActions from "@/lib/actions/message";
 import { Message } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
+import { MessageCache } from "@/lib/services/cache";
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -55,9 +56,17 @@ export function ChatContainer() {
       isLoadingRef.current = true;
       const newThread = await createThread();
       console.log("[ChatContainer] Created new thread:", newThread.id);
+
+      // Clear any existing messages and cache
+      setInitialMessages([]);
+      setLocalMessages([]);
+      MessageCache.clearCache(newThread.id);
+
+      // Navigate to the new thread
       router.replace(`/dashboard/chat?thread=${newThread.id}`, {
         scroll: false,
       });
+
       // Focus the input after creating a new thread
       setTimeout(() => {
         chatInputRef.current?.focus();
@@ -77,6 +86,7 @@ export function ChatContainer() {
     const fetchMessages = async () => {
       if (!currentThreadId) {
         setInitialMessages([]);
+        setLocalMessages([]);
         return;
       }
 
@@ -85,14 +95,30 @@ export function ChatContainer() {
       isLoadingRef.current = true;
       setIsLoadingThread(true);
       try {
-        const messages = await messageActions.fetchMessages(currentThreadId);
-        if (!isMounted) return;
+        // Check cache first
+        const cachedMessages = MessageCache.getCachedMessages(currentThreadId);
+        if (cachedMessages) {
+          console.log("[ChatContainer] Using cached messages");
+          setInitialMessages(cachedMessages);
+          setLocalMessages([]);
+        } else {
+          const messages = await messageActions.fetchMessages(currentThreadId);
+          if (!isMounted) return;
 
-        console.log("[ChatContainer] Fetched messages:", messages.length);
-        setInitialMessages(messages);
+          console.log("[ChatContainer] Fetched messages:", messages.length);
+          setInitialMessages(messages);
+          setLocalMessages([]);
+
+          // Cache the fetched messages
+          if (messages.length > 0) {
+            MessageCache.cacheMessages(currentThreadId, messages);
+          }
+        }
+
         // Set model from first message if it exists
-        if (messages.length > 0 && messages[0].model) {
-          setModel(messages[0].model as ModelType);
+        const allMessages = [...initialMessages, ...localMessages];
+        if (allMessages.length > 0 && allMessages[0].model) {
+          setModel(allMessages[0].model as ModelType);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);

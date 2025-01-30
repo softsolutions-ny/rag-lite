@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Thread, Folder } from "@/lib/types";
 import { useFoldersStore, useThreadsStore } from "@/lib/store";
+import { MessageCache } from "@/lib/services/cache";
 
 interface ThreadListProps {
   threads: Thread[];
@@ -114,6 +115,8 @@ export function ThreadList({
   ) => {
     try {
       await moveThreadToFolder(threadId, folderId);
+      // Clear the cache for this thread since its folder has changed
+      MessageCache.clearCache(threadId);
       // Refresh threads to ensure UI is in sync
       await fetchThreads();
     } catch (error) {
