@@ -200,11 +200,14 @@ base_engine_args = {
 # Add production-specific settings
 if ENV == "production":
     base_engine_args["pool_pre_ping"] = False
-    base_engine_args["connect_args"].update({
-        "ssl": "require",
-        "prepared_statement_cache_size": 0,
-        "options": "-c statement_cache_size=0"
+    base_engine_args["connect_args"]["ssl"] = "require"
+    base_engine_args["connect_args"]["server_settings"].update({
+        "statement_cache_size": "0",
+        "prepared_statements": "false"
     })
+    # Add pgbouncer settings
+    base_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
+    base_engine_args["execution_options"]["prepared_statement_cache"] = False
 else:
     base_engine_args["pool_pre_ping"] = True
 
@@ -215,17 +218,20 @@ async_engine = create_async_engine(
     **base_engine_args
 )
 
-# Sync engine uses the same configuration
+# Sync engine uses the same configuration but with options instead of server_settings
 sync_engine_args = {
     **base_engine_args,
     "connect_args": {
-        "options": "-c search_path=elucide,public -c statement_cache_size=0",
-        "prepared_statement_cache_size": 0
+        "options": "-c search_path=elucide,public"
     }
 }
 
 if ENV == "production":
     sync_engine_args["connect_args"]["sslmode"] = "require"
+    sync_engine_args["connect_args"]["options"] += " -c statement_cache_size=0 -c prepared_statements=false"
+    # Add pgbouncer settings
+    sync_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
+    sync_engine_args["execution_options"]["prepared_statement_cache"] = False
 
 sync_engine = create_engine(
     settings.DATABASE_URL_SYNC,
