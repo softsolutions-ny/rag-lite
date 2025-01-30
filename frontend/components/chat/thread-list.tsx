@@ -20,10 +20,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Thread, Folder } from "@/lib/types";
 import { useFoldersStore, useThreadsStore } from "@/lib/store";
-import { useAuth } from "@clerk/nextjs";
 
 interface ThreadListProps {
   threads: Thread[];
@@ -53,9 +52,23 @@ export function ThreadList({
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
     new Set()
   );
-  const { userId } = useAuth();
   const { moveThreadToFolder, fetchThreads } = useThreadsStore();
   const { deleteFolder, updateFolder } = useFoldersStore();
+
+  // Auto-expand folder containing current thread
+  useEffect(() => {
+    if (currentThreadId) {
+      // Find which folder contains the current thread
+      folders.forEach((folder) => {
+        const folderThreads = folderedThreads.get(folder.id) || [];
+        if (folderThreads.some((thread) => thread.id === currentThreadId)) {
+          setExpandedFolders(
+            (prev) => new Set(Array.from(prev).concat([folder.id]))
+          );
+        }
+      });
+    }
+  }, [currentThreadId, folders, folderedThreads]);
 
   const toggleFolder = (folderId: string) => {
     setExpandedFolders((prev) => {
@@ -102,9 +115,7 @@ export function ThreadList({
     try {
       await moveThreadToFolder(threadId, folderId);
       // Refresh threads to ensure UI is in sync
-      if (userId) {
-        await fetchThreads(userId);
-      }
+      await fetchThreads();
     } catch (error) {
       console.error("Error moving thread to folder:", error);
     }
@@ -165,7 +176,7 @@ export function ThreadList({
           variant="ghost"
           className={cn(
             "flex items-center gap-1.5 flex-1 min-w-0 justify-start text-left h-8",
-            currentThreadId === thread.id && "bg-muted",
+            currentThreadId === thread.id && "bg-muted hover:bg-muted",
             isInFolder ? "pl-8" : "pl-2"
           )}
           onClick={() => onSelectThread(thread.id)}
@@ -239,7 +250,7 @@ export function ThreadList({
       {/* Empty state when no threads or folders exist */}
       {threads.length === 0 && folders.length === 0 && (
         <div className="px-2 py-3 text-sm text-muted-foreground">
-          Start a conversation by typing in the chat input below.
+          Click the + button above to start a new conversation.
         </div>
       )}
       <div className="flex flex-col gap-1">

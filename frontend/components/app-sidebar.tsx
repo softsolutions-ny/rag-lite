@@ -79,9 +79,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Debounced fetch functions for subsequent updates
   const debouncedFetch = useMemo(
     () =>
-      debounce((uid: string) => {
-        fetchThreads(uid);
-        fetchFolders(uid);
+      debounce(() => {
+        fetchThreads();
+        fetchFolders();
       }, 1000),
     [fetchThreads, fetchFolders]
   );
@@ -92,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       // Immediate fetch on mount
       const initialFetch = async () => {
         try {
-          await Promise.all([fetchThreads(userId), fetchFolders(userId)]);
+          await Promise.all([fetchThreads(), fetchFolders()]);
         } catch (error) {
           console.error("Error fetching initial data:", error);
         }
@@ -113,25 +113,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     try {
       // Create the actual thread first
-      const thread = await createThread(userId);
+      const thread = await createThread();
 
-      // Navigate to the new thread
-      router.push(`/dashboard/chat?thread=${thread.id}`);
+      // Update the URL without a full navigation
+      router.replace(`/dashboard/chat?thread=${thread.id}`, {
+        scroll: false,
+      });
     } catch (error) {
       console.error("Failed to create thread:", error);
     }
   };
 
   const handleSelectThread = (threadId: string) => {
-    router.push(`/dashboard/chat?thread=${threadId}`);
+    // Update the URL without a full navigation
+    router.replace(`/dashboard/chat?thread=${threadId}`, {
+      scroll: false,
+    });
   };
 
   const handleDeleteThread = async (threadId: string) => {
     try {
+      // Delete the thread first
       await deleteThread(threadId);
-      // If the deleted thread was selected, redirect to chat home
+
+      // If the deleted thread was selected, redirect to chat home and wait for navigation
       if (currentThreadId === threadId) {
-        router.push("/dashboard/chat");
+        await router.push("/dashboard/chat");
       }
     } catch (error) {
       console.error("Error deleting thread:", error);
@@ -151,7 +158,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     try {
       await createFolder({
-        user_id: userId,
         name: newFolderName.trim(),
       });
       setNewFolderName("");

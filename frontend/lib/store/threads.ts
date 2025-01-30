@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Thread, UpdateThreadData } from '../types';
+import * as threadActions from '../actions/thread';
 
 interface ThreadsState {
   threads: Thread[];
@@ -9,25 +10,13 @@ interface ThreadsState {
   pendingUpdates: Map<string, UpdateThreadData>;
   
   // Actions
-  fetchThreads: (userId: string) => Promise<void>;
-  createThread: (userId: string) => Promise<Thread>;
+  fetchThreads: () => Promise<void>;
+  createThread: () => Promise<Thread>;
   updateThread: (threadId: string, data: UpdateThreadData, optimistic?: boolean) => Promise<Thread>;
   deleteThread: (threadId: string) => Promise<void>;
   moveThreadToFolder: (threadId: string, folderId: string | undefined) => Promise<Thread>;
   syncPendingUpdates: () => Promise<void>;
 }
-
-// Common fetch options for all requests
-const commonFetchOptions: RequestInit = {
-  credentials: 'include',
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
-};
-
-// Debounce time for syncing updates (5 seconds)
-const SYNC_DEBOUNCE = 5000;
 
 export const useThreadsStore = create<ThreadsState>((set, get) => ({
   threads: [],
@@ -36,36 +25,19 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
   lastSyncTime: 0,
   pendingUpdates: new Map(),
 
-  fetchThreads: async (userId: string) => {
+  fetchThreads: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads?user_id=${userId}`,
-        {
-          ...commonFetchOptions,
-          method: 'GET',
-        }
-      );
-      if (!response.ok) throw new Error('Failed to fetch threads');
-      const threads = await response.json();
+      const threads = await threadActions.fetchThreads();
       set({ threads, isLoading: false, lastSyncTime: Date.now() });
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to fetch threads', isLoading: false });
     }
   },
 
-  createThread: async (userId: string) => {
+  createThread: async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads`,
-        {
-          ...commonFetchOptions,
-          method: 'POST',
-          body: JSON.stringify({ user_id: userId }),
-        }
-      );
-      if (!response.ok) throw new Error('Failed to create thread');
-      const newThread = await response.json();
+      const newThread = await threadActions.createThread();
       set((state) => ({
         threads: [newThread, ...state.threads],
       }));
@@ -101,35 +73,24 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
         }),
       }));
 
-      // Schedule a sync if it's been more than SYNC_DEBOUNCE since last sync
+      // Schedule a sync if it's been more than 5 seconds since last sync
       const now = Date.now();
-      if (now - state.lastSyncTime > SYNC_DEBOUNCE) {
+      if (now - state.lastSyncTime > 5000) {
         setTimeout(() => {
           get().syncPendingUpdates();
-        }, SYNC_DEBOUNCE);
+        }, 5000);
       }
 
       return currentThread;
     } else {
       // Immediate update to the backend
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${threadId}`,
-          {
-            ...commonFetchOptions,
-            method: 'PATCH',
-            body: JSON.stringify(data),
-          }
-        );
-        if (!response.ok) throw new Error('Failed to update thread');
-        const updatedThread = await response.json();
-        
+        const updatedThread = await threadActions.updateThread(threadId, data);
         set((state) => ({
           threads: state.threads.map((t) =>
             t.id === threadId ? updatedThread : t
           ),
         }));
-
         return updatedThread;
       } catch (error) {
         set({ error: error instanceof Error ? error.message : 'Failed to update thread' });
@@ -147,16 +108,7 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
       // Process all pending updates
       await Promise.all(
         updates.map(async ([threadId, data]) => {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${threadId}`,
-            {
-              ...commonFetchOptions,
-              method: 'PATCH',
-              body: JSON.stringify(data),
-            }
-          );
-          if (!response.ok) throw new Error(`Failed to update thread ${threadId}`);
-          return response.json();
+          return threadActions.updateThread(threadId, data);
         })
       );
 
@@ -174,37 +126,42 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
   deleteThread: async (threadId: string) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${threadId}`,
-        {
-          ...commonFetchOptions,
-          method: 'DELETE',
-        }
-      );
-      if (!response.ok) throw new Error('Failed to delete thread');
-      set((state: ThreadsState) => ({
-        threads: state.threads.filter((t: Thread) => t.id !== threadId),
-        isLoading: false,
-      }));
+      await threadActions.deleteThread(threadId);
+      
+      // Clean up state and pending updates
+      set((state) => {
+        const newPendingUpdates = new Map(state.pendingUpdates);
+        newPendingUpdates.delete(threadId);
+        
+        return {
+          threads: state.threads.filter((t) => t.id !== threadId),
+          pendingUpdates: newPendingUpdates,
+          isLoading: false,
+        };
+      });
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to delete thread', isLoading: false });
       throw error;
     }
   },
 
-  moveThreadToFolder: async (threadId: string, folderId: string | undefined): Promise<Thread> => {
+  moveThreadToFolder: async (threadId: string, folderId: string | undefined) => {
     try {
-      // Get the current thread to preserve its title
-      const currentThread = useThreadsStore.getState().threads.find(t => t.id === threadId);
+      // Find the current thread to preserve its title
+      const currentThread = get().threads.find(t => t.id === threadId);
       if (!currentThread) throw new Error('Thread not found');
 
-      // Use the existing updateThread function to handle both API call and state update
-      const updatedThread = await useThreadsStore.getState().updateThread(threadId, {
+      const updatedThread = await threadActions.updateThread(threadId, {
         folder_id: folderId,
         title: currentThread.title || undefined,
         updated_at: new Date().toISOString(),
       });
-
+      
+      set((state) => ({
+        threads: state.threads.map((t) =>
+          t.id === threadId ? updatedThread : t
+        ),
+      }));
       return updatedThread;
     } catch (error) {
       console.error('Error moving thread to folder:', error);

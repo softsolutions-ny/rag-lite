@@ -9,14 +9,10 @@ import { useAuth } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useThreadsStore } from "@/lib/store";
 import { useChat } from "@/lib/hooks/useChat";
-
-interface Message {
-  id: string;
-  role: "user" | "assistant" | "system";
-  content: string;
-  image_url?: string;
-  model?: string;
-}
+import * as messageActions from "@/lib/actions/message";
+import { Message } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -36,37 +32,12 @@ export function ChatContainer() {
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const { threads, updateThread, createThread } = useThreadsStore();
 
-  // Create a background thread if none exists
-  useEffect(() => {
-    const initializeThread = async () => {
-      // Only create a thread if we don't have a current thread and user is authenticated
-      if (!currentThreadId && userId && !isLoadingRef.current) {
-        try {
-          isLoadingRef.current = true;
-          const newThread = await createThread(userId);
-          console.log(
-            "[ChatContainer] Created background thread:",
-            newThread.id
-          );
-          router.push(`/dashboard/chat?thread=${newThread.id}`);
-        } catch (error) {
-          console.error(
-            "[ChatContainer] Error creating background thread:",
-            error
-          );
-        } finally {
-          isLoadingRef.current = false;
-        }
-      }
-    };
-
-    initializeThread();
-  }, [currentThreadId, userId, createThread, router]);
-
   // Update currentThreadId when URL changes
   useEffect(() => {
     const param = searchParams.get("thread");
     console.log("[ChatContainer] URL thread param changed:", param);
+
+    // Immediately update the current thread ID
     setCurrentThreadId(param as string | undefined);
 
     if (!param) {
@@ -75,6 +46,28 @@ export function ChatContainer() {
       setLocalMessages([]);
     }
   }, [searchParams]);
+
+  // Create a new thread when requested
+  const handleCreateThread = async () => {
+    if (!userId || isLoadingRef.current) return;
+
+    try {
+      isLoadingRef.current = true;
+      const newThread = await createThread();
+      console.log("[ChatContainer] Created new thread:", newThread.id);
+      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
+        scroll: false,
+      });
+      // Focus the input after creating a new thread
+      setTimeout(() => {
+        chatInputRef.current?.focus();
+      }, 100);
+    } catch (error) {
+      console.error("[ChatContainer] Error creating thread:", error);
+    } finally {
+      isLoadingRef.current = false;
+    }
+  };
 
   // Fetch messages when thread changes
   useEffect(() => {
@@ -92,31 +85,14 @@ export function ChatContainer() {
       isLoadingRef.current = true;
       setIsLoadingThread(true);
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/threads/${currentThreadId}/messages`,
-          { cache: "no-store" }
-        );
-
+        const messages = await messageActions.fetchMessages(currentThreadId);
         if (!isMounted) return;
 
-        if (response.ok) {
-          const messages = await response.json();
-          console.log("[ChatContainer] Fetched messages:", messages.length);
-          setInitialMessages(
-            messages.map((msg: Message) => ({
-              id: msg.id,
-              content: msg.content,
-              role: msg.role,
-              model: msg.model,
-              image_url: msg.image_url,
-            }))
-          );
-          // Set model from first message if it exists
-          if (messages.length > 0 && messages[0].model) {
-            setModel(messages[0].model as ModelType);
-          }
-        } else {
-          console.error("Failed to fetch messages");
+        console.log("[ChatContainer] Fetched messages:", messages.length);
+        setInitialMessages(messages);
+        // Set model from first message if it exists
+        if (messages.length > 0 && messages[0].model) {
+          setModel(messages[0].model as ModelType);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -237,49 +213,20 @@ export function ChatContainer() {
         });
       } else if (image_url && imageAnalysis) {
         // Handle image messages
-        const userMessage: Message = {
-          id: Date.now().toString(),
-          content: content || "Analyzing image...",
-          role: "user",
-          image_url: image_url.trim(),
+        const userMessage = await messageActions.createMessage(
+          currentThreadId,
+          content || "Analyzing image...",
+          "user",
           model,
-        };
+          image_url
+        );
 
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          content: imageAnalysis,
-          role: "assistant",
-          model,
-        };
-
-        // Store messages in DB
-        await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              thread_id: currentThreadId,
-              role: userMessage.role,
-              content: userMessage.content,
-              model: userMessage.model,
-              image_url: userMessage.image_url,
-            }),
-          }),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              thread_id: currentThreadId,
-              role: assistantMessage.role,
-              content: assistantMessage.content,
-              model: assistantMessage.model,
-            }),
-          }),
-        ]);
+        const assistantMessage = await messageActions.createMessage(
+          currentThreadId,
+          imageAnalysis,
+          "assistant",
+          model
+        );
 
         // Update UI
         setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
@@ -320,37 +267,68 @@ export function ChatContainer() {
       <div className="absolute inset-0 bottom-[88px]">
         <ScrollArea className="h-full">
           <div className="flex flex-col gap-4 px-4">
-            {memoizedMessages}
-            {allMessages.length === 0 && !isLoadingThread && (
+            {currentThreadId ? (
+              <>
+                {memoizedMessages.length > 0 ? (
+                  memoizedMessages
+                ) : (
+                  <div className="flex h-[50vh] items-center justify-center text-center">
+                    <div className="max-w-md space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          Start typing below to begin your conversation with
+                          elucide.
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          You can ask questions, share images, or request
+                          assistance with any task.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="h-16" />
+                <div ref={messagesEndRef} />
+              </>
+            ) : (
               <div className="flex h-[50vh] items-center justify-center text-center">
-                <div className="max-w-md space-y-4">
-                  <h2 className="text-2xl font-semibold">Welcome to Elucide</h2>
-                  <p className="text-muted-foreground">
-                    Start a new conversation by typing a message below. Your
-                    message will automatically create a new thread.
-                  </p>
+                <div className="max-w-md space-y-6">
+                  <div className="space-y-2">
+                    <h1 className="text-2xl font-bold">elucide</h1>
+                    <p className="text-sm text-muted-foreground">
+                      graphical user interface for robot intelligence
+                    </p>
+                  </div>
+                  <Button
+                    onClick={handleCreateThread}
+                    disabled={isLoadingRef.current}
+                    className="gap-2"
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                    New Thread
+                  </Button>
                 </div>
               </div>
             )}
-            <div className="h-16" />
-            <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 pt-4">
-        <div className="mx-auto max-w-3xl p-4">
-          <ChatInput
-            inputRef={chatInputRef}
-            isLoading={isLoading || isLoadingThread}
-            onSubmit={handleMessageSubmit}
-            onStop={handleStop}
-            model={model}
-            onModelChange={setModel}
-            disableModelChange={allMessages.length > 0}
-          />
+      {currentThreadId && (
+        <div className="absolute inset-x-0 bottom-0 pt-4">
+          <div className="mx-auto max-w-3xl p-4">
+            <ChatInput
+              inputRef={chatInputRef}
+              isLoading={isLoading || isLoadingThread}
+              onSubmit={handleMessageSubmit}
+              onStop={handleStop}
+              model={model}
+              onModelChange={setModel}
+              disableModelChange={allMessages.length > 0}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

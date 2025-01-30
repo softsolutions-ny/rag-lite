@@ -116,4 +116,15 @@ export interface UpdateThreadData {
   label?: string;
   folder_id?: string;
   updated_at?: string;
+}
+
+export interface Message {
+  id: string;
+  thread_id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  model?: string;
+  image_url?: string;
+  created_at: string;
+  updated_at: string;
 } 

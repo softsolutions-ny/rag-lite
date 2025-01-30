@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Folder, CreateFolderData, UpdateFolderData } from '../types';
-import { StoreApi } from 'zustand';
+import * as folderActions from '../actions/folder';
 
 interface FoldersState {
   folders: Folder[];
@@ -8,47 +8,32 @@ interface FoldersState {
   error: string | null;
   
   // Actions
-  fetchFolders: (userId: string) => Promise<void>;
-  createFolder: (data: CreateFolderData) => Promise<Folder>;
+  fetchFolders: () => Promise<void>;
+  createFolder: (data: Omit<CreateFolderData, 'user_id'>) => Promise<Folder>;
   updateFolder: (folderId: string, data: UpdateFolderData) => Promise<Folder>;
   deleteFolder: (folderId: string) => Promise<void>;
 }
 
-type SetState = StoreApi<FoldersState>['setState'];
-
-export const useFoldersStore = create<FoldersState>((set: SetState) => ({
+export const useFoldersStore = create<FoldersState>((set) => ({
   folders: [],
   isLoading: false,
   error: null,
 
-  fetchFolders: async (userId: string) => {
+  fetchFolders: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/folders?user_id=${userId}`
-      );
-      if (!response.ok) throw new Error('Failed to fetch folders');
-      const folders = await response.json();
+      const folders = await folderActions.fetchFolders();
       set({ folders, isLoading: false });
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to fetch folders', isLoading: false });
     }
   },
 
-  createFolder: async (data: CreateFolderData) => {
+  createFolder: async (data: Omit<CreateFolderData, 'user_id'>) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/folders`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        }
-      );
-      if (!response.ok) throw new Error('Failed to create folder');
-      const newFolder = await response.json();
-      set((state: FoldersState) => ({ folders: [...state.folders, newFolder], isLoading: false }));
+      const newFolder = await folderActions.createFolder(data);
+      set((state) => ({ folders: [...state.folders, newFolder], isLoading: false }));
       return newFolder;
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to create folder', isLoading: false });
@@ -59,18 +44,9 @@ export const useFoldersStore = create<FoldersState>((set: SetState) => ({
   updateFolder: async (folderId: string, data: UpdateFolderData) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/folders/${folderId}`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        }
-      );
-      if (!response.ok) throw new Error('Failed to update folder');
-      const updatedFolder = await response.json();
-      set((state: FoldersState) => ({
-        folders: state.folders.map((f: Folder) => (f.id === folderId ? updatedFolder : f)),
+      const updatedFolder = await folderActions.updateFolder(folderId, data);
+      set((state) => ({
+        folders: state.folders.map((f) => (f.id === folderId ? updatedFolder : f)),
         isLoading: false,
       }));
       return updatedFolder;
@@ -83,13 +59,9 @@ export const useFoldersStore = create<FoldersState>((set: SetState) => ({
   deleteFolder: async (folderId: string) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/folders/${folderId}`,
-        { method: 'DELETE' }
-      );
-      if (!response.ok) throw new Error('Failed to delete folder');
-      set((state: FoldersState) => ({
-        folders: state.folders.filter((f: Folder) => f.id !== folderId),
+      await folderActions.deleteFolder(folderId);
+      set((state) => ({
+        folders: state.folders.filter((f) => f.id !== folderId),
         isLoading: false,
       }));
     } catch (error) {

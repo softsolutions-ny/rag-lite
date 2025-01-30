@@ -1,143 +1,137 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Message } from '../types';
 import { ModelType } from '../ai-config';
-import { useAuthFetch } from '../store/api';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-}
+import * as messageActions from '../actions/message';
 
 interface UseChatOptions {
-  initialMessages?: Message[];
   model: ModelType;
   threadId?: string;
-  onFinish?: (message: Message) => void;
+  initialMessages?: Message[];
+  onFinish?: () => void;
   onError?: (error: Error) => void;
 }
 
 export function useChat({
-  initialMessages = [],
   model,
   threadId,
+  initialMessages = [],
   onFinish,
   onError,
 }: UseChatOptions) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const authFetch = useAuthFetch();
 
-  // Update messages when initialMessages changes
   useEffect(() => {
-    console.log("[useChat] Updating messages with:", initialMessages);
     setMessages(initialMessages);
   }, [initialMessages]);
 
   const append = useCallback(
-    async (message: { content: string; role?: 'user' | 'assistant' | 'system' }) => {
-      if (!threadId) {
-        const error = new Error("Thread ID is required for chat");
-        console.error("[useChat] Error:", error);
-        if (onError) onError(error);
-        return;
-      }
+    async (message: Pick<Message, 'content' | 'role'>) => {
+      if (!threadId) return;
+
+      setIsLoading(true);
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = new AbortController();
 
       try {
-        setIsLoading(true);
-        const userMessage: Message = {
-          id: Date.now().toString(),
-          role: message.role || 'user',
-          content: message.content,
-        };
-
+        // Add user message
+        const userMessage = await messageActions.createMessage(
+          threadId,
+          message.content,
+          message.role,
+          model
+        );
         setMessages((prev) => [...prev, userMessage]);
 
-        // Create new abort controller for this request
-        abortControllerRef.current = new AbortController();
+        // Start streaming assistant response
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/stream`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              thread_id: threadId,
+              model,
+              messages: [...messages, userMessage].map((msg) => ({
+                role: msg.role,
+                content: msg.content,
+              })),
+            }),
+            signal: abortControllerRef.current.signal,
+          }
+        );
 
-        // Create assistant message placeholder
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: '',
-        };
+        if (!response.ok) throw new Error('Failed to stream response');
+        if (!response.body) throw new Error('Response body is empty');
 
-        setMessages((prev) => [...prev, assistantMessage]);
-
-        // Start streaming from the backend API
-        const response = await authFetch('/api/v1/chat/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            messages: [...initialMessages, userMessage],
-            model,
-            thread_id: threadId,
-          }),
-          signal: abortControllerRef.current.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to send message');
-        }
-
-        const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error('No response stream available');
-        }
-
-        let accumulatedContent = '';
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let content = '';
 
         while (true) {
-          const { done, value } = await reader.read();
-          if (done || abortControllerRef.current?.signal.aborted) break;
+          const { value, done } = await reader.read();
+          if (done) break;
 
-          // Convert the chunk to text
-          const chunk = new TextDecoder().decode(value);
-          accumulatedContent += chunk;
+          const chunk = decoder.decode(value);
+          content += chunk;
 
+          // Update the assistant message as we receive chunks
           setMessages((prev) => {
-            const updated = [...prev];
-            const lastMessage = updated[updated.length - 1];
-            if (lastMessage.role === 'assistant') {
-              lastMessage.content = accumulatedContent;
+            const lastMessage = prev[prev.length - 1];
+            if (lastMessage && lastMessage.role === 'assistant') {
+              return [
+                ...prev.slice(0, -1),
+                { ...lastMessage, content: content },
+              ];
+            } else {
+              return [
+                ...prev,
+                {
+                  id: Date.now().toString(),
+                  thread_id: threadId,
+                  role: 'assistant',
+                  content: content,
+                  model,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                },
+              ];
             }
-            return updated;
           });
         }
 
-        if (!abortControllerRef.current?.signal.aborted && onFinish) {
-          onFinish({
-            ...assistantMessage,
-            content: accumulatedContent,
-          });
-        }
+        // Save the final assistant message
+        await messageActions.createMessage(
+          threadId,
+          content,
+          'assistant',
+          model
+        );
+
+        onFinish?.();
       } catch (error) {
-        console.error('[useChat] Error in chat:', error);
-        if (onError && error instanceof Error) {
-          onError(error);
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.error('Chat error:', error);
+          onError?.(error);
         }
       } finally {
         setIsLoading(false);
         abortControllerRef.current = null;
       }
     },
-    [initialMessages, model, threadId, onFinish, onError, authFetch]
+    [threadId, model, messages, onFinish, onError]
   );
 
   const stop = useCallback(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-      setIsLoading(false);
-    }
+    abortControllerRef.current?.abort();
+    setIsLoading(false);
   }, []);
 
   return {
     messages,
+    isLoading,
     append,
     stop,
-    isLoading,
   };
 } 
