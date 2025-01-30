@@ -33,36 +33,6 @@ export function ChatContainer() {
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const { threads, updateThread, createThread } = useThreadsStore();
 
-  // Add a ref to track thread creation state
-  const isCreatingThreadRef = useRef(false);
-
-  // Update currentThreadId when URL changes
-  useEffect(() => {
-    const param = searchParams.get("thread");
-    console.log("[ChatContainer] URL thread param changed:", param);
-
-    // Don't update if we're in the middle of creating a thread
-    if (isCreatingThreadRef.current) {
-      console.log("[ChatContainer] Ignoring URL change during thread creation");
-      return;
-    }
-
-    // Clear any ongoing operations
-    if (isLoadingRef.current) {
-      isLoadingRef.current = false;
-    }
-
-    // Immediately update the current thread ID
-    setCurrentThreadId(param as string | undefined);
-
-    // Clear messages when thread changes
-    setInitialMessages([]);
-    setLocalMessages([]);
-
-    // Reset loading state
-    setIsLoadingThread(false);
-  }, [searchParams]);
-
   // Set model from first message if it exists
   const setModelFromMessages = useCallback((messages: Message[]) => {
     if (messages.length > 0 && messages[0].model) {
@@ -70,87 +40,74 @@ export function ChatContainer() {
     }
   }, []);
 
-  // Fetch messages when thread changes
+  // Update currentThreadId when URL changes
   useEffect(() => {
-    console.log("[ChatContainer] Thread ID changed:", currentThreadId);
+    const param = searchParams.get("thread");
+    console.log("[ChatContainer] URL thread param changed:", param);
+
+    // Immediately update the current thread ID and clear messages
+    setCurrentThreadId(param as string | undefined);
+    if (!param) {
+      setInitialMessages([]);
+      setLocalMessages([]);
+      return;
+    }
+
+    // Check cache first before setting loading state
+    const cachedMessages = MessageCache.getCachedMessages(param);
+    if (cachedMessages) {
+      console.log("[ChatContainer] Using cached messages");
+      setInitialMessages(cachedMessages);
+      setLocalMessages([]);
+      setModelFromMessages(cachedMessages);
+      return;
+    }
+
+    // Only set loading state if we need to fetch
+    setIsLoadingThread(true);
+  }, [searchParams, setModelFromMessages]);
+
+  // Separate effect for fetching messages to avoid blocking UI
+  useEffect(() => {
     let isMounted = true;
-    let abortController = new AbortController();
 
     const fetchMessages = async () => {
-      if (!currentThreadId) {
-        setInitialMessages([]);
-        setLocalMessages([]);
-        return;
-      }
-
-      if (isLoadingRef.current) {
-        // Cancel previous fetch
-        abortController.abort();
-        abortController = new AbortController();
-      }
-
-      isLoadingRef.current = true;
-      setIsLoadingThread(true);
+      if (!currentThreadId || !isLoadingThread) return;
 
       try {
-        // Check cache first
-        const cachedMessages = MessageCache.getCachedMessages(currentThreadId);
-        if (cachedMessages) {
-          console.log("[ChatContainer] Using cached messages");
-          if (isMounted) {
-            setInitialMessages(cachedMessages);
-            setLocalMessages([]);
-            setModelFromMessages(cachedMessages);
-          }
-        } else {
-          // Fetch with abort signal
-          const messages = await messageActions.fetchMessages(currentThreadId);
-          if (!isMounted) return;
+        const messages = await messageActions.fetchMessages(currentThreadId);
+        if (!isMounted) return;
 
-          console.log("[ChatContainer] Fetched messages:", messages.length);
-          setInitialMessages(messages);
-          setLocalMessages([]);
-          setModelFromMessages(messages);
+        console.log("[ChatContainer] Fetched messages:", messages.length);
+        setInitialMessages(messages);
+        setLocalMessages([]);
+        setModelFromMessages(messages);
 
-          // Cache the fetched messages
-          if (messages.length > 0) {
-            MessageCache.cacheMessages(currentThreadId, messages);
-          }
+        // Cache the fetched messages
+        if (messages.length > 0) {
+          MessageCache.cacheMessages(currentThreadId, messages);
         }
       } catch (error) {
-        // Handle abort error
-        if (error instanceof Error && error.name === "AbortError") {
-          console.log("[ChatContainer] Fetch aborted");
-          return;
-        }
         console.error("Error fetching messages:", error);
       } finally {
         if (isMounted) {
-          isLoadingRef.current = false;
           setIsLoadingThread(false);
         }
       }
     };
 
-    // Start fetching immediately
     fetchMessages();
 
     return () => {
       isMounted = false;
-      abortController.abort();
-      isLoadingRef.current = false;
     };
-  }, [currentThreadId, setModelFromMessages]);
+  }, [currentThreadId, isLoadingThread, setModelFromMessages]);
 
   // Create a new thread when requested
   const handleCreateThread = useCallback(async () => {
-    if (!userId || isLoadingRef.current || isCreatingThreadRef.current) {
-      console.log("[ChatContainer] Preventing duplicate thread creation");
-      return;
-    }
+    if (!userId || isLoadingRef.current) return;
 
     try {
-      isCreatingThreadRef.current = true;
       isLoadingRef.current = true;
 
       // Create thread with optimistic update and get the new thread
@@ -164,24 +121,18 @@ export function ChatContainer() {
 
       // Update URL and current thread ID
       setCurrentThreadId(newThread.id);
-      await router.replace(`/dashboard/chat?thread=${newThread.id}`, {
+      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
         scroll: false,
       });
 
-      // Focus the input after a short delay to ensure the UI has updated
-      setTimeout(() => {
-        chatInputRef.current?.focus();
-      }, 100);
+      // Focus the input immediately
+      chatInputRef.current?.focus();
     } catch (error) {
       console.error("[ChatContainer] Error creating thread:", error);
       // On error, clear current thread
       setCurrentThreadId(undefined);
     } finally {
       isLoadingRef.current = false;
-      // Add a small delay before allowing new thread creation
-      setTimeout(() => {
-        isCreatingThreadRef.current = false;
-      }, 500);
     }
   }, [userId, createThread, router]);
 
@@ -228,17 +179,11 @@ export function ChatContainer() {
     },
   });
 
-  // Combine local and chat messages with proper cleanup
-  const allMessages = useMemo(() => {
-    // Filter out any messages that don't belong to the current thread
-    const filteredLocal = localMessages.filter(
-      (m) => !currentThreadId || m.thread_id === currentThreadId
-    );
-    const filteredChat = chatMessages.filter(
-      (m) => !currentThreadId || m.thread_id === currentThreadId
-    );
-    return [...filteredLocal, ...filteredChat];
-  }, [localMessages, chatMessages, currentThreadId]);
+  // Combine local and chat messages
+  const allMessages = useMemo(
+    () => [...localMessages, ...chatMessages],
+    [localMessages, chatMessages]
+  );
 
   // Memoize message rendering
   const memoizedMessages = useMemo(

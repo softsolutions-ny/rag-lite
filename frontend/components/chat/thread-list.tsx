@@ -23,7 +23,7 @@ import { useState, useEffect } from "react";
 import { Thread, Folder } from "@/lib/types";
 import { useFoldersStore, useThreadsStore } from "@/lib/store";
 import { MessageCache } from "@/lib/services/cache";
-import { SidebarMenuSkeleton } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ThreadListProps {
   threads: Thread[];
@@ -162,10 +162,7 @@ export function ThreadList({
   };
 
   const renderThread = (thread: Thread, isInFolder: boolean = false) => (
-    <div
-      key={thread.id}
-      className="flex items-center min-w-0 animate-in fade-in-0 duration-200"
-    >
+    <div key={thread.id} className="flex items-center min-w-0">
       {editingThreadId === thread.id ? (
         <div className="flex-1 px-1">
           <Input
@@ -245,12 +242,11 @@ export function ThreadList({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-2 p-2 animate-in fade-in-0">
-        {[...Array(5)].map((_, i) => (
+      <div className="flex flex-col gap-1 p-2">
+        {[1, 2, 3, 4, 5].map((i) => (
           <div key={i} className="flex items-center gap-2">
-            <div className="flex-1">
-              <SidebarMenuSkeleton showIcon={false} />
-            </div>
+            <Skeleton className="h-8 flex-1" />
+            <Skeleton className="h-8 w-8" />
           </div>
         ))}
       </div>
@@ -261,7 +257,7 @@ export function ThreadList({
     <div className="flex flex-col gap-1 p-2">
       {/* Empty state when no threads or folders exist */}
       {threads.length === 0 && folders.length === 0 && (
-        <div className="px-2 py-3 text-sm text-muted-foreground animate-in fade-in-0 duration-200">
+        <div className="px-2 py-3 text-sm text-muted-foreground">
           Click the + button above to start a new conversation.
         </div>
       )}
@@ -272,7 +268,7 @@ export function ThreadList({
           const isExpanded = expandedFolders.has(folder.id);
 
           return (
-            <div key={folder.id} className="animate-in fade-in-0 duration-200">
+            <div key={folder.id}>
               <div className="flex items-center">
                 {editingFolderId === folder.id ? (
                   <div className="flex-1 px-1">
