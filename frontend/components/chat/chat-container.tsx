@@ -48,35 +48,12 @@ export function ChatContainer() {
     }
   }, [searchParams]);
 
-  // Create a new thread when requested
-  const handleCreateThread = async () => {
-    if (!userId || isLoadingRef.current) return;
-
-    try {
-      isLoadingRef.current = true;
-      const newThread = await createThread();
-      console.log("[ChatContainer] Created new thread:", newThread.id);
-
-      // Clear any existing messages and cache
-      setInitialMessages([]);
-      setLocalMessages([]);
-      MessageCache.clearCache(newThread.id);
-
-      // Navigate to the new thread
-      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
-        scroll: false,
-      });
-
-      // Focus the input after creating a new thread
-      setTimeout(() => {
-        chatInputRef.current?.focus();
-      }, 100);
-    } catch (error) {
-      console.error("[ChatContainer] Error creating thread:", error);
-    } finally {
-      isLoadingRef.current = false;
+  // Set model from first message if it exists
+  const setModelFromMessages = useCallback((messages: Message[]) => {
+    if (messages.length > 0 && messages[0].model) {
+      setModel(messages[0].model as ModelType);
     }
-  };
+  }, []);
 
   // Fetch messages when thread changes
   useEffect(() => {
@@ -99,8 +76,11 @@ export function ChatContainer() {
         const cachedMessages = MessageCache.getCachedMessages(currentThreadId);
         if (cachedMessages) {
           console.log("[ChatContainer] Using cached messages");
-          setInitialMessages(cachedMessages);
-          setLocalMessages([]);
+          if (isMounted) {
+            setInitialMessages(cachedMessages);
+            setLocalMessages([]);
+            setModelFromMessages(cachedMessages);
+          }
         } else {
           const messages = await messageActions.fetchMessages(currentThreadId);
           if (!isMounted) return;
@@ -108,17 +88,12 @@ export function ChatContainer() {
           console.log("[ChatContainer] Fetched messages:", messages.length);
           setInitialMessages(messages);
           setLocalMessages([]);
+          setModelFromMessages(messages);
 
           // Cache the fetched messages
           if (messages.length > 0) {
             MessageCache.cacheMessages(currentThreadId, messages);
           }
-        }
-
-        // Set model from first message if it exists
-        const allMessages = [...initialMessages, ...localMessages];
-        if (allMessages.length > 0 && allMessages[0].model) {
-          setModel(allMessages[0].model as ModelType);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -136,7 +111,39 @@ export function ChatContainer() {
       isMounted = false;
       isLoadingRef.current = false;
     };
-  }, [currentThreadId]);
+  }, [currentThreadId, setModelFromMessages]);
+
+  // Create a new thread when requested
+  const handleCreateThread = useCallback(async () => {
+    if (!userId || isLoadingRef.current) return;
+
+    try {
+      isLoadingRef.current = true;
+
+      // Create thread with optimistic update
+      const newThread = await createThread();
+      console.log("[ChatContainer] Created new thread:", newThread.id);
+
+      // Clear messages and cache
+      setInitialMessages([]);
+      setLocalMessages([]);
+      MessageCache.clearCache(newThread.id);
+
+      // Update URL
+      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
+        scroll: false,
+      });
+
+      // Focus the input after creating a new thread
+      setTimeout(() => {
+        chatInputRef.current?.focus();
+      }, 100);
+    } catch (error) {
+      console.error("[ChatContainer] Error creating thread:", error);
+    } finally {
+      isLoadingRef.current = false;
+    }
+  }, [userId, createThread, router]);
 
   const {
     messages: chatMessages,

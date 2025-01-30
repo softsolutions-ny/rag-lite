@@ -37,13 +37,39 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
 
   createThread: async () => {
     try {
-      const newThread = await threadActions.createThread();
+      // Create optimistic thread
+      const optimisticThread: Thread = {
+        id: `temp-${Date.now()}`,
+        user_id: 'temp',
+        title: null,
+        label: null,
+        folder_id: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      // Update state optimistically
       set((state) => ({
-        threads: [newThread, ...state.threads],
+        threads: [optimisticThread, ...state.threads],
       }));
+
+      // Create thread in backend
+      const newThread = await threadActions.createThread();
+
+      // Update state with real thread
+      set((state) => ({
+        threads: state.threads.map((t) =>
+          t.id === optimisticThread.id ? newThread : t
+        ),
+      }));
+
       return newThread;
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Failed to create thread' });
+      // Revert optimistic update on error
+      set((state) => ({
+        threads: state.threads.filter((t) => t.id !== `temp-${Date.now()}`),
+        error: error instanceof Error ? error.message : 'Failed to create thread',
+      }));
       throw error;
     }
   },

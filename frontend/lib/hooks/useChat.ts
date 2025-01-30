@@ -24,21 +24,12 @@ export function useChat({
   const abortControllerRef = useRef<AbortController | null>(null);
   const pendingMessagesRef = useRef<Map<string, Message>>(new Map());
 
-  // Load messages from cache or initialize with provided messages
+  // Reset state when thread changes
   useEffect(() => {
-    if (threadId) {
-      const cachedMessages = MessageCache.getCachedMessages(threadId);
-      if (cachedMessages) {
-        setMessages(cachedMessages);
-      } else {
-        setMessages(initialMessages);
-        if (initialMessages.length > 0) {
-          MessageCache.cacheMessages(threadId, initialMessages);
-        }
-      }
-    } else {
-      setMessages([]);
-    }
+    setMessages(initialMessages);
+    pendingMessagesRef.current.clear();
+    abortControllerRef.current?.abort();
+    setIsLoading(false);
   }, [threadId, initialMessages]);
 
   // Background sync for pending messages
@@ -67,7 +58,10 @@ export function useChat({
   // Sync pending messages periodically
   useEffect(() => {
     const interval = setInterval(syncPendingMessages, 5000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      abortControllerRef.current?.abort();
+    };
   }, [syncPendingMessages]);
 
   const append = useCallback(
