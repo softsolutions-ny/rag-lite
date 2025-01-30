@@ -198,8 +198,6 @@ base_engine_args = {
 if ENV == "production":
     base_engine_args.update({
         "pool_pre_ping": False,
-        "pool_size": 1,  # Minimize connections since we're using pgBouncer
-        "max_overflow": 0,
         "connect_args": {
             "ssl": "require",
             "server_settings": {
