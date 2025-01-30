@@ -139,7 +139,7 @@ export function ChatInput({
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  }, [inputRef]);
 
   return (
     <div className="relative flex w-full max-w-3xl flex-col self-center rounded-lg border bg-background p-2">

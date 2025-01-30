@@ -191,47 +191,61 @@ base_engine_args = {
         "server_settings": {
             "search_path": "elucide,public"
         }
-    },
-    "execution_options": {
-        "isolation_level": "READ COMMITTED"
     }
 }
 
 # Add production-specific settings
 if ENV == "production":
-    base_engine_args["pool_pre_ping"] = False
-    base_engine_args["connect_args"]["ssl"] = "require"
-    base_engine_args["connect_args"]["server_settings"].update({
-        "statement_cache_size": "0",
-        "prepared_statements": "false"
+    base_engine_args.update({
+        "pool_pre_ping": False,
+        "pool_size": 1,  # Minimize connections since we're using pgBouncer
+        "max_overflow": 0,
+        "connect_args": {
+            "ssl": "require",
+            "server_settings": {
+                "search_path": "elucide,public",
+                "statement_cache_size": "0",
+                "prepared_statements": "false",
+                "plan_cache_mode": "force_generic_plan"
+            }
+        },
+        "execution_options": {
+            "isolation_level": "READ COMMITTED",
+            "prepared_statement_cache_size": 0,
+            "prepared_statement_cache": False
+        }
     })
-    # Add pgbouncer settings
-    base_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
-    base_engine_args["execution_options"]["prepared_statement_cache"] = False
+
+    # Additional asyncpg-specific settings for production
+    async_engine_args = {
+        **base_engine_args,
+        "connect_args": {
+            **base_engine_args["connect_args"],
+            "statement_cache_size": 0,
+            "prepared_statement_cache_size": 0,
+            "command_timeout": 60
+        }
+    }
 else:
-    base_engine_args["pool_pre_ping"] = True
+    async_engine_args = base_engine_args
 
 logger.info("Creating database engines with schema: elucide,public")
 # Create database engines
 async_engine = create_async_engine(
     settings.DATABASE_URL_ASYNC,
-    **base_engine_args
+    **async_engine_args
 )
 
 # Sync engine uses the same configuration but with options instead of server_settings
 sync_engine_args = {
     **base_engine_args,
     "connect_args": {
-        "options": "-c search_path=elucide,public"
+        "options": "-c search_path=elucide,public -c statement_cache_size=0 -c prepared_statements=false -c plan_cache_mode=force_generic_plan"
     }
 }
 
 if ENV == "production":
     sync_engine_args["connect_args"]["sslmode"] = "require"
-    sync_engine_args["connect_args"]["options"] += " -c statement_cache_size=0 -c prepared_statements=false"
-    # Add pgbouncer settings
-    sync_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
-    sync_engine_args["execution_options"]["prepared_statement_cache"] = False
 
 sync_engine = create_engine(
     settings.DATABASE_URL_SYNC,
@@ -240,7 +254,7 @@ sync_engine = create_engine(
 
 # Add logging for connection details
 logger.info(f"Async Database URL (masked): {urlparse(settings.DATABASE_URL_ASYNC).hostname}")
-logger.info(f"Async Engine Arguments: {base_engine_args}")
+logger.info(f"Async Engine Arguments: {async_engine_args}")
 logger.info(f"Sync Engine Arguments: {sync_engine_args}")
 
 logger.info("Creating session factories")
