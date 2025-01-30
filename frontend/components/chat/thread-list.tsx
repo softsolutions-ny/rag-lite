@@ -19,11 +19,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Thread, Folder } from "@/lib/types";
 import { useFoldersStore, useThreadsStore } from "@/lib/store";
 import { MessageCache } from "@/lib/services/cache";
 import { Skeleton } from "@/components/ui/skeleton";
+import * as messageActions from "@/lib/actions/message";
 
 interface ThreadListProps {
   threads: Thread[];
@@ -36,6 +37,141 @@ interface ThreadListProps {
   isLoading?: boolean;
 }
 
+// Memoize the thread item component
+const ThreadItem = memo(
+  ({
+    thread,
+    isInFolder,
+    currentThreadId,
+    onSelect,
+    onDelete,
+    onRename,
+    onMoveToFolder,
+  }: {
+    thread: Thread;
+    isInFolder: boolean;
+    currentThreadId?: string;
+    onSelect: (threadId: string) => void;
+    onDelete?: (threadId: string) => void;
+    onRename?: (threadId: string, newTitle: string) => void;
+    onMoveToFolder: (threadId: string, folderId: string | undefined) => void;
+  }) => {
+    const [editingTitle, setEditingTitle] = useState("");
+    const [isEditing, setIsEditing] = useState(false);
+
+    // Preload messages on hover
+    const handleMouseEnter = useCallback(async () => {
+      // Skip if this is the current thread or messages are already cached
+      if (
+        currentThreadId === thread.id ||
+        MessageCache.getCachedMessages(thread.id)
+      ) {
+        return;
+      }
+
+      try {
+        const messages = await messageActions.fetchMessages(thread.id);
+        MessageCache.cacheMessages(thread.id, messages);
+      } catch (error) {
+        console.error("Error preloading messages:", error);
+      }
+    }, [thread.id, currentThreadId]);
+
+    return (
+      <div
+        key={thread.id}
+        className="flex items-center min-w-0"
+        onMouseEnter={handleMouseEnter}
+      >
+        {isEditing ? (
+          <div className="flex-1 px-1">
+            <Input
+              autoFocus
+              value={editingTitle}
+              onChange={(e) => setEditingTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onRename?.(thread.id, editingTitle.trim());
+                  setIsEditing(false);
+                } else if (e.key === "Escape") {
+                  setIsEditing(false);
+                }
+              }}
+              onBlur={() => {
+                if (editingTitle.trim()) {
+                  onRename?.(thread.id, editingTitle.trim());
+                }
+                setIsEditing(false);
+              }}
+              className="h-7"
+            />
+          </div>
+        ) : (
+          <Button
+            variant="ghost"
+            className={cn(
+              "flex items-center gap-1.5 flex-1 min-w-0 justify-start text-left h-8",
+              currentThreadId === thread.id && "bg-muted hover:bg-muted",
+              isInFolder ? "pl-8" : "pl-2"
+            )}
+            onClick={() => onSelect(thread.id)}
+          >
+            <div className="flex items-center min-w-0 flex-1">
+              <span className="truncate text-sm leading-none">
+                {thread.title || thread.id}
+              </span>
+            </div>
+          </Button>
+        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-7 w-7 p-0 hover:bg-muted focus-visible:ring-0 focus-visible:ring-offset-0 shrink-0 ml-1"
+            >
+              <MoreHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[160px]">
+            <DropdownMenuItem
+              onSelect={() => {
+                setEditingTitle(thread.title || "");
+                setIsEditing(true);
+              }}
+            >
+              <Pencil className="h-3.5 w-3.5 mr-2" />
+              Rename
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <FolderIcon className="h-3.5 w-3.5 mr-2" />
+                Move to folder
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  onSelect={() => onMoveToFolder(thread.id, undefined)}
+                >
+                  <FolderInput className="h-3.5 w-3.5 mr-2" />
+                  Remove from folder
+                </DropdownMenuItem>
+                {/* Folder items rendered by parent component */}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onSelect={() => onDelete?.(thread.id)}
+            >
+              Delete thread
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  }
+);
+ThreadItem.displayName = "ThreadItem";
+
 export function ThreadList({
   threads,
   folders,
@@ -46,8 +182,6 @@ export function ThreadList({
   onRenameThread,
   isLoading = false,
 }: ThreadListProps) {
-  const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
-  const [editTitle, setEditTitle] = useState("");
   const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
   const [editFolderName, setEditFolderName] = useState("");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
@@ -83,40 +217,12 @@ export function ThreadList({
     });
   };
 
-  const formatTitle = (thread: Thread) => {
-    return thread.title || thread.id;
-  };
-
-  const handleStartRename = (thread: Thread) => {
-    setEditingThreadId(thread.id);
-    setEditTitle(thread.title || "");
-  };
-
-  const handleRenameSubmit = async (threadId: string) => {
-    if (onRenameThread && editTitle.trim()) {
-      await onRenameThread(threadId, editTitle.trim());
-    }
-    setEditingThreadId(null);
-    setEditTitle("");
-  };
-
-  const handleRenameKeyDown = (e: React.KeyboardEvent, threadId: string) => {
-    if (e.key === "Enter") {
-      handleRenameSubmit(threadId);
-    } else if (e.key === "Escape") {
-      setEditingThreadId(null);
-      setEditTitle("");
-    }
-  };
-
   const handleMoveToFolder = async (
     threadId: string,
     folderId: string | undefined
   ) => {
     try {
       await moveThreadToFolder(threadId, folderId);
-      // Clear the cache for this thread since its folder has changed
-      MessageCache.clearCache(threadId);
       // Refresh threads to ensure UI is in sync
       await fetchThreads();
     } catch (error) {
@@ -161,83 +267,26 @@ export function ThreadList({
     }
   };
 
-  const renderThread = (thread: Thread, isInFolder: boolean = false) => (
-    <div key={thread.id} className="flex items-center min-w-0">
-      {editingThreadId === thread.id ? (
-        <div className="flex-1 px-1">
-          <Input
-            autoFocus
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            onKeyDown={(e) => handleRenameKeyDown(e, thread.id)}
-            onBlur={() => handleRenameSubmit(thread.id)}
-            className="h-7"
-          />
-        </div>
-      ) : (
-        <Button
-          variant="ghost"
-          className={cn(
-            "flex items-center gap-1.5 flex-1 min-w-0 justify-start text-left h-8",
-            currentThreadId === thread.id && "bg-muted hover:bg-muted",
-            isInFolder ? "pl-8" : "pl-2"
-          )}
-          onClick={() => onSelectThread(thread.id)}
-        >
-          <div className="flex items-center min-w-0 flex-1">
-            <span className="truncate text-sm leading-none">
-              {formatTitle(thread)}
-            </span>
-          </div>
-        </Button>
-      )}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="h-7 w-7 p-0 hover:bg-muted focus-visible:ring-0 focus-visible:ring-offset-0 shrink-0 ml-1"
-          >
-            <MoreHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem onSelect={() => handleStartRename(thread)}>
-            <Pencil className="h-3.5 w-3.5 mr-2" />
-            Rename
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <FolderIcon className="h-3.5 w-3.5 mr-2" />
-              Move to folder
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem
-                onSelect={() => handleMoveToFolder(thread.id, undefined)}
-              >
-                <FolderInput className="h-3.5 w-3.5 mr-2" />
-                Remove from folder
-              </DropdownMenuItem>
-              {folders.map((folder) => (
-                <DropdownMenuItem
-                  key={folder.id}
-                  onSelect={() => handleMoveToFolder(thread.id, folder.id)}
-                >
-                  <FolderIcon className="h-3.5 w-3.5 mr-2" />
-                  {folder.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-          <DropdownMenuItem
-            className="text-destructive focus:text-destructive"
-            onSelect={() => onDeleteThread?.(thread.id)}
-          >
-            Delete thread
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+  // Update the renderThread function to use the memoized component
+  const renderThread = (
+    thread: Thread,
+    isInFolder: boolean = false,
+    currentThreadId?: string,
+    onSelectThread?: (threadId: string) => void,
+    onDeleteThread?: (threadId: string) => void,
+    onRenameThread?: (threadId: string, newTitle: string) => void,
+    onMoveToFolder?: (threadId: string, folderId: string | undefined) => void
+  ) => (
+    <ThreadItem
+      key={thread.id}
+      thread={thread}
+      isInFolder={isInFolder}
+      currentThreadId={currentThreadId}
+      onSelect={onSelectThread!}
+      onDelete={onDeleteThread}
+      onRename={onRenameThread}
+      onMoveToFolder={onMoveToFolder!}
+    />
   );
 
   if (isLoading) {
@@ -329,7 +378,17 @@ export function ThreadList({
               </div>
               {isExpanded && (
                 <div className="pl-4 space-y-1">
-                  {folderThreads.map((thread) => renderThread(thread, true))}
+                  {folderThreads.map((thread) =>
+                    renderThread(
+                      thread,
+                      true,
+                      currentThreadId,
+                      onSelectThread,
+                      onDeleteThread,
+                      onRenameThread,
+                      handleMoveToFolder
+                    )
+                  )}
                 </div>
               )}
             </div>
@@ -339,7 +398,17 @@ export function ThreadList({
         {/* Render unfoldered threads */}
         {threads.length > 0 && (
           <div className="space-y-1">
-            {threads.map((thread) => renderThread(thread, false))}
+            {threads.map((thread) =>
+              renderThread(
+                thread,
+                false,
+                currentThreadId,
+                onSelectThread,
+                onDeleteThread,
+                onRenameThread,
+                handleMoveToFolder
+              )
+            )}
           </div>
         )}
       </div>

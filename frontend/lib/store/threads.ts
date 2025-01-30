@@ -190,6 +190,14 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
       const currentThread = get().threads.find(t => t.id === threadId);
       if (!currentThread) throw new Error('Thread not found');
 
+      // Apply optimistic update
+      set((state) => ({
+        ...state,
+        threads: state.threads.map((t) =>
+          t.id === threadId ? { ...t, folder_id: folderId || null } : t
+        ),
+      }));
+
       const updatedThread = await threadActions.updateThread(threadId, {
         folder_id: folderId,
         title: currentThread.title || undefined,
@@ -197,12 +205,20 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
       });
       
       set((state) => ({
+        ...state,
         threads: state.threads.map((t) =>
           t.id === threadId ? updatedThread : t
         ),
       }));
       return updatedThread;
     } catch (error) {
+      // Revert optimistic update on error
+      set((state) => ({
+        ...state,
+        threads: state.threads.map((t) =>
+          t.id === threadId ? { ...t, folder_id: null } : t
+        ),
+      }));
       console.error('Error moving thread to folder:', error);
       throw error;
     }

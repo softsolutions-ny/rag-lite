@@ -131,7 +131,6 @@ export function ChatContainer() {
       // Clear messages and cache
       setInitialMessages([]);
       setLocalMessages([]);
-      MessageCache.clearCache(newThread.id);
 
       // Update URL and current thread ID
       setCurrentThreadId(newThread.id);
@@ -235,73 +234,72 @@ export function ChatContainer() {
     }
   }, [allMessages, scrollToBottom]);
 
-  const handleMessageSubmit = async (
-    content: string,
-    image_url?: string,
-    imageAnalysis?: string
-  ) => {
-    if (!userId || !currentThreadId) return;
+  const handleMessageSubmit = useCallback(
+    async (content: string, image_url?: string, imageAnalysis?: string) => {
+      if (!userId || !currentThreadId) return;
 
-    try {
-      console.log("[ChatContainer] Submitting message:", {
-        content,
-        image_url,
-        imageAnalysis,
-        currentThreadId,
-        model,
-      });
-
-      if (content.trim() && !image_url) {
-        await append({
-          content: content.trim(),
-          role: "user",
-        });
-      } else if (image_url && imageAnalysis) {
-        // Handle image messages
-        const userMessage = await messageActions.createMessage(
-          currentThreadId,
-          content || "Analyzing image...",
-          "user",
-          model,
-          image_url
-        );
-
-        const assistantMessage = await messageActions.createMessage(
-          currentThreadId,
+      try {
+        console.log("[ChatContainer] Submitting message:", {
+          content,
+          image_url,
           imageAnalysis,
-          "assistant",
-          model
-        );
+          currentThreadId,
+          model,
+        });
 
-        // Update UI
-        setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
+        if (content.trim() && !image_url) {
+          await append({
+            content: content.trim(),
+            role: "user",
+          });
+        } else if (image_url && imageAnalysis) {
+          // Handle image messages
+          const userMessage = await messageActions.createMessage(
+            currentThreadId,
+            content || "Analyzing image...",
+            "user",
+            model,
+            image_url
+          );
 
-        // Update thread timestamp optimistically
-        try {
-          const currentThread = threads.find((t) => t.id === currentThreadId);
-          if (currentThread) {
-            await updateThread(
-              currentThreadId,
-              {
-                title: currentThread.title || undefined,
-                updated_at: new Date().toISOString(),
-              },
-              true // Enable optimistic updates
+          const assistantMessage = await messageActions.createMessage(
+            currentThreadId,
+            imageAnalysis,
+            "assistant",
+            model
+          );
+
+          // Update UI
+          setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
+
+          // Update thread timestamp optimistically
+          try {
+            const currentThread = threads.find((t) => t.id === currentThreadId);
+            if (currentThread) {
+              await updateThread(
+                currentThreadId,
+                {
+                  title: currentThread.title || undefined,
+                  updated_at: new Date().toISOString(),
+                },
+                true // Enable optimistic updates
+              );
+            }
+          } catch (error) {
+            console.error(
+              "[ChatContainer] Error updating thread timestamp:",
+              error
             );
           }
-        } catch (error) {
-          console.error(
-            "[ChatContainer] Error updating thread timestamp:",
-            error
-          );
         }
-      }
 
-      console.log("[ChatContainer] Message submitted successfully");
-    } catch (error) {
-      console.error("[ChatContainer] Error submitting message:", error);
-    }
-  };
+        console.log("[ChatContainer] Message submitted successfully");
+      } catch (error) {
+        console.error("[ChatContainer] Error submitting message:", error);
+      }
+    },
+    [userId, currentThreadId, model, append, threads, updateThread]
+  );
 
   const handleStop = useCallback(() => {
     stop();
