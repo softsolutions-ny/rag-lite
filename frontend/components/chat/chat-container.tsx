@@ -120,7 +120,7 @@ export function ChatContainer() {
     try {
       isLoadingRef.current = true;
 
-      // Create thread with optimistic update
+      // Create thread with optimistic update and get the new thread
       const newThread = await createThread();
       console.log("[ChatContainer] Created new thread:", newThread.id);
 
@@ -129,17 +129,18 @@ export function ChatContainer() {
       setLocalMessages([]);
       MessageCache.clearCache(newThread.id);
 
-      // Update URL
+      // Update URL and current thread ID
+      setCurrentThreadId(newThread.id);
       router.replace(`/dashboard/chat?thread=${newThread.id}`, {
         scroll: false,
       });
 
-      // Focus the input after creating a new thread
-      setTimeout(() => {
-        chatInputRef.current?.focus();
-      }, 100);
+      // Focus the input immediately
+      chatInputRef.current?.focus();
     } catch (error) {
       console.error("[ChatContainer] Error creating thread:", error);
+      // On error, clear current thread
+      setCurrentThreadId(undefined);
     } finally {
       isLoadingRef.current = false;
     }

@@ -37,11 +37,18 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
 
   createThread: async () => {
     try {
+      const state = get();
+      
+      // Calculate next untitled number
+      const untitledThreads = state.threads.filter(t => t.title?.startsWith('Untitled ') || !t.title);
+      const nextNumber = untitledThreads.length + 1;
+      const tempTitle = `Untitled ${nextNumber}`;
+      
       // Create optimistic thread
       const optimisticThread: Thread = {
         id: `temp-${Date.now()}`,
         user_id: 'temp',
-        title: null,
+        title: tempTitle,
         label: null,
         folder_id: null,
         created_at: new Date().toISOString(),
@@ -51,24 +58,30 @@ export const useThreadsStore = create<ThreadsState>((set, get) => ({
       // Update state optimistically
       set((state) => ({
         threads: [optimisticThread, ...state.threads],
+        isLoading: true,
       }));
 
       // Create thread in backend
       const newThread = await threadActions.createThread();
 
-      // Update state with real thread
+      // Update state with real thread but preserve the title
       set((state) => ({
         threads: state.threads.map((t) =>
-          t.id === optimisticThread.id ? newThread : t
+          t.id === optimisticThread.id ? { ...newThread, title: tempTitle } : t
         ),
+        isLoading: false,
       }));
 
-      return newThread;
+      // Update the title in the backend
+      await threadActions.updateThread(newThread.id, { title: tempTitle });
+
+      return { ...newThread, title: tempTitle };
     } catch (error) {
       // Revert optimistic update on error
       set((state) => ({
-        threads: state.threads.filter((t) => t.id !== `temp-${Date.now()}`),
+        threads: state.threads.filter(t => !t.id.startsWith('temp-')),
         error: error instanceof Error ? error.message : 'Failed to create thread',
+        isLoading: false,
       }));
       throw error;
     }
