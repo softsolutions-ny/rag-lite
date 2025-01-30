@@ -22,6 +22,7 @@ export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevMessagesLength = useRef<number>(0);
   const isLoadingRef = useRef(false);
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const { userId } = useAuth();
@@ -150,10 +151,15 @@ export function ChatContainer() {
         try {
           const currentThread = threads.find((t) => t.id === currentThreadId);
           if (currentThread) {
-            await updateThread(currentThreadId, {
-              title: currentThread.title || undefined,
-              updated_at: new Date().toISOString(),
-            });
+            // Use optimistic update
+            await updateThread(
+              currentThreadId,
+              {
+                title: currentThread.title || undefined,
+                updated_at: new Date().toISOString(),
+              },
+              true // Enable optimistic updates
+            );
             console.log("[ChatContainer] Thread updated successfully");
           }
         } catch (error) {
@@ -163,6 +169,10 @@ export function ChatContainer() {
           );
         }
       }
+      // Focus the input after response finishes
+      setTimeout(() => {
+        chatInputRef.current?.focus();
+      }, 100);
     }, [currentThreadId, updateThread, threads]),
     onError: (error) => {
       console.error("[ChatContainer] Chat error:", error);
@@ -220,7 +230,6 @@ export function ChatContainer() {
         model,
       });
 
-      // For regular messages, use the chat API
       if (content.trim() && !image_url) {
         await append({
           content: content.trim(),
@@ -228,8 +237,6 @@ export function ChatContainer() {
         });
       } else if (image_url && imageAnalysis) {
         // Handle image messages
-        // If we have an image and analysis, handle it locally and store in DB
-        // Create user message with image
         const userMessage: Message = {
           id: Date.now().toString(),
           content: content || "Analyzing image...",
@@ -238,7 +245,6 @@ export function ChatContainer() {
           model,
         };
 
-        // Create assistant message with analysis
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: imageAnalysis,
@@ -278,14 +284,18 @@ export function ChatContainer() {
         // Update UI
         setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
 
-        // Update thread timestamp
+        // Update thread timestamp optimistically
         try {
           const currentThread = threads.find((t) => t.id === currentThreadId);
           if (currentThread) {
-            await updateThread(currentThreadId, {
-              title: currentThread.title || undefined,
-              updated_at: new Date().toISOString(),
-            });
+            await updateThread(
+              currentThreadId,
+              {
+                title: currentThread.title || undefined,
+                updated_at: new Date().toISOString(),
+              },
+              true // Enable optimistic updates
+            );
           }
         } catch (error) {
           console.error(
@@ -331,6 +341,7 @@ export function ChatContainer() {
       <div className="absolute inset-x-0 bottom-0 pt-4">
         <div className="mx-auto max-w-3xl p-4">
           <ChatInput
+            inputRef={chatInputRef}
             isLoading={isLoading || isLoadingThread}
             onSubmit={handleMessageSubmit}
             onStop={handleStop}

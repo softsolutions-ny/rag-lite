@@ -112,43 +112,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     if (!userId) return;
 
     try {
-      // Optimistically create a new thread
-      const optimisticThread: Thread = {
-        id: `temp-${Date.now()}`,
-        title: "New Thread",
-        user_id: userId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        folder_id: null,
-        label: null,
-      };
-
-      // Update local state immediately
-      useThreadsStore.setState((state) => ({
-        threads: [optimisticThread, ...state.threads],
-      }));
-
-      // Navigate immediately
-      router.push("/dashboard/chat");
-
-      // Create the actual thread
+      // Create the actual thread first
       const thread = await createThread(userId);
 
-      // Update with real thread
-      useThreadsStore.setState((state) => ({
-        threads: state.threads.map((t) =>
-          t.id === optimisticThread.id ? thread : t
-        ),
-      }));
-
-      // Navigate to the real thread
+      // Navigate to the new thread
       router.push(`/dashboard/chat?thread=${thread.id}`);
     } catch (error) {
       console.error("Failed to create thread:", error);
-      // Revert optimistic update on error
-      useThreadsStore.setState((state) => ({
-        threads: state.threads.filter((t) => !t.id.startsWith("temp-")),
-      }));
     }
   };
 

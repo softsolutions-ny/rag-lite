@@ -22,6 +22,7 @@ interface ChatInputProps {
   model: ModelType;
   onModelChange: (model: ModelType) => void;
   disableModelChange?: boolean;
+  inputRef?: React.RefObject<HTMLTextAreaElement>;
 }
 
 export function ChatInput({
@@ -31,6 +32,7 @@ export function ChatInput({
   model,
   onModelChange,
   disableModelChange = false,
+  inputRef: externalRef,
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -39,9 +41,11 @@ export function ChatInput({
     url: string;
     file: File;
   } | null>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const internalInputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const authFetch = useAuthFetch();
+
+  const inputRef = externalRef || internalInputRef;
 
   const handleImageUpload = async (file: File) => {
     if (!file) return;
