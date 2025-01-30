@@ -38,14 +38,20 @@ export function ChatContainer() {
     const param = searchParams.get("thread");
     console.log("[ChatContainer] URL thread param changed:", param);
 
+    // Clear any ongoing operations
+    if (isLoadingRef.current) {
+      isLoadingRef.current = false;
+    }
+
     // Immediately update the current thread ID
     setCurrentThreadId(param as string | undefined);
 
-    if (!param) {
-      // Clear messages when no thread is selected
-      setInitialMessages([]);
-      setLocalMessages([]);
-    }
+    // Clear messages when no thread is selected
+    setInitialMessages([]);
+    setLocalMessages([]);
+
+    // Reset loading state
+    setIsLoadingThread(false);
   }, [searchParams]);
 
   // Set model from first message if it exists
@@ -59,6 +65,7 @@ export function ChatContainer() {
   useEffect(() => {
     console.log("[ChatContainer] Thread ID changed:", currentThreadId);
     let isMounted = true;
+    let abortController = new AbortController();
 
     const fetchMessages = async () => {
       if (!currentThreadId) {
@@ -67,10 +74,15 @@ export function ChatContainer() {
         return;
       }
 
-      if (isLoadingRef.current) return;
+      if (isLoadingRef.current) {
+        // Cancel previous fetch
+        abortController.abort();
+        abortController = new AbortController();
+      }
 
       isLoadingRef.current = true;
       setIsLoadingThread(true);
+
       try {
         // Check cache first
         const cachedMessages = MessageCache.getCachedMessages(currentThreadId);
@@ -82,6 +94,7 @@ export function ChatContainer() {
             setModelFromMessages(cachedMessages);
           }
         } else {
+          // Fetch with abort signal
           const messages = await messageActions.fetchMessages(currentThreadId);
           if (!isMounted) return;
 
@@ -96,6 +109,11 @@ export function ChatContainer() {
           }
         }
       } catch (error) {
+        // Handle abort error
+        if (error instanceof Error && error.name === "AbortError") {
+          console.log("[ChatContainer] Fetch aborted");
+          return;
+        }
         console.error("Error fetching messages:", error);
       } finally {
         if (isMounted) {
@@ -105,10 +123,12 @@ export function ChatContainer() {
       }
     };
 
+    // Start fetching immediately
     fetchMessages();
 
     return () => {
       isMounted = false;
+      abortController.abort();
       isLoadingRef.current = false;
     };
   }, [currentThreadId, setModelFromMessages]);
@@ -189,11 +209,17 @@ export function ChatContainer() {
     },
   });
 
-  // Combine local and chat messages
-  const allMessages = useMemo(
-    () => [...localMessages, ...chatMessages],
-    [localMessages, chatMessages]
-  );
+  // Combine local and chat messages with proper cleanup
+  const allMessages = useMemo(() => {
+    // Filter out any messages that don't belong to the current thread
+    const filteredLocal = localMessages.filter(
+      (m) => !currentThreadId || m.thread_id === currentThreadId
+    );
+    const filteredChat = chatMessages.filter(
+      (m) => !currentThreadId || m.thread_id === currentThreadId
+    );
+    return [...filteredLocal, ...filteredChat];
+  }, [localMessages, chatMessages, currentThreadId]);
 
   // Memoize message rendering
   const memoizedMessages = useMemo(
