@@ -76,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [isNewFolderDialogOpen, setIsNewFolderDialogOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
 
-  // Debounced fetch functions
+  // Debounced fetch functions for subsequent updates
   const debouncedFetch = useMemo(
     () =>
       debounce((uid: string) => {
@@ -86,31 +86,69 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     [fetchThreads, fetchFolders]
   );
 
-  // Only fetch on mount and userId change
+  // Immediate fetch on mount, debounced for updates
   useEffect(() => {
     if (userId) {
-      debouncedFetch(userId);
+      // Immediate fetch on mount
+      const initialFetch = async () => {
+        try {
+          await Promise.all([fetchThreads(userId), fetchFolders(userId)]);
+        } catch (error) {
+          console.error("Error fetching initial data:", error);
+        }
+      };
+      initialFetch();
+
+      // Setup debounced fetch for subsequent updates
+      const cleanup = () => {
+        debouncedFetch.cancel();
+      };
+
+      return cleanup;
     }
-    return () => {
-      debouncedFetch.cancel();
-    };
-  }, [userId, debouncedFetch]);
+  }, [userId, fetchThreads, fetchFolders, debouncedFetch]);
 
   const handleNewThread = async () => {
     if (!userId) return;
 
     try {
-      // First navigate to /dashboard/chat to clear the current thread
+      // Optimistically create a new thread
+      const optimisticThread: Thread = {
+        id: `temp-${Date.now()}`,
+        title: "New Thread",
+        user_id: userId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        folder_id: null,
+        label: null,
+      };
+
+      // Update local state immediately
+      useThreadsStore.setState((state) => ({
+        threads: [optimisticThread, ...state.threads],
+      }));
+
+      // Navigate immediately
       router.push("/dashboard/chat");
 
-      // Small delay to ensure state is cleared
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Then create and navigate to the new thread
+      // Create the actual thread
       const thread = await createThread(userId);
+
+      // Update with real thread
+      useThreadsStore.setState((state) => ({
+        threads: state.threads.map((t) =>
+          t.id === optimisticThread.id ? thread : t
+        ),
+      }));
+
+      // Navigate to the real thread
       router.push(`/dashboard/chat?thread=${thread.id}`);
     } catch (error) {
       console.error("Failed to create thread:", error);
+      // Revert optimistic update on error
+      useThreadsStore.setState((state) => ({
+        threads: state.threads.filter((t) => !t.id.startsWith("temp-")),
+      }));
     }
   };
 

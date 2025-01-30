@@ -205,6 +205,9 @@ if ENV == "production":
         "statement_cache_size": "0",
         "prepared_statements": "false"
     })
+    # Add pgbouncer settings
+    base_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
+    base_engine_args["execution_options"]["prepared_statement_cache"] = False
 else:
     base_engine_args["pool_pre_ping"] = True
 
@@ -225,7 +228,10 @@ sync_engine_args = {
 
 if ENV == "production":
     sync_engine_args["connect_args"]["sslmode"] = "require"
-    sync_engine_args["connect_args"]["options"] += " -c statement_cache_size=0"
+    sync_engine_args["connect_args"]["options"] += " -c statement_cache_size=0 -c prepared_statements=false"
+    # Add pgbouncer settings
+    sync_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
+    sync_engine_args["execution_options"]["prepared_statement_cache"] = False
 
 sync_engine = create_engine(
     settings.DATABASE_URL_SYNC,

@@ -33,13 +33,41 @@ export function ChatContainer() {
   const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [isLoadingThread, setIsLoadingThread] = useState(false);
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
-  const { threads, fetchThreads, updateThread, createThread } =
-    useThreadsStore();
+  const { threads, updateThread, createThread } = useThreadsStore();
+
+  // Create a background thread if none exists
+  useEffect(() => {
+    const initializeThread = async () => {
+      // Only create a thread if we don't have a current thread and user is authenticated
+      if (!currentThreadId && userId && !isLoadingRef.current) {
+        try {
+          isLoadingRef.current = true;
+          const newThread = await createThread(userId);
+          console.log(
+            "[ChatContainer] Created background thread:",
+            newThread.id
+          );
+          router.push(`/dashboard/chat?thread=${newThread.id}`);
+        } catch (error) {
+          console.error(
+            "[ChatContainer] Error creating background thread:",
+            error
+          );
+        } finally {
+          isLoadingRef.current = false;
+        }
+      }
+    };
+
+    initializeThread();
+  }, [currentThreadId, userId, createThread, router]);
 
   // Update currentThreadId when URL changes
   useEffect(() => {
     const param = searchParams.get("thread");
+    console.log("[ChatContainer] URL thread param changed:", param);
     setCurrentThreadId(param as string | undefined);
+
     if (!param) {
       // Clear messages when no thread is selected
       setInitialMessages([]);
@@ -47,15 +75,9 @@ export function ChatContainer() {
     }
   }, [searchParams]);
 
-  // Fetch threads when user ID is available
+  // Fetch messages when thread changes
   useEffect(() => {
-    if (userId) {
-      fetchThreads(userId);
-    }
-  }, [userId, fetchThreads]);
-
-  // Fetch messages only when thread changes
-  useEffect(() => {
+    console.log("[ChatContainer] Thread ID changed:", currentThreadId);
     let isMounted = true;
 
     const fetchMessages = async () => {
@@ -78,6 +100,7 @@ export function ChatContainer() {
 
         if (response.ok) {
           const messages = await response.json();
+          console.log("[ChatContainer] Fetched messages:", messages.length);
           setInitialMessages(
             messages.map((msg: Message) => ({
               id: msg.id,
@@ -119,7 +142,7 @@ export function ChatContainer() {
     stop,
   } = useChat({
     model,
-    threadId: currentThreadId || "",
+    threadId: currentThreadId,
     initialMessages,
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");
@@ -186,7 +209,7 @@ export function ChatContainer() {
     image_url?: string,
     imageAnalysis?: string
   ) => {
-    if (!userId) return;
+    if (!userId || !currentThreadId) return;
 
     try {
       console.log("[ChatContainer] Submitting message:", {
@@ -197,20 +220,15 @@ export function ChatContainer() {
         model,
       });
 
-      // Create a new thread first if we don't have one
-      let threadId = currentThreadId;
-      if (!threadId) {
-        const newThread = await createThread(userId);
-        console.log("[ChatContainer] Created new thread:", newThread.id);
-        threadId = newThread.id;
-        setCurrentThreadId(threadId);
-        await router.push(`/dashboard/chat?thread=${threadId}`);
-        // Wait for state to update
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
-
-      // If we have an image and analysis, handle it locally and store in DB
-      if (image_url && imageAnalysis) {
+      // For regular messages, use the chat API
+      if (content.trim() && !image_url) {
+        await append({
+          content: content.trim(),
+          role: "user",
+        });
+      } else if (image_url && imageAnalysis) {
+        // Handle image messages
+        // If we have an image and analysis, handle it locally and store in DB
         // Create user message with image
         const userMessage: Message = {
           id: Date.now().toString(),
@@ -229,41 +247,42 @@ export function ChatContainer() {
         };
 
         // Store messages in DB
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            thread_id: threadId,
-            role: userMessage.role,
-            content: userMessage.content,
-            model: userMessage.model,
-            image_url: userMessage.image_url,
+        await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              thread_id: currentThreadId,
+              role: userMessage.role,
+              content: userMessage.content,
+              model: userMessage.model,
+              image_url: userMessage.image_url,
+            }),
           }),
-        });
-
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            thread_id: threadId,
-            role: assistantMessage.role,
-            content: assistantMessage.content,
-            model: assistantMessage.model,
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              thread_id: currentThreadId,
+              role: assistantMessage.role,
+              content: assistantMessage.content,
+              model: assistantMessage.model,
+            }),
           }),
-        });
+        ]);
 
         // Update UI
         setLocalMessages((prev) => [...prev, userMessage, assistantMessage]);
 
         // Update thread timestamp
         try {
-          const currentThread = threads.find((t) => t.id === threadId);
+          const currentThread = threads.find((t) => t.id === currentThreadId);
           if (currentThread) {
-            await updateThread(threadId, {
+            await updateThread(currentThreadId, {
               title: currentThread.title || undefined,
               updated_at: new Date().toISOString(),
             });
@@ -274,17 +293,9 @@ export function ChatContainer() {
             error
           );
         }
-      } else {
-        // For regular messages, use the chat API
-        if (content.trim()) {
-          await append({
-            content,
-            role: "user",
-          });
-        }
       }
 
-      console.log("[ChatContainer] All messages appended successfully");
+      console.log("[ChatContainer] Message submitted successfully");
     } catch (error) {
       console.error("[ChatContainer] Error submitting message:", error);
     }

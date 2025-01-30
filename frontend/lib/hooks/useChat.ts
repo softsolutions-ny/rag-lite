@@ -11,7 +11,7 @@ interface Message {
 interface UseChatOptions {
   initialMessages?: Message[];
   model: ModelType;
-  threadId: string;
+  threadId?: string;
   onFinish?: (message: Message) => void;
   onError?: (error: Error) => void;
 }
@@ -37,8 +37,9 @@ export function useChat({
   const append = useCallback(
     async (message: { content: string; role?: 'user' | 'assistant' | 'system' }) => {
       if (!threadId) {
-        console.error("[useChat] No thread ID provided");
-        if (onError) onError(new Error("No thread ID provided"));
+        const error = new Error("Thread ID is required for chat");
+        console.error("[useChat] Error:", error);
+        if (onError) onError(error);
         return;
       }
 
@@ -114,7 +115,7 @@ export function useChat({
           });
         }
       } catch (error) {
-        console.error('Error in chat:', error);
+        console.error('[useChat] Error in chat:', error);
         if (onError && error instanceof Error) {
           onError(error);
         }
