@@ -33,10 +33,19 @@ export function ChatContainer() {
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const { threads, updateThread, createThread } = useThreadsStore();
 
+  // Add a ref to track thread creation state
+  const isCreatingThreadRef = useRef(false);
+
   // Update currentThreadId when URL changes
   useEffect(() => {
     const param = searchParams.get("thread");
     console.log("[ChatContainer] URL thread param changed:", param);
+
+    // Don't update if we're in the middle of creating a thread
+    if (isCreatingThreadRef.current) {
+      console.log("[ChatContainer] Ignoring URL change during thread creation");
+      return;
+    }
 
     // Clear any ongoing operations
     if (isLoadingRef.current) {
@@ -46,7 +55,7 @@ export function ChatContainer() {
     // Immediately update the current thread ID
     setCurrentThreadId(param as string | undefined);
 
-    // Clear messages when no thread is selected
+    // Clear messages when thread changes
     setInitialMessages([]);
     setLocalMessages([]);
 
@@ -135,9 +144,13 @@ export function ChatContainer() {
 
   // Create a new thread when requested
   const handleCreateThread = useCallback(async () => {
-    if (!userId || isLoadingRef.current) return;
+    if (!userId || isLoadingRef.current || isCreatingThreadRef.current) {
+      console.log("[ChatContainer] Preventing duplicate thread creation");
+      return;
+    }
 
     try {
+      isCreatingThreadRef.current = true;
       isLoadingRef.current = true;
 
       // Create thread with optimistic update and get the new thread
@@ -151,18 +164,24 @@ export function ChatContainer() {
 
       // Update URL and current thread ID
       setCurrentThreadId(newThread.id);
-      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
+      await router.replace(`/dashboard/chat?thread=${newThread.id}`, {
         scroll: false,
       });
 
-      // Focus the input immediately
-      chatInputRef.current?.focus();
+      // Focus the input after a short delay to ensure the UI has updated
+      setTimeout(() => {
+        chatInputRef.current?.focus();
+      }, 100);
     } catch (error) {
       console.error("[ChatContainer] Error creating thread:", error);
       // On error, clear current thread
       setCurrentThreadId(undefined);
     } finally {
       isLoadingRef.current = false;
+      // Add a small delay before allowing new thread creation
+      setTimeout(() => {
+        isCreatingThreadRef.current = false;
+      }, 500);
     }
   }, [userId, createThread, router]);
 
