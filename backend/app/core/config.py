@@ -189,11 +189,15 @@ base_engine_args = {
     "poolclass": NullPool,  # Disable SQLAlchemy pooling
     "connect_args": {
         "server_settings": {
-            "search_path": "elucide,public"
+            "search_path": "elucide,public",
+            "statement_cache_size": "0",
+            "prepared_statements": "false"
         }
     },
     "execution_options": {
-        "isolation_level": "READ COMMITTED"
+        "isolation_level": "READ COMMITTED",
+        "prepared_statement_cache_size": 0,
+        "prepared_statement_cache": False
     }
 }
 
@@ -201,13 +205,9 @@ base_engine_args = {
 if ENV == "production":
     base_engine_args["pool_pre_ping"] = False
     base_engine_args["connect_args"]["ssl"] = "require"
-    base_engine_args["connect_args"]["server_settings"].update({
-        "statement_cache_size": "0",
-        "prepared_statements": "false"
-    })
-    # Add pgbouncer settings
-    base_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
-    base_engine_args["execution_options"]["prepared_statement_cache"] = False
+    # Add pgbouncer settings directly to connect_args
+    base_engine_args["connect_args"]["statement_cache_size"] = 0
+    base_engine_args["connect_args"]["prepared_statements"] = False
 else:
     base_engine_args["pool_pre_ping"] = True
 
