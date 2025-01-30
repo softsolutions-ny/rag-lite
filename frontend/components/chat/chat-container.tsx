@@ -265,12 +265,6 @@ export function ChatContainer() {
           // Add to pending messages
           MessageCache.addPendingMessage(currentThreadId, optimisticMessage);
 
-          // Start the append operation
-          const appendPromise = append({
-            content: content.trim(),
-            role: "user",
-          });
-
           // Update thread timestamp optimistically
           try {
             const currentThread = threads.find((t) => t.id === currentThreadId);
@@ -291,14 +285,31 @@ export function ChatContainer() {
             );
           }
 
-          // Wait for the append to complete
-          await appendPromise;
+          console.log("[ChatContainer] Message submitted successfully");
 
-          // Remove from pending once complete
-          MessageCache.removePendingMessage(
-            currentThreadId,
-            optimisticMessage.id
-          );
+          // Start the append operation without waiting
+          append({
+            content: content.trim(),
+            role: "user",
+          })
+            .then(() => {
+              // Remove from pending once complete
+              MessageCache.removePendingMessage(
+                currentThreadId,
+                optimisticMessage.id
+              );
+            })
+            .catch((error) => {
+              console.error(
+                "[ChatContainer] Error in append operation:",
+                error
+              );
+              // Remove pending message on error
+              MessageCache.removePendingMessage(
+                currentThreadId,
+                optimisticMessage.id
+              );
+            });
         } else if (image_url && imageAnalysis) {
           // Handle image messages
           const userMessage = await messageActions.createMessage(
@@ -342,9 +353,9 @@ export function ChatContainer() {
               error
             );
           }
-        }
 
-        console.log("[ChatContainer] Message submitted successfully");
+          console.log("[ChatContainer] Message submitted successfully");
+        }
       } catch (error) {
         console.error("[ChatContainer] Error submitting message:", error);
         // Remove pending message on error
