@@ -189,25 +189,22 @@ base_engine_args = {
     "poolclass": NullPool,  # Disable SQLAlchemy pooling
     "connect_args": {
         "server_settings": {
-            "search_path": "elucide,public",
-            "statement_cache_size": "0",
-            "prepared_statements": "false"
+            "search_path": "elucide,public"
         }
     },
     "execution_options": {
-        "isolation_level": "READ COMMITTED",
-        "prepared_statement_cache_size": 0,
-        "prepared_statement_cache": False
+        "isolation_level": "READ COMMITTED"
     }
 }
 
 # Add production-specific settings
 if ENV == "production":
     base_engine_args["pool_pre_ping"] = False
-    base_engine_args["connect_args"]["ssl"] = "require"
-    # Add pgbouncer settings directly to connect_args
-    base_engine_args["connect_args"]["statement_cache_size"] = 0
-    base_engine_args["connect_args"]["prepared_statements"] = False
+    base_engine_args["connect_args"].update({
+        "ssl": "require",
+        "prepared_statement_cache_size": 0,
+        "options": "-c statement_cache_size=0"
+    })
 else:
     base_engine_args["pool_pre_ping"] = True
 
@@ -218,20 +215,17 @@ async_engine = create_async_engine(
     **base_engine_args
 )
 
-# Sync engine uses the same configuration but with options instead of server_settings
+# Sync engine uses the same configuration
 sync_engine_args = {
     **base_engine_args,
     "connect_args": {
-        "options": "-c search_path=elucide,public"
+        "options": "-c search_path=elucide,public -c statement_cache_size=0",
+        "prepared_statement_cache_size": 0
     }
 }
 
 if ENV == "production":
     sync_engine_args["connect_args"]["sslmode"] = "require"
-    sync_engine_args["connect_args"]["options"] += " -c statement_cache_size=0 -c prepared_statements=false"
-    # Add pgbouncer settings
-    sync_engine_args["execution_options"]["prepared_statement_cache_size"] = 0
-    sync_engine_args["execution_options"]["prepared_statement_cache"] = False
 
 sync_engine = create_engine(
     settings.DATABASE_URL_SYNC,
