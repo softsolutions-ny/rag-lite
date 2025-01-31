@@ -22,6 +22,7 @@ export function ChatContainer() {
   const prevMessagesLength = useRef<number>(0);
   const isLoadingRef = useRef(false);
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
+  const lastThreadIdRef = useRef<string | undefined>();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { userId } = useAuth();
@@ -46,13 +47,27 @@ export function ChatContainer() {
   // Update currentThreadId when URL changes
   useEffect(() => {
     const param = searchParams.get("thread");
-    console.log("[ChatContainer] URL thread param changed:", param);
 
-    // Clear messages immediately when thread changes
+    // Prevent redundant updates
+    if (param === lastThreadIdRef.current) {
+      return;
+    }
+
+    console.log("[ChatContainer] [URL Change] Thread param changed:", {
+      from: lastThreadIdRef.current,
+      to: param,
+      isLoadingThread,
+    });
+
+    // Clear loading state and messages immediately
+    if (isLoadingThread) {
+      setThreadLoading(false);
+    }
     setInitialMessages([]);
     setLocalMessages([]);
 
-    // Immediately update the current thread ID
+    // Update refs and state
+    lastThreadIdRef.current = param as string | undefined;
     setCurrentThreadId(param as string | undefined);
 
     // If no thread selected, we're done
@@ -63,7 +78,10 @@ export function ChatContainer() {
     // Check cache first before setting loading state
     const cachedMessages = MessageCache.getCachedMessages(param);
     if (cachedMessages) {
-      console.log("[ChatContainer] Using cached messages");
+      console.log(
+        "[ChatContainer] [URL Change] Using cached messages for thread:",
+        param
+      );
       // Remove any optimistic messages from cache before using it
       const cleanedMessages = cachedMessages.filter(
         (msg) => !MessageCache.isOptimisticId(msg.id)
@@ -73,22 +91,97 @@ export function ChatContainer() {
       return;
     }
 
-    // Only set loading state if we need to fetch
+    // Set loading state for fetch
+    console.log(
+      "[ChatContainer] [URL Change] Setting loading state for thread:",
+      param
+    );
     setThreadLoading(true);
-  }, [searchParams, setModelFromMessages, setThreadLoading]);
+  }, [searchParams, setModelFromMessages, setThreadLoading, isLoadingThread]);
 
-  // Separate effect for fetching messages to avoid blocking UI
+  // Create a new thread when requested
+  const handleCreateThread = useCallback(async () => {
+    if (!userId || isLoadingRef.current) return;
+
+    try {
+      console.log("[ChatContainer] [Create Thread] Starting thread creation");
+      isLoadingRef.current = true;
+      setThreadLoading(true);
+
+      // Create thread with optimistic update and get the new thread
+      const newThread = await createThread();
+      console.log("[ChatContainer] [Create Thread] Thread created:", {
+        id: newThread.id,
+        previousThreadId: lastThreadIdRef.current,
+      });
+
+      // Clear messages and cache
+      console.log("[ChatContainer] [Create Thread] Clearing messages");
+      setInitialMessages([]);
+      setLocalMessages([]);
+
+      // Update URL and current thread ID
+      console.log("[ChatContainer] [Create Thread] Updating current thread ID");
+      lastThreadIdRef.current = newThread.id; // Update ref before state change
+      setCurrentThreadId(newThread.id);
+
+      // Use replace to avoid adding to history stack
+      console.log("[ChatContainer] [Create Thread] Updating URL");
+      window.history.replaceState(
+        {},
+        "",
+        `/dashboard/chat?thread=${newThread.id}`
+      );
+      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
+        scroll: false,
+      });
+
+      // Focus the input immediately
+      console.log("[ChatContainer] [Create Thread] Focusing input");
+      chatInputRef.current?.focus();
+    } catch (error) {
+      console.error("[ChatContainer] [Create Thread] Error:", error);
+      // On error, clear current thread
+      lastThreadIdRef.current = undefined;
+      setCurrentThreadId(undefined);
+      setThreadLoading(false);
+    } finally {
+      console.log("[ChatContainer] [Create Thread] Cleanup");
+      isLoadingRef.current = false;
+    }
+  }, [userId, createThread, router, setThreadLoading]);
+
+  // Separate effect for fetching messages
   useEffect(() => {
     let isMounted = true;
+    let controller: AbortController | null = null;
 
     const fetchMessages = async () => {
       if (!currentThreadId || !isLoadingThread) return;
 
+      // Create new abort controller for this fetch
+      controller = new AbortController();
+
+      console.log("[ChatContainer] [Fetch] Starting message fetch:", {
+        threadId: currentThreadId,
+        isLoadingThread,
+      });
+
       try {
         const messages = await messageActions.fetchMessages(currentThreadId);
-        if (!isMounted) return;
 
-        console.log("[ChatContainer] Fetched messages:", messages.length);
+        // Check if we're still mounted and this is still the current fetch
+        if (!isMounted || controller.signal.aborted) {
+          console.log(
+            "[ChatContainer] [Fetch] Fetch aborted or component unmounted"
+          );
+          return;
+        }
+
+        console.log("[ChatContainer] [Fetch] Messages received:", {
+          threadId: currentThreadId,
+          count: messages.length,
+        });
 
         // Remove any optimistic messages before setting state
         const cleanedMessages = messages.filter(
@@ -100,19 +193,29 @@ export function ChatContainer() {
           MessageCache.getPendingMessages(currentThreadId);
         const allMessages = [...cleanedMessages, ...pendingMessages];
 
-        if (isMounted) {
+        if (isMounted && !controller.signal.aborted) {
+          console.log("[ChatContainer] [Fetch] Updating messages:", {
+            threadId: currentThreadId,
+            messageCount: allMessages.length,
+          });
           setInitialMessages(allMessages);
           setModelFromMessages(allMessages);
 
-          // Cache the fetched messages (pending messages will be added automatically)
+          // Cache the fetched messages
           if (cleanedMessages.length > 0) {
             MessageCache.cacheMessages(currentThreadId, cleanedMessages);
           }
         }
       } catch (error) {
-        console.error("Error fetching messages:", error);
+        if (!controller.signal.aborted) {
+          console.error("[ChatContainer] [Fetch] Error:", error);
+        }
       } finally {
-        if (isMounted) {
+        if (isMounted && !controller.signal.aborted) {
+          console.log("[ChatContainer] [Fetch] Finishing fetch:", {
+            threadId: currentThreadId,
+            isLoadingThread,
+          });
           setThreadLoading(false);
         }
       }
@@ -121,10 +224,17 @@ export function ChatContainer() {
     fetchMessages();
 
     return () => {
+      console.log("[ChatContainer] [Fetch] Cleanup effect:", {
+        threadId: currentThreadId,
+        isLoadingThread,
+      });
+
+      // Abort any in-flight fetch
+      if (controller) {
+        controller.abort();
+      }
+
       isMounted = false;
-      // Clear messages when unmounting/switching threads
-      setInitialMessages([]);
-      setLocalMessages([]);
     };
   }, [
     currentThreadId,
@@ -132,48 +242,6 @@ export function ChatContainer() {
     setModelFromMessages,
     setThreadLoading,
   ]);
-
-  // Create a new thread when requested
-  const handleCreateThread = useCallback(async () => {
-    if (!userId || isLoadingRef.current) return;
-
-    try {
-      isLoadingRef.current = true;
-      setThreadLoading(true);
-
-      // Create thread with optimistic update and get the new thread
-      const newThread = await createThread();
-      console.log("[ChatContainer] Created new thread:", newThread.id);
-
-      // Clear messages and cache
-      setInitialMessages([]);
-      setLocalMessages([]);
-
-      // Update URL and current thread ID
-      setCurrentThreadId(newThread.id);
-
-      // Use replace to avoid adding to history stack
-      window.history.replaceState(
-        {},
-        "",
-        `/dashboard/chat?thread=${newThread.id}`
-      );
-      router.replace(`/dashboard/chat?thread=${newThread.id}`, {
-        scroll: false,
-      });
-
-      // Focus the input immediately
-      chatInputRef.current?.focus();
-    } catch (error) {
-      console.error("[ChatContainer] Error creating thread:", error);
-      // On error, clear current thread
-      setCurrentThreadId(undefined);
-      setThreadLoading(false);
-    } finally {
-      isLoadingRef.current = false;
-      // Note: We don't clear isLoadingThread here because it will be cleared by the URL change effect
-    }
-  }, [userId, createThread, router, setThreadLoading]);
 
   const {
     messages: chatMessages,
