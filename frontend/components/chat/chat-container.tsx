@@ -127,6 +127,7 @@ export function ChatContainer() {
 
     try {
       isLoadingRef.current = true;
+      setIsLoadingThread(true); // Set loading state while creating thread
 
       // Create thread with optimistic update and get the new thread
       const newThread = await createThread();
@@ -155,8 +156,10 @@ export function ChatContainer() {
       console.error("[ChatContainer] Error creating thread:", error);
       // On error, clear current thread
       setCurrentThreadId(undefined);
+      setIsLoadingThread(false); // Clear loading state on error
     } finally {
       isLoadingRef.current = false;
+      // Note: We don't clear isLoadingThread here because it will be cleared by the URL change effect
     }
   }, [userId, createThread, router]);
 
