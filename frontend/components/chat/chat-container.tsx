@@ -186,23 +186,16 @@ export function ChatContainer() {
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");
 
-      // Focus the input with a small delay to ensure DOM is ready
-      console.log("[ChatContainer] Scheduling input focus...");
-      setTimeout(() => {
-        console.log("[ChatContainer] Attempting to focus input...");
-        if (chatInputRef.current) {
-          chatInputRef.current.focus();
-          console.log("[ChatContainer] Input focused successfully");
-        } else {
-          console.log("[ChatContainer] Chat input ref is null");
-        }
-      }, 0);
+      // Focus input immediately
+      console.log("[ChatContainer] Focusing input...");
+      chatInputRef.current?.focus();
 
-      // Then handle thread update asynchronously
+      // Handle thread update in the background
       if (currentThreadId) {
         try {
           const currentThread = threads.find((t) => t.id === currentThreadId);
           if (currentThread && !currentThread.title?.startsWith("Untitled")) {
+            console.log("[ChatContainer] Updating thread timestamp...");
             await updateThread(
               currentThreadId,
               {
