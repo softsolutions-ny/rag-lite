@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { MessageCache } from "@/lib/services/cache";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useThreadLoading } from "@/lib/store/thread-loading-context";
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -30,9 +31,9 @@ export function ChatContainer() {
     threadParam as string | undefined
   );
   const [initialMessages, setInitialMessages] = useState<Message[]>([]);
-  const [isLoadingThread, setIsLoadingThread] = useState(false);
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const { threads, updateThread, createThread } = useThreadsStore();
+  const { isLoadingThread, setThreadLoading } = useThreadLoading();
 
   // Set model from first message if it exists
   const setModelFromMessages = useCallback((messages: Message[]) => {
@@ -71,8 +72,8 @@ export function ChatContainer() {
     }
 
     // Only set loading state if we need to fetch
-    setIsLoadingThread(true);
-  }, [searchParams, setModelFromMessages]);
+    setThreadLoading(true);
+  }, [searchParams, setModelFromMessages, setThreadLoading]);
 
   // Separate effect for fetching messages to avoid blocking UI
   useEffect(() => {
@@ -109,7 +110,7 @@ export function ChatContainer() {
         console.error("Error fetching messages:", error);
       } finally {
         if (isMounted) {
-          setIsLoadingThread(false);
+          setThreadLoading(false);
         }
       }
     };
@@ -119,7 +120,12 @@ export function ChatContainer() {
     return () => {
       isMounted = false;
     };
-  }, [currentThreadId, isLoadingThread, setModelFromMessages]);
+  }, [
+    currentThreadId,
+    isLoadingThread,
+    setModelFromMessages,
+    setThreadLoading,
+  ]);
 
   // Create a new thread when requested
   const handleCreateThread = useCallback(async () => {
@@ -127,7 +133,7 @@ export function ChatContainer() {
 
     try {
       isLoadingRef.current = true;
-      setIsLoadingThread(true); // Set loading state while creating thread
+      setThreadLoading(true);
 
       // Create thread with optimistic update and get the new thread
       const newThread = await createThread();
@@ -156,12 +162,12 @@ export function ChatContainer() {
       console.error("[ChatContainer] Error creating thread:", error);
       // On error, clear current thread
       setCurrentThreadId(undefined);
-      setIsLoadingThread(false); // Clear loading state on error
+      setThreadLoading(false);
     } finally {
       isLoadingRef.current = false;
       // Note: We don't clear isLoadingThread here because it will be cleared by the URL change effect
     }
-  }, [userId, createThread, router]);
+  }, [userId, createThread, router, setThreadLoading]);
 
   const {
     messages: chatMessages,

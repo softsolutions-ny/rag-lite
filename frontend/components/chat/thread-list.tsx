@@ -25,6 +25,7 @@ import { useFoldersStore, useThreadsStore } from "@/lib/store";
 import { MessageCache } from "@/lib/services/cache";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as messageActions from "@/lib/actions/message";
+import { useThreadLoading } from "@/lib/store/thread-loading-context";
 
 interface ThreadListProps {
   threads: Thread[];
@@ -60,6 +61,7 @@ const ThreadItem = memo(
   }) => {
     const [editingTitle, setEditingTitle] = useState(thread.title || "");
     const [isEditing, setIsEditing] = useState(false);
+    const { startThreadLoading } = useThreadLoading();
 
     // Handle rename
     const handleRename = useCallback(async () => {
@@ -96,6 +98,14 @@ const ThreadItem = memo(
       }
     }, [thread.id, currentThreadId]);
 
+    // Handle thread selection with loading state
+    const handleSelect = useCallback(() => {
+      if (currentThreadId !== thread.id) {
+        startThreadLoading();
+        onSelect(thread.id);
+      }
+    }, [currentThreadId, thread.id, onSelect, startThreadLoading]);
+
     return (
       <div
         key={thread.id}
@@ -128,7 +138,7 @@ const ThreadItem = memo(
               currentThreadId === thread.id && "bg-muted hover:bg-muted",
               isInFolder ? "pl-8" : "pl-2"
             )}
-            onClick={() => onSelect(thread.id)}
+            onClick={handleSelect}
           >
             <div className="flex items-center min-w-0 flex-1">
               <span className="truncate text-sm leading-none">
@@ -211,6 +221,7 @@ export function ThreadList({
   );
   const { moveThreadToFolder, fetchThreads } = useThreadsStore();
   const { deleteFolder, updateFolder } = useFoldersStore();
+  const { isLoadingThread } = useThreadLoading();
 
   // Auto-expand folder containing current thread
   useEffect(() => {
@@ -313,7 +324,10 @@ export function ThreadList({
     />
   );
 
-  if (isLoading) {
+  // Show loading skeleton only for initial load or thread selection
+  const showLoadingSkeleton = isLoading || (isLoadingThread && currentThreadId);
+
+  if (showLoadingSkeleton) {
     return (
       <div className="flex flex-col gap-1 p-2">
         {[1, 2, 3, 4, 5].map((i) => (

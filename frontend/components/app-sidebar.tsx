@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Input } from "./ui/input";
 import { useState } from "react";
+import { useThreadLoading } from "@/lib/store/thread-loading-context";
 
 const NewChatButton = React.forwardRef<
   HTMLButtonElement,
@@ -77,6 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const currentThreadId = searchParams.get("thread") || undefined;
   const [isNewFolderDialogOpen, setIsNewFolderDialogOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
+  const { startThreadLoading } = useThreadLoading();
 
   // Debounced fetch functions for subsequent updates
   const debouncedFetch = useMemo(
@@ -112,20 +114,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   // Memoize organized threads calculation
   const organizedThreads = useMemo(() => {
-    // Don't show loading state for subsequent updates
-    if (isLoadingThreads && threads.length > 0) {
-      return {
-        unfoldered: threads.filter((t) => !t.folder_id),
-        foldered: new Map(
-          folders.map((f) => [
-            f.id,
-            threads.filter((t) => t.folder_id === f.id),
-          ])
-        ),
-      };
-    }
-
-    // Only show loading state on initial load
+    // Only show loading state on initial load when we have no threads
     if (isLoadingThreads && threads.length === 0) {
       return { unfoldered: [], foldered: new Map() };
     }
@@ -164,6 +153,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Optimistic updates for thread operations
   const handleNewThread = async () => {
     try {
+      startThreadLoading();
       // Create the actual thread first
       const thread = await createThread();
 
@@ -310,7 +300,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               onSelectThread={handleSelectThread}
               onDeleteThread={handleDeleteThread}
               onRenameThread={handleRenameThread}
-              isLoading={isLoadingThreads || isLoadingFolders}
+              isLoading={isLoadingThreads && threads.length === 0}
             />
           </SidebarGroupContent>
         </SidebarGroup>
