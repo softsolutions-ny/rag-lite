@@ -179,16 +179,18 @@ export function ChatContainer() {
     model,
     threadId: currentThreadId,
     initialMessages,
-    onStream: useCallback(() => {
+    onStream: useCallback((chunk: string, isLastChunk: boolean) => {
       // If we get any chunk, we've received the first token
       setIsWaitingForFirstToken(false);
+
+      // Focus input immediately when we get the last chunk
+      if (isLastChunk) {
+        console.log("[ChatContainer] Last chunk received, focusing input...");
+        chatInputRef.current?.focus();
+      }
     }, []),
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");
-
-      // Focus input immediately
-      console.log("[ChatContainer] Focusing input...");
-      chatInputRef.current?.focus();
 
       // Handle thread update in the background
       if (currentThreadId) {

@@ -10,7 +10,7 @@ interface UseChatOptions {
   initialMessages?: Message[];
   onFinish?: () => void;
   onError?: (error: Error) => void;
-  onStream?: (chunk: string) => void;
+  onStream?: (chunk: string, isLastChunk: boolean) => void;
 }
 
 export function useChat({
@@ -145,13 +145,17 @@ export function useChat({
 
         while (true) {
           const { value, done } = await reader.read();
-          if (done) break;
+          if (done) {
+            // Signal this is the last chunk
+            onStream?.("", true);
+            break;
+          }
 
           const chunk = decoder.decode(value);
           content += chunk;
 
           // Call onStream callback with the chunk
-          onStream?.(chunk);
+          onStream?.(chunk, false);
 
           // Update the assistant message as we receive chunks
           setMessages((prev) => {
