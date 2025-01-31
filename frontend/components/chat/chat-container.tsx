@@ -48,13 +48,15 @@ export function ChatContainer() {
     const param = searchParams.get("thread");
     console.log("[ChatContainer] URL thread param changed:", param);
 
+    // Clear messages immediately when thread changes
+    setInitialMessages([]);
+    setLocalMessages([]);
+
     // Immediately update the current thread ID
     setCurrentThreadId(param as string | undefined);
 
-    // Clear messages if no thread selected
+    // If no thread selected, we're done
     if (!param) {
-      setInitialMessages([]);
-      setLocalMessages([]);
       return;
     }
 
@@ -67,7 +69,6 @@ export function ChatContainer() {
         (msg) => !MessageCache.isOptimisticId(msg.id)
       );
       setInitialMessages(cleanedMessages);
-      setLocalMessages([]);
       setModelFromMessages(cleanedMessages);
       return;
     }
@@ -99,13 +100,14 @@ export function ChatContainer() {
           MessageCache.getPendingMessages(currentThreadId);
         const allMessages = [...cleanedMessages, ...pendingMessages];
 
-        setInitialMessages(allMessages);
-        setLocalMessages([]);
-        setModelFromMessages(allMessages);
+        if (isMounted) {
+          setInitialMessages(allMessages);
+          setModelFromMessages(allMessages);
 
-        // Cache the fetched messages (pending messages will be added automatically)
-        if (cleanedMessages.length > 0) {
-          MessageCache.cacheMessages(currentThreadId, cleanedMessages);
+          // Cache the fetched messages (pending messages will be added automatically)
+          if (cleanedMessages.length > 0) {
+            MessageCache.cacheMessages(currentThreadId, cleanedMessages);
+          }
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -120,6 +122,9 @@ export function ChatContainer() {
 
     return () => {
       isMounted = false;
+      // Clear messages when unmounting/switching threads
+      setInitialMessages([]);
+      setLocalMessages([]);
     };
   }, [
     currentThreadId,
@@ -417,7 +422,7 @@ export function ChatContainer() {
     <>
       <div className="absolute inset-0 bottom-[88px]">
         <ScrollArea className="h-full">
-          <div className="flex flex-col gap-4 px-4">
+          <div className="flex flex-col gap-4 px-4" key={currentThreadId}>
             {currentThreadId ? (
               <>
                 {isLoadingThread ? (
