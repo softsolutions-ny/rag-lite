@@ -136,10 +136,11 @@ export function ChatInput({
   };
 
   useEffect(() => {
-    if (inputRef.current) {
+    // Focus input when component mounts or updates
+    if (!isLoading && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [inputRef]);
+  }, [isLoading, inputRef]);
 
   return (
     <div className="relative flex w-full max-w-3xl flex-col self-center rounded-lg border bg-background p-2">

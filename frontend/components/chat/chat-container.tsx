@@ -170,18 +170,31 @@ export function ChatContainer() {
     initialMessages,
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");
+
+      // Focus the input with a small delay to ensure DOM is ready
+      console.log("[ChatContainer] Scheduling input focus...");
+      setTimeout(() => {
+        console.log("[ChatContainer] Attempting to focus input...");
+        if (chatInputRef.current) {
+          chatInputRef.current.focus();
+          console.log("[ChatContainer] Input focused successfully");
+        } else {
+          console.log("[ChatContainer] Chat input ref is null");
+        }
+      }, 0);
+
+      // Then handle thread update asynchronously
       if (currentThreadId) {
         try {
           const currentThread = threads.find((t) => t.id === currentThreadId);
-          if (currentThread) {
-            // Use optimistic update
+          if (currentThread && !currentThread.title?.startsWith("Untitled")) {
             await updateThread(
               currentThreadId,
               {
                 title: currentThread.title || undefined,
                 updated_at: new Date().toISOString(),
               },
-              true // Enable optimistic updates
+              true
             );
             console.log("[ChatContainer] Thread updated successfully");
           }
@@ -192,10 +205,6 @@ export function ChatContainer() {
           );
         }
       }
-      // Focus the input after response finishes
-      setTimeout(() => {
-        chatInputRef.current?.focus();
-      }, 100);
     }, [currentThreadId, updateThread, threads]),
     onError: (error) => {
       console.error("[ChatContainer] Chat error:", error);

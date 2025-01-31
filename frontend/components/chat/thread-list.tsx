@@ -47,6 +47,7 @@ const ThreadItem = memo(
     onDelete,
     onRename,
     onMoveToFolder,
+    folders,
   }: {
     thread: Thread;
     isInFolder: boolean;
@@ -55,9 +56,27 @@ const ThreadItem = memo(
     onDelete?: (threadId: string) => void;
     onRename?: (threadId: string, newTitle: string) => void;
     onMoveToFolder: (threadId: string, folderId: string | undefined) => void;
+    folders: Folder[];
   }) => {
-    const [editingTitle, setEditingTitle] = useState("");
+    const [editingTitle, setEditingTitle] = useState(thread.title || "");
     const [isEditing, setIsEditing] = useState(false);
+
+    // Handle rename
+    const handleRename = useCallback(async () => {
+      if (editingTitle.trim() && onRename) {
+        try {
+          await onRename(thread.id, editingTitle.trim());
+          setIsEditing(false);
+        } catch (error) {
+          console.error("Error renaming thread:", error);
+          // Revert to original title on error
+          setEditingTitle(thread.title || "");
+          setIsEditing(false);
+        }
+      } else {
+        setIsEditing(false);
+      }
+    }, [editingTitle, thread.id, thread.title, onRename]);
 
     // Preload messages on hover
     const handleMouseEnter = useCallback(async () => {
@@ -91,18 +110,13 @@ const ThreadItem = memo(
               onChange={(e) => setEditingTitle(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  onRename?.(thread.id, editingTitle.trim());
-                  setIsEditing(false);
+                  handleRename();
                 } else if (e.key === "Escape") {
+                  setEditingTitle(thread.title || "");
                   setIsEditing(false);
                 }
               }}
-              onBlur={() => {
-                if (editingTitle.trim()) {
-                  onRename?.(thread.id, editingTitle.trim());
-                }
-                setIsEditing(false);
-              }}
+              onBlur={handleRename}
               className="h-7"
             />
           </div>
@@ -155,7 +169,15 @@ const ThreadItem = memo(
                   <FolderInput className="h-3.5 w-3.5 mr-2" />
                   Remove from folder
                 </DropdownMenuItem>
-                {/* Folder items rendered by parent component */}
+                {folders.map((folder) => (
+                  <DropdownMenuItem
+                    key={folder.id}
+                    onSelect={() => onMoveToFolder(thread.id, folder.id)}
+                  >
+                    <FolderIcon className="h-3.5 w-3.5 mr-2" />
+                    {folder.name}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuItem
@@ -275,7 +297,8 @@ export function ThreadList({
     onSelectThread?: (threadId: string) => void,
     onDeleteThread?: (threadId: string) => void,
     onRenameThread?: (threadId: string, newTitle: string) => void,
-    onMoveToFolder?: (threadId: string, folderId: string | undefined) => void
+    onMoveToFolder?: (threadId: string, folderId: string | undefined) => void,
+    folders?: Folder[]
   ) => (
     <ThreadItem
       key={thread.id}
@@ -286,6 +309,7 @@ export function ThreadList({
       onDelete={onDeleteThread}
       onRename={onRenameThread}
       onMoveToFolder={onMoveToFolder!}
+      folders={folders!}
     />
   );
 
@@ -386,7 +410,8 @@ export function ThreadList({
                       onSelectThread,
                       onDeleteThread,
                       onRenameThread,
-                      handleMoveToFolder
+                      handleMoveToFolder,
+                      folders
                     )
                   )}
                 </div>
@@ -406,7 +431,8 @@ export function ThreadList({
                 onSelectThread,
                 onDeleteThread,
                 onRenameThread,
-                handleMoveToFolder
+                handleMoveToFolder,
+                folders
               )
             )}
           </div>
