@@ -14,6 +14,7 @@ import { Message } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { MessageCache } from "@/lib/services/cache";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ChatContainer() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -397,7 +398,33 @@ export function ChatContainer() {
           <div className="flex flex-col gap-4 px-4">
             {currentThreadId ? (
               <>
-                {memoizedMessages.length > 0 ? (
+                {isLoadingThread ? (
+                  <div className="space-y-4">
+                    <div className="mx-auto max-w-3xl w-full px-4">
+                      <div className="flex w-full justify-end">
+                        <div className="max-w-[75%]">
+                          <Skeleton className="h-12 w-64" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mx-auto max-w-3xl w-full px-4">
+                      <div className="flex w-full justify-start">
+                        <div className="max-w-[75%] space-y-3">
+                          <Skeleton className="h-4 w-72" />
+                          <Skeleton className="h-4 w-80" />
+                          <Skeleton className="h-4 w-64" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mx-auto max-w-3xl w-full px-4">
+                      <div className="flex w-full justify-end">
+                        <div className="max-w-[75%]">
+                          <Skeleton className="h-10 w-52" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : memoizedMessages.length > 0 ? (
                   memoizedMessages
                 ) : (
                   <div className="flex h-[50vh] items-center justify-center text-center">
