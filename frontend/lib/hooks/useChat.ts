@@ -146,10 +146,57 @@ export function useChat({
         while (true) {
           const { value, done } = await reader.read();
           if (done) {
-            // Signal this is the last chunk
+            // Signal this is the last chunk BEFORE starting background operations
             const timestamp = new Date().toISOString();
             console.log(`[useChat] [${timestamp}] Stream done, sending last chunk signal`);
             onStream?.("", true);
+
+            // Start background operations AFTER signaling completion
+            setTimeout(async () => {
+              try {
+                const bgTimestamp = new Date().toISOString();
+                console.log(`[useChat] [${bgTimestamp}] Starting background message creation`);
+                
+                const [finalUserMessage, finalAssistantMessage] = await Promise.all([
+                  messageActions.createMessage(
+                    threadId,
+                    userMessage.content,
+                    'user',
+                    model
+                  ),
+                  messageActions.createMessage(
+                    threadId,
+                    content,
+                    'assistant',
+                    model
+                  )
+                ]);
+
+                const endTimestamp = new Date().toISOString();
+                console.log(`[useChat] [${endTimestamp}] Final messages created successfully`);
+
+                // Replace optimistic messages with real ones
+                setMessages((prev) => {
+                  const updated = prev.map((msg) => {
+                    if (msg.id === tempId) return finalUserMessage;
+                    if (msg.id === assistantTempId) return finalAssistantMessage;
+                    return msg;
+                  });
+                  MessageCache.cacheMessages(threadId, updated);
+                  return updated;
+                });
+
+                // Clean up pending messages
+                pendingMessagesRef.current.delete(tempId);
+                pendingMessagesRef.current.delete(assistantTempId);
+
+                onFinish?.();
+              } catch (error) {
+                console.error('[useChat] Error in background operations:', error);
+                onError?.(error as Error);
+              }
+            }, 0);
+
             break;
           }
 
@@ -170,44 +217,6 @@ export function useChat({
             return updated;
           });
         }
-
-        // Create final messages in the backend
-        const timestamp = new Date().toISOString();
-        console.log(`[useChat] [${timestamp}] Stream complete, creating final messages`);
-        const [finalUserMessage, finalAssistantMessage] = await Promise.all([
-          messageActions.createMessage(
-            threadId,
-            userMessage.content,
-            'user',
-            model
-          ),
-          messageActions.createMessage(
-            threadId,
-            content,
-            'assistant',
-            model
-          )
-        ]);
-
-        const endTimestamp = new Date().toISOString();
-        console.log(`[useChat] [${endTimestamp}] Final messages created successfully`);
-
-        // Replace optimistic messages with real ones
-        setMessages((prev) => {
-          const updated = prev.map((msg) => {
-            if (msg.id === tempId) return finalUserMessage;
-            if (msg.id === assistantTempId) return finalAssistantMessage;
-            return msg;
-          });
-          MessageCache.cacheMessages(threadId, updated);
-          return updated;
-        });
-
-        // Clean up pending messages
-        pendingMessagesRef.current.delete(tempId);
-        pendingMessagesRef.current.delete(assistantTempId);
-
-        onFinish?.();
       } catch (error) {
         if (error instanceof Error && error.name !== 'AbortError') {
           console.error('Chat error:', error);
