@@ -19,6 +19,7 @@ default_origins = [
     "http://localhost:3000",  # Keep local development
     "https://elucide.vercel.app",  # Main production domain
     "https://*.vercel.app",  # Broader wildcard for all Vercel deployments
+    "https://elucide-arekhalperns-projects.vercel.app",  # Personal Vercel deployment
 ]
 
 # Parse CORS origins from settings and ensure localhost:3000 is included for development
