@@ -10,6 +10,7 @@ interface UseChatOptions {
   initialMessages?: Message[];
   onFinish?: () => void;
   onError?: (error: Error) => void;
+  onStream?: (chunk: string) => void;
 }
 
 export function useChat({
@@ -18,6 +19,7 @@ export function useChat({
   initialMessages = [],
   onFinish,
   onError,
+  onStream,
 }: UseChatOptions) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isLoading, setIsLoading] = useState(false);
@@ -148,6 +150,9 @@ export function useChat({
           const chunk = decoder.decode(value);
           content += chunk;
 
+          // Call onStream callback with the chunk
+          onStream?.(chunk);
+
           // Update the assistant message as we receive chunks
           setMessages((prev) => {
             const updated = prev.map((msg) =>
@@ -206,7 +211,7 @@ export function useChat({
         abortControllerRef.current = null;
       }
     },
-    [threadId, model, messages, onFinish, onError]
+    [threadId, model, messages, onFinish, onError, onStream]
   );
 
   const stop = useCallback(() => {

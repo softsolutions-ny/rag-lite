@@ -69,12 +69,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     updateThread,
     deleteThread,
   } = useThreadsStore();
-  const {
-    folders,
-    isLoading: isLoadingFolders,
-    createFolder,
-    fetchFolders,
-  } = useFoldersStore();
+  const { folders, createFolder, fetchFolders } = useFoldersStore();
   const currentThreadId = searchParams.get("thread") || undefined;
   const [isNewFolderDialogOpen, setIsNewFolderDialogOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");

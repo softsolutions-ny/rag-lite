@@ -12,7 +12,7 @@ import { useChat } from "@/lib/hooks/useChat";
 import * as messageActions from "@/lib/actions/message";
 import { Message } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Loader2 } from "lucide-react";
 import { MessageCache } from "@/lib/services/cache";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useThreadLoading } from "@/lib/store/thread-loading-context";
@@ -34,6 +34,7 @@ export function ChatContainer() {
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const { threads, updateThread, createThread } = useThreadsStore();
   const { isLoadingThread, setThreadLoading } = useThreadLoading();
+  const [isWaitingForFirstToken, setIsWaitingForFirstToken] = useState(false);
 
   // Set model from first message if it exists
   const setModelFromMessages = useCallback((messages: Message[]) => {
@@ -178,6 +179,10 @@ export function ChatContainer() {
     model,
     threadId: currentThreadId,
     initialMessages,
+    onStream: useCallback(() => {
+      // If we get any chunk, we've received the first token
+      setIsWaitingForFirstToken(false);
+    }, []),
     onFinish: useCallback(async () => {
       console.log("[ChatContainer] Message stream finished");
 
@@ -217,6 +222,7 @@ export function ChatContainer() {
       }
     }, [currentThreadId, updateThread, threads]),
     onError: (error) => {
+      setIsWaitingForFirstToken(false);
       console.error("[ChatContainer] Chat error:", error);
     },
   });
@@ -270,6 +276,7 @@ export function ChatContainer() {
         });
 
         if (content.trim() && !image_url) {
+          setIsWaitingForFirstToken(true);
           // Create optimistic message
           const optimisticMessage = {
             id: MessageCache.generateOptimisticId(),
@@ -319,6 +326,7 @@ export function ChatContainer() {
               );
             })
             .catch((error) => {
+              setIsWaitingForFirstToken(false);
               console.error(
                 "[ChatContainer] Error in append operation:",
                 error
@@ -376,6 +384,7 @@ export function ChatContainer() {
           console.log("[ChatContainer] Message submitted successfully");
         }
       } catch (error) {
+        setIsWaitingForFirstToken(false);
         console.error("[ChatContainer] Error submitting message:", error);
         // Remove pending message on error
         if (content.trim() && !image_url) {
@@ -433,23 +442,37 @@ export function ChatContainer() {
                       </div>
                     </div>
                   </div>
-                ) : memoizedMessages.length > 0 ? (
-                  memoizedMessages
                 ) : (
-                  <div className="flex h-[50vh] items-center justify-center text-center">
-                    <div className="max-w-md space-y-4">
-                      <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">
-                          Start typing below to begin your conversation with
-                          elucide.
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          You can ask questions, share images, or request
-                          assistance with any task.
-                        </p>
+                  <>
+                    {memoizedMessages.length > 0 ? (
+                      memoizedMessages
+                    ) : (
+                      <div className="flex h-[50vh] items-center justify-center text-center">
+                        <div className="max-w-md space-y-4">
+                          <div className="space-y-2">
+                            <p className="text-sm text-muted-foreground">
+                              Start typing below to begin your conversation with
+                              elucide.
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              You can ask questions, share images, or request
+                              assistance with any task.
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    )}
+                    {isWaitingForFirstToken && (
+                      <div className="mx-auto max-w-3xl w-full px-4">
+                        <div className="flex w-full justify-start">
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            <span className="text-xs">contemplating...</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
                 <div className="h-16" />
                 <div ref={messagesEndRef} />
