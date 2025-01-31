@@ -147,6 +147,8 @@ export function useChat({
           const { value, done } = await reader.read();
           if (done) {
             // Signal this is the last chunk
+            const timestamp = new Date().toISOString();
+            console.log(`[useChat] [${timestamp}] Stream done, sending last chunk signal`);
             onStream?.("", true);
             break;
           }
@@ -170,6 +172,8 @@ export function useChat({
         }
 
         // Create final messages in the backend
+        const timestamp = new Date().toISOString();
+        console.log(`[useChat] [${timestamp}] Stream complete, creating final messages`);
         const [finalUserMessage, finalAssistantMessage] = await Promise.all([
           messageActions.createMessage(
             threadId,
@@ -184,6 +188,9 @@ export function useChat({
             model
           )
         ]);
+
+        const endTimestamp = new Date().toISOString();
+        console.log(`[useChat] [${endTimestamp}] Final messages created successfully`);
 
         // Replace optimistic messages with real ones
         setMessages((prev) => {

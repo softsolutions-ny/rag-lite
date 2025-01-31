@@ -185,19 +185,25 @@ export function ChatContainer() {
 
       // Focus input immediately when we get the last chunk
       if (isLastChunk) {
-        console.log("[ChatContainer] Last chunk received, focusing input...");
+        const timestamp = new Date().toISOString();
+        console.log(
+          `[ChatContainer] [${timestamp}] Last chunk received, focusing input...`
+        );
         chatInputRef.current?.focus();
       }
     }, []),
     onFinish: useCallback(async () => {
-      console.log("[ChatContainer] Message stream finished");
+      const timestamp = new Date().toISOString();
+      console.log(`[ChatContainer] [${timestamp}] Message stream finished`);
 
       // Handle thread update in the background
       if (currentThreadId) {
         try {
           const currentThread = threads.find((t) => t.id === currentThreadId);
           if (currentThread && !currentThread.title?.startsWith("Untitled")) {
-            console.log("[ChatContainer] Updating thread timestamp...");
+            console.log(
+              `[ChatContainer] [${timestamp}] Updating thread timestamp...`
+            );
             await updateThread(
               currentThreadId,
               {
@@ -206,11 +212,14 @@ export function ChatContainer() {
               },
               true
             );
-            console.log("[ChatContainer] Thread updated successfully");
+            const endTimestamp = new Date().toISOString();
+            console.log(
+              `[ChatContainer] [${endTimestamp}] Thread updated successfully`
+            );
           }
         } catch (error) {
           console.error(
-            "[ChatContainer] Error updating thread timestamp:",
+            `[ChatContainer] [${timestamp}] Error updating thread timestamp:`,
             error
           );
         }
