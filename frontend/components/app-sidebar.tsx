@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { debounce } from "lodash";
+import Image from "next/image";
+import Link from "next/link";
 
 import {
   Sidebar,
@@ -313,6 +315,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <div className="mt-auto p-4">
+        <Link
+          href="https://github.com/softsolutions-ny/elucide"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Image
+            src="/github-icon.svg"
+            alt="GitHub"
+            width={16}
+            height={16}
+            className="dark:invert"
+          />
+          <span>Source</span>
+        </Link>
+      </div>
     </Sidebar>
   );
 }
